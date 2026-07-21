@@ -1,0 +1,23 @@
+{
+  "compound_classes": [
+    { "slug": "alkaloid", "kind": "real", "description": "Nitrogen-containing bioactives (caffeine, morphine, nicotine)" },
+    { "slug": "tannin", "kind": "real", "description": "Astringent polyphenols (tea, oak bark)" },
+    { "slug": "resin", "kind": "real", "description": "Viscous plant secretions (frankincense, myrrh)" },
+    { "slug": "volatile-oil", "kind": "real", "description": "Aromatic essential oils (includes terpenes)" },
+    { "slug": "mucilage", "kind": "real", "description": "Gel-forming polysaccharides (slippery elm, marshmallow)" },
+    { "slug": "polysaccharide", "kind": "real", "description": "Long-chain sugars (fiber, starch)" },
+    { "slug": "glycoside", "kind": "real", "description": "Sugar-linked bioactives" },
+    { "slug": "flavonoid", "kind": "real", "description": "Polyphenolic pigments" },
+    { "slug": "saponin", "kind": "real", "description": "Foam-producing surfactants" },
+    { "slug": "mineral-salt", "kind": "real", "description": "Inorganic ionic compounds" },
+    { "slug": "protein", "kind": "real", "description": "Amino acid polymers" },
+    { "slug": "lipid", "kind": "real", "description": "Fats, waxes" },
+    { "slug": "oxide", "kind": "real", "description": "Metal oxides (rust, patina)" },
+    { "slug": "carbon-residue", "kind": "real", "description": "Charred or burned residues (ash, charcoal, soot)" },
+    { "slug": "essence-vapor", "kind": "fictional", "description": "Pneuma signature compound class" },
+    { "slug": "noxious-vapor", "kind": "fictional", "description": "Effluvia signature compound class" },
+    { "slug": "void-fragment", "kind": "fictional", "description": "Cosmic signature compound class" },
+    { "slug": "unstable-compound", "kind": "fictional", "description": "Aberrant signature compound class" },
+    { "slug": "unknown-substance", "kind": "fictional", "description": "Catchall for the otherwise unclassifiable" }
+  ]
+}

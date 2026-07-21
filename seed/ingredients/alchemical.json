@@ -1,0 +1,548 @@
+{
+  "category": "alchemical",
+  "ingredients": [
+    {
+      "id": "wood-ash",
+      "slug": "wood-ash",
+      "name": "Wood Ash",
+      "taxonomy": {
+        "lore": "The gray remainder of the hearth. Leached with water, it becomes lye and cleans what nothing else will. The ash of one fire is the beginning of everything the next one makes.",
+        "origin": "real",
+        "scientific_name": "Potassium carbonate with calcium salts",
+        "appearance_text": "Fine pale gray powder streaked with white. Coarser than expected up close, with occasional darker char specks. Dry to the point of pulling moisture from the air.",
+        "appearance_img": null,
+        "type": "ash",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.7
+          },
+          {
+            "class": "carbon-residue",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "alkaline-ashes"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 2,
+        "toxicity_base": "low",
+        "stability_base": 10,
+        "extraction_yield": 0.7,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "alkalizer",
+          "desiccant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#B8B4A8",
+        "color_secondary": "#8B857A",
+        "aroma_notes": [
+          {
+            "note": "smoke",
+            "position": "top"
+          },
+          {
+            "note": "ash",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.5,
+          "sour": 0,
+          "salty": 0.3,
+          "umami": 0,
+          "astringent": 0.6,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "bone-char",
+      "slug": "bone-char",
+      "name": "Bone Char",
+      "taxonomy": {
+        "lore": "Bones burned in a closed vessel until nothing remained but the black skeleton of what they were. Draws impurity into itself as breath into lungs. Older than the word charcoal, and blacker than any wood ash.",
+        "origin": "real",
+        "scientific_name": "Bone carbon with calcium phosphate",
+        "appearance_text": "Deep matte black granules and powder, sometimes still recognizable as fragments of bone. Feels dry and lightweight, stains fingertips faintly on contact.",
+        "appearance_img": null,
+        "type": "ash",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "carbon-residue",
+            "concentration": 0.75
+          },
+          {
+            "class": "mineral-salt",
+            "concentration": 0.3
+          },
+          {
+            "class": "protein",
+            "concentration": 0.1
+          }
+        ],
+        "related_family": "carbon-blacks"
+      },
+      "reactive": {
+        "solubility": "insoluble",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "chelator",
+          "denaturant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#1A1A1A",
+        "color_secondary": "#3B3835",
+        "aroma_notes": [
+          {
+            "note": "smoke",
+            "position": "top"
+          },
+          {
+            "note": "ash",
+            "position": "heart"
+          },
+          {
+            "note": "wood",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.3,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.4,
+          "metallic": 0.1,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.8
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "verdigris",
+      "slug": "verdigris",
+      "name": "Verdigris",
+      "taxonomy": {
+        "lore": "The green that grows on copper the way lichen grows on stone. The rooftop of every old city eventually. Pigment for painters, medicine for a certain kind of physician, poison for anyone who mistakes it for cure.",
+        "origin": "real",
+        "scientific_name": "Copper(II) carbonate",
+        "appearance_text": "Vivid blue-green crust flaking from copper substrate. Sometimes velvet-fine, sometimes crystalline. The specific green that only copper time makes.",
+        "appearance_img": null,
+        "type": "rust",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "oxide",
+            "concentration": 0.7
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "copper-oxides"
+      },
+      "reactive": {
+        "solubility": "acid-soluble",
+        "ph_contribution": 0,
+        "toxicity_base": "high",
+        "stability_base": 9,
+        "extraction_yield": 0.7,
+        "potency_base": 6,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 3,
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "denaturant",
+          "oxidizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#4FA391",
+        "color_secondary": "#7BC4B0",
+        "aroma_notes": [
+          {
+            "note": "mineral",
+            "position": "top"
+          },
+          {
+            "note": "metallic",
+            "position": "heart"
+          },
+          {
+            "note": "acrid",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.6,
+          "sour": 0.2,
+          "salty": 0.2,
+          "umami": 0,
+          "astringent": 0.7,
+          "metallic": 0.9,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "rust",
+      "slug": "rust",
+      "name": "Rust",
+      "taxonomy": {
+        "lore": "What iron gives back to the world when the world will not leave it alone. Scraped from old blades and older gate-hinges. The color of dried blood which is not accidental; the chemistry is nearly the same.",
+        "origin": "real",
+        "scientific_name": "Iron(III) oxide hydrate",
+        "appearance_text": "Powder in shades from orange-brown to deep red-brown, sometimes still clinging to fragments of the iron it came from. Stains cloth immediately and permanently.",
+        "appearance_img": null,
+        "type": "rust",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "oxide",
+            "concentration": 0.85
+          },
+          {
+            "class": "mineral-salt",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "iron-oxides"
+      },
+      "reactive": {
+        "solubility": "acid-soluble",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 10,
+        "extraction_yield": 0.6,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "oxidizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#A0492A",
+        "color_secondary": "#6B2E1F",
+        "aroma_notes": [
+          {
+            "note": "metallic",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.2,
+          "sour": 0.2,
+          "salty": 0.1,
+          "umami": 0,
+          "astringent": 0.4,
+          "metallic": 0.8,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "charcoal",
+      "slug": "charcoal",
+      "name": "Charcoal",
+      "taxonomy": {
+        "lore": "Wood burned in the absence of air until only the skeleton of what it was remains. Draws poison out of stomach, ink out of parchment, water out of any preparation left with it long enough. The universal absence-that-absorbs.",
+        "origin": "real",
+        "scientific_name": "Activated carbon",
+        "appearance_text": "Deep black porous chunks that leave black on anything they touch. Surprisingly light for their size. When ground, the powder is finer than soot and rises easily on breath.",
+        "appearance_img": null,
+        "type": "ash",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "carbon-residue",
+            "concentration": 0.9
+          }
+        ],
+        "related_family": "activated-carbons"
+      },
+      "reactive": {
+        "solubility": "insoluble",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "chelator",
+          "stabilizer",
+          "desiccant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#1A1A1A",
+        "color_secondary": "#2B2B2B",
+        "aroma_notes": [
+          {
+            "note": "smoke",
+            "position": "top"
+          },
+          {
+            "note": "wood",
+            "position": "heart"
+          },
+          {
+            "note": "ash",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.1,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "saltpeter",
+      "slug": "saltpeter",
+      "name": "Saltpeter",
+      "taxonomy": {
+        "lore": "The white salt that crystallizes on stable walls where old urine has soaked and dried. Preserves meat against corruption; ignites when brought near flame. Every apothecary keeps some. Every apothecary handles it carefully.",
+        "origin": "real",
+        "scientific_name": "Potassium nitrate",
+        "appearance_text": "Long white needle-like crystals, sometimes clumped into masses. Faintly cool to the touch. Dissolves readily in water without noticeable effervescence.",
+        "appearance_img": null,
+        "type": "residue",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.8
+          },
+          {
+            "class": "oxide",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "nitrate-salts"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 10,
+        "extraction_yield": 0.85,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "oxidizer",
+          "preservative"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F0EDE5",
+        "color_secondary": "#D4CFC0",
+        "aroma_notes": [
+          {
+            "note": "mineral",
+            "position": "top"
+          },
+          {
+            "note": "sour",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.2,
+          "sour": 0.3,
+          "salty": 0.6,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0.2,
+          "bright": 0.2
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.8
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "wine-lees",
+      "slug": "wine-lees",
+      "name": "Wine Lees",
+      "taxonomy": {
+        "lore": "The crust that forms on the inside of wine barrels as the vintage settles. Scraped and dried, called argol or crude cream of tartar. The taste of every wine ever aged, concentrated into brittle amber crystals.",
+        "origin": "real",
+        "scientific_name": "Potassium bitartrate",
+        "appearance_text": "Pale amber to reddish-brown crystalline crust, sometimes still smelling faintly of the wine it came from. Breaks easily into gritty fragments.",
+        "appearance_img": null,
+        "type": "residue",
+        "category": "alchemical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.6
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "tartrate-salts"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.7,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "acid-releaser",
+          "stabilizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#C4915A",
+        "color_secondary": "#8B6B3A",
+        "aroma_notes": [
+          {
+            "note": "sour",
+            "position": "top"
+          },
+          {
+            "note": "wood",
+            "position": "heart"
+          },
+          {
+            "note": "stale",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.2,
+          "sour": 0.8,
+          "salty": 0.1,
+          "umami": 0.1,
+          "astringent": 0.5,
+          "metallic": 0,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "gritty",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.4
+      }
+    }
+  ]
+}

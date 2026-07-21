@@ -1,0 +1,503 @@
+{
+  "category": "fungal",
+  "ingredients": [
+    {
+      "id": "amanita-muscaria",
+      "slug": "amanita-muscaria",
+      "name": "Fly Agaric",
+      "taxonomy": {
+        "lore": "Red-capped and white-spotted, the fungus of stories. The cap dried and prepared correctly is a threshold; the cap eaten raw is a mistake. The line between the two is thinner than it looks.",
+        "origin": "real",
+        "scientific_name": "Amanita muscaria",
+        "appearance_text": "Vivid red cap with white wart-like patches, gills white beneath. Grows in fairy rings under birch and pine.",
+        "appearance_img": null,
+        "type": "cap",
+        "category": "fungal",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "alkaloid",
+            "concentration": 0.7
+          },
+          {
+            "class": "glycoside",
+            "concentration": 0.3
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "Amanitaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "medium",
+        "stability_base": 5,
+        "extraction_yield": 0.7,
+        "potency_base": 7,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 4,
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "hallucinogenic-amplifier",
+          "dream-inducer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#C41E1E",
+        "color_secondary": "#F5F5F0",
+        "aroma_notes": [
+          {
+            "note": "earth",
+            "position": "top"
+          },
+          {
+            "note": "musk",
+            "position": "heart"
+          },
+          {
+            "note": "plant-decay",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.7,
+          "sour": 0.1,
+          "salty": 0.1,
+          "umami": 0.4,
+          "astringent": 0.3,
+          "metallic": 0.1,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "reishi",
+      "slug": "reishi",
+      "name": "Reishi",
+      "taxonomy": {
+        "lore": "The mushroom of long years. Woody, glossy, bitter to taste and impossible to hurry. Simmered patiently, it gives back what patience deserves.",
+        "origin": "real",
+        "scientific_name": "Ganoderma lucidum",
+        "appearance_text": "Kidney-shaped shelf fungus with a hard glossy surface, dark red-brown with paler concentric bands. Underside porous and cream-colored.",
+        "appearance_img": null,
+        "type": "cap",
+        "category": "fungal",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "polysaccharide",
+            "concentration": 0.7
+          },
+          {
+            "class": "glycoside",
+            "concentration": 0.3
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Ganodermataceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.5,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "preservative",
+          "stabilizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#6B2E1F",
+        "color_secondary": "#8B4A2E",
+        "aroma_notes": [
+          {
+            "note": "wood",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "bitter-scent",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.9,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0.5,
+          "astringent": 0.6,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.9
+        },
+        "sound": null,
+        "temperature_feel": "neutral",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "lions-mane",
+      "slug": "lions-mane",
+      "name": "Lion's Mane",
+      "taxonomy": {
+        "lore": "White cascading tendrils, edible and gentle. Said to sharpen thought the way a whetstone sharpens iron, slowly and by patient contact.",
+        "origin": "real",
+        "scientific_name": "Hericium erinaceus",
+        "appearance_text": "Rounded white mass of drooping needle-like spines, growing from the bark of hardwood trees. Resembles a shaggy mane.",
+        "appearance_img": null,
+        "type": "cap",
+        "category": "fungal",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "polysaccharide",
+            "concentration": 0.6
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.3
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Hericiaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 6,
+        "extraction_yield": 0.7,
+        "potency_base": 4,
+        "dose_response": "ceiling",
+        "ceiling_value": 5,
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "mnemonic",
+          "bioavailability-booster"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F5F1E3",
+        "color_secondary": "#DDD5B8",
+        "aroma_notes": [
+          {
+            "note": "seawater",
+            "position": "top"
+          },
+          {
+            "note": "nutty",
+            "position": "heart"
+          },
+          {
+            "note": "earth",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.4,
+          "bitter": 0.1,
+          "sour": 0,
+          "salty": 0.3,
+          "umami": 0.6,
+          "astringent": 0.1,
+          "metallic": 0,
+          "bright": 0.2
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "neutral",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "ergot",
+      "slug": "ergot",
+      "name": "Ergot",
+      "taxonomy": {
+        "lore": "The dark kernel that grows where the grain should have been. Villages that ate infected rye danced themselves to death and thought it was God. A precise measure heals; carelessness invites the fire.",
+        "origin": "real",
+        "scientific_name": "Claviceps purpurea",
+        "appearance_text": "Hard blackish-purple kernels protruding from grain heads, curved and slightly larger than the normal seed. Rye grains twisted by the infection.",
+        "appearance_img": null,
+        "type": "bloom",
+        "category": "fungal",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "alkaloid",
+            "concentration": 0.85
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "Clavicipitaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "high",
+        "stability_base": 6,
+        "extraction_yield": 0.75,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "hallucinogenic-amplifier",
+          "disinhibitor"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#2B1522",
+        "color_secondary": "#4A2D3F",
+        "aroma_notes": [
+          {
+            "note": "earth",
+            "position": "top"
+          },
+          {
+            "note": "acrid",
+            "position": "heart"
+          },
+          {
+            "note": "plant-decay",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.8,
+          "sour": 0.2,
+          "salty": 0,
+          "umami": 0.1,
+          "astringent": 0.6,
+          "metallic": 0.3,
+          "bright": 0
+        },
+        "texture": {
+          "type": "gritty",
+          "intensity": 0.8
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "oakmoss",
+      "slug": "oakmoss",
+      "name": "Oakmoss",
+      "taxonomy": {
+        "lore": "A creature that is both alga and fungus, forgetting which. Grows on old bark and holds its own scent forever, and holds the scents of others besides.",
+        "origin": "real",
+        "scientific_name": "Evernia prunastri",
+        "appearance_text": "Pale gray-green branched structure resembling a small stiff shrub, growing flat against oak and beech bark. Feels leathery when fresh, brittle when dry.",
+        "appearance_img": null,
+        "type": "lichen",
+        "category": "fungal",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "resin",
+            "concentration": 0.5
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.4
+          },
+          {
+            "class": "tannin",
+            "concentration": 0.3
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Parmeliaceae"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 9,
+        "extraction_yield": 0.6,
+        "potency_base": 4,
+        "dose_response": "threshold",
+        "activation_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "volatile-fixer",
+          "stabilizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#8FA394",
+        "color_secondary": "#B8C0A5",
+        "aroma_notes": [
+          {
+            "note": "wood",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "musk",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.6,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.2,
+          "astringent": 0.8,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "neutral",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "penicillium",
+      "slug": "penicillium",
+      "name": "Penicillium",
+      "taxonomy": {
+        "lore": "The blue-green fuzz that ruined bread and saved centuries. Grows on anything sweet and left alone. What it kills, it kills quietly; what it heals, it heals the same way.",
+        "origin": "real",
+        "scientific_name": "Penicillium chrysogenum",
+        "appearance_text": "Fuzzy blue-green mold with a velvety texture, powdery when disturbed. Sometimes bordered by a paler ring of newer growth.",
+        "appearance_img": null,
+        "type": "bloom",
+        "category": "fungal",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "unknown-substance",
+            "concentration": 0.5
+          },
+          {
+            "class": "protein",
+            "concentration": 0.2
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Trichocomaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "low",
+        "stability_base": 4,
+        "extraction_yield": 0.6,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "denaturant",
+          "preservative"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#7B9A76",
+        "color_secondary": "#B8D0B3",
+        "aroma_notes": [
+          {
+            "note": "musk",
+            "position": "top"
+          },
+          {
+            "note": "sour",
+            "position": "heart"
+          },
+          {
+            "note": "earth",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.5,
+          "sour": 0.7,
+          "salty": 0.2,
+          "umami": 0.3,
+          "astringent": 0.4,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.4
+      }
+    }
+  ]
+}

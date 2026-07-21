@@ -1,0 +1,279 @@
+{
+  "synergy_pairs": [
+    {
+      "tag_a": "oxidizer",
+      "tag_b": "reducer",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "desiccant",
+      "tag_b": "deliquescent",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "bioavailability-booster",
+      "tag_b": "bioavailability-inhibitor",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "emulsifier",
+      "tag_b": "separator",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "binder",
+      "tag_b": "loosener",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "preservative",
+      "tag_b": "accelerant",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "volatile-fixer",
+      "tag_b": "volatile-releaser",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "acid-releaser",
+      "tag_b": "alkalizer",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "hallucinogenic-amplifier",
+      "tag_b": "reality-anchor",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "boundary-thinner",
+      "tag_b": "boundary-sealer",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "echo-binder",
+      "tag_b": "echo-dampener",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "mnemonic",
+      "tag_b": "amnesiac",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "veil-piercer",
+      "tag_b": "veil-drawer",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "magnetizer",
+      "tag_b": "repeller",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "concentrator",
+      "tag_b": "diffuser",
+      "type": "always_antagonistic",
+      "boost": null,
+      "severity": 0.8,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} cancel each other out."
+    },
+    {
+      "tag_a": "emulsifier",
+      "tag_b": "binder",
+      "type": "always_complementary",
+      "boost": 0.4,
+      "severity": null,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} reinforce each other. Enables stable emulsions."
+    },
+    {
+      "tag_a": "preservative",
+      "tag_b": "desiccant",
+      "type": "always_complementary",
+      "boost": 0.4,
+      "severity": null,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} reinforce each other. Compounding stability."
+    },
+    {
+      "tag_a": "boundary-thinner",
+      "tag_b": "dream-inducer",
+      "type": "always_complementary",
+      "boost": 0.4,
+      "severity": null,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} reinforce each other. Unlocks lucid-dreaming effects."
+    },
+    {
+      "tag_a": "chelator",
+      "tag_b": "bioavailability-booster",
+      "type": "always_complementary",
+      "boost": 0.4,
+      "severity": null,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} reinforce each other. Selectively boosts non-chelated compounds."
+    },
+    {
+      "tag_a": "resonance-tuner",
+      "tag_b": "echo-binder",
+      "type": "always_complementary",
+      "boost": 0.4,
+      "severity": null,
+      "complementary_ceiling": null,
+      "balanced_ceiling": null,
+      "straining_ceiling": null,
+      "warning_template": "{A} and {B} reinforce each other. Unlocks captured-emotion preparations."
+    },
+    {
+      "tag_a": "warming",
+      "tag_b": "cooling",
+      "type": "scaled",
+      "boost": 0.3,
+      "severity": 0.3,
+      "complementary_ceiling": 0.7,
+      "balanced_ceiling": 1.4,
+      "straining_ceiling": 2,
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+    },
+    {
+      "tag_a": "stimulant-amplifier",
+      "tag_b": "sedative-amplifier",
+      "type": "scaled",
+      "boost": 0.3,
+      "severity": 0.3,
+      "complementary_ceiling": 0.7,
+      "balanced_ceiling": 1.4,
+      "straining_ceiling": 2,
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+    },
+    {
+      "tag_a": "dream-inducer",
+      "tag_b": "lucidity-guard",
+      "type": "scaled",
+      "boost": 0.3,
+      "severity": 0.3,
+      "complementary_ceiling": 0.7,
+      "balanced_ceiling": 1.4,
+      "straining_ceiling": 2,
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+    },
+    {
+      "tag_a": "time-dilator",
+      "tag_b": "moment-anchor",
+      "type": "scaled",
+      "boost": 0.3,
+      "severity": 0.3,
+      "complementary_ceiling": 0.7,
+      "balanced_ceiling": 1.4,
+      "straining_ceiling": 2,
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+    },
+    {
+      "tag_a": "disinhibitor",
+      "tag_b": "will-fortifier",
+      "type": "scaled",
+      "boost": 0.3,
+      "severity": 0.3,
+      "complementary_ceiling": 0.7,
+      "balanced_ceiling": 1.4,
+      "straining_ceiling": 2,
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+    }
+  ]
+}

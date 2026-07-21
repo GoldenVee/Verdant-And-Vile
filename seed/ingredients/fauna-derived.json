@@ -1,0 +1,741 @@
+{
+  "category": "fauna-derived",
+  "ingredients": [
+    {
+      "id": "beeswax",
+      "slug": "beeswax",
+      "name": "Beeswax",
+      "taxonomy": {
+        "lore": "The comb of the hive, rendered and strained. Yellow at first, palest at second refining. What every apothecary keeps to bind what would not otherwise stay together.",
+        "origin": "real",
+        "scientific_name": "Cera alba (Apis mellifera)",
+        "appearance_text": "Solid pale yellow blocks with a fine matte surface. Slightly waxy fingerprints stay where you press. Warm honey scent at close range.",
+        "appearance_img": null,
+        "type": "wax-raw",
+        "category": "fauna-derived",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "lipid",
+            "concentration": 0.85
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.15
+          }
+        ],
+        "related_family": "apis-hive-products"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.5,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "binder",
+          "stabilizer",
+          "preservative"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F5D580",
+        "color_secondary": "#E8B850",
+        "aroma_notes": [
+          {
+            "note": "honied",
+            "position": "top"
+          },
+          {
+            "note": "wax",
+            "position": "heart"
+          },
+          {
+            "note": "wood",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.3,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "waxy",
+          "intensity": 0.9
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "cantharides",
+      "slug": "cantharides",
+      "name": "Cantharides",
+      "taxonomy": {
+        "lore": "The dried emerald bodies of a blister beetle. Called Spanish fly by the wrong sort of apothecary. A drop restores what age has taken; a drop more takes what youth would not have parted with.",
+        "origin": "real",
+        "scientific_name": "Lytta vesicatoria",
+        "appearance_text": "Small elongated beetle bodies, iridescent green-gold, dried until brittle. Ground, they release a sharp acrid smell that stings the eyes.",
+        "appearance_img": null,
+        "type": "chitin",
+        "category": "fauna-derived",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "protein",
+            "concentration": 0.3
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.6
+          },
+          {
+            "class": "lipid",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "blister-beetles"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "lethal",
+        "stability_base": 8,
+        "extraction_yield": 0.65,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 2,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "disinhibitor",
+          "warming"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#2E5E3A",
+        "color_secondary": "#D4A855",
+        "aroma_notes": [
+          {
+            "note": "acrid",
+            "position": "top"
+          },
+          {
+            "note": "leather",
+            "position": "heart"
+          },
+          {
+            "note": "sulfur",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.7,
+          "sour": 0.2,
+          "salty": 0.1,
+          "umami": 0.3,
+          "astringent": 0.8,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "burning",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "ambergris",
+      "slug": "ambergris",
+      "name": "Ambergris",
+      "taxonomy": {
+        "lore": "Grey wax washed up on the beach, smelling first of the sea and second of something warmer that no one has adequately named. Formed inside a whale's belly around what it could not digest. Costs its weight in gold and holds a perfume together for a hundred years.",
+        "origin": "real",
+        "scientific_name": "Physeter macrocephalus intestinal concretion",
+        "appearance_text": "Waxy grey lump, sometimes streaked with darker veins. Fresh pieces smell marine and slightly fecal; aged pieces smell warm and sweet and unmistakably alive.",
+        "appearance_img": null,
+        "type": "organ",
+        "category": "fauna-derived",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "lipid",
+            "concentration": 0.7
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.3
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "cetacean-secretions"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.6,
+        "potency_base": 5,
+        "dose_response": "ceiling",
+        "ceiling_value": 6,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "volatile-fixer",
+          "stabilizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#A89C88",
+        "color_secondary": "#6B5D4A",
+        "aroma_notes": [
+          {
+            "note": "seawater",
+            "position": "top"
+          },
+          {
+            "note": "musk",
+            "position": "heart"
+          },
+          {
+            "note": "amber",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.2,
+          "sour": 0,
+          "salty": 0.3,
+          "umami": 0.4,
+          "astringent": 0.1,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "waxy",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.9
+      }
+    },
+    {
+      "id": "deer-musk",
+      "slug": "deer-musk",
+      "name": "Deer Musk",
+      "taxonomy": {
+        "lore": "The gland of the male musk deer, dried and aged. Warmer than any flower ever grew, deeper than any spice. Half a grain scents a chamber for a season. A whole grain scents the wearer's hair through years and washings.",
+        "origin": "real",
+        "scientific_name": "Moschus moschiferus preputial gland",
+        "appearance_text": "Dark reddish-brown grains, sticky when fresh, hardened when aged. The scent is almost overwhelming close to the source and turns beautiful with distance.",
+        "appearance_img": null,
+        "type": "organ",
+        "category": "fauna-derived",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "lipid",
+            "concentration": 0.5
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.5
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "cervid-glands"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 9,
+        "extraction_yield": 0.7,
+        "potency_base": 7,
+        "dose_response": "ceiling",
+        "ceiling_value": 5,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "warming",
+          "volatile-fixer",
+          "disinhibitor"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#5B2E1F",
+        "color_secondary": "#8B4A2E",
+        "aroma_notes": [
+          {
+            "note": "musk",
+            "position": "top"
+          },
+          {
+            "note": "leather",
+            "position": "heart"
+          },
+          {
+            "note": "amber",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.4,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.5,
+          "astringent": 0.2,
+          "metallic": 0.1,
+          "bright": 0
+        },
+        "texture": {
+          "type": "waxy",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.9
+      }
+    },
+    {
+      "id": "cattle-gallstone",
+      "slug": "cattle-gallstone",
+      "name": "Cattle Gallstone",
+      "taxonomy": {
+        "lore": "Called niuhuang in the older texts. A stone that grows inside a cow that has been ill, one in ten thousand. Worth its weight several times over in the great pharmacies. Calms fever, calms fright, calms the mind that has begun to see what is not there.",
+        "origin": "real",
+        "scientific_name": "Calculus bovis",
+        "appearance_text": "Small yellow-brown concretion the size of a walnut, sometimes layered like a pearl. Faintly bitter smell. Rare enough that a good one is priced with gemstones.",
+        "appearance_img": null,
+        "type": "organ",
+        "category": "fauna-derived",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "protein",
+            "concentration": 0.3
+          },
+          {
+            "class": "lipid",
+            "concentration": 0.2
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "bovid-concretions"
+      },
+      "reactive": {
+        "solubility": "acid-soluble",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.55,
+        "potency_base": 7,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "sedative-amplifier",
+          "reality-anchor",
+          "chelator"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#C4A055",
+        "color_secondary": "#8B7A3A",
+        "aroma_notes": [
+          {
+            "note": "bitter-scent",
+            "position": "top"
+          },
+          {
+            "note": "musk",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.7,
+          "sour": 0.1,
+          "salty": 0.1,
+          "umami": 0.3,
+          "astringent": 0.4,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.9
+      }
+    },
+    {
+      "id": "pearl-powder",
+      "slug": "pearl-powder",
+      "name": "Pearl Powder",
+      "taxonomy": {
+        "lore": "Freshwater pearls ground fine as flour on a bronze mortar. The Empress Cixi is said to have taken a spoonful daily. Kept her skin like porcelain, kept her thoughts from where they wanted to wander.",
+        "origin": "real",
+        "scientific_name": "Mother-of-pearl (nacre)",
+        "appearance_text": "Fine iridescent white powder that catches light in a hundred colors when tilted. Impalpable to touch, dry as chalk.",
+        "appearance_img": null,
+        "type": "shell",
+        "category": "fauna-derived",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.85
+          },
+          {
+            "class": "protein",
+            "concentration": 0.15
+          }
+        ],
+        "related_family": "mollusc-nacre"
+      },
+      "reactive": {
+        "solubility": "acid-soluble",
+        "ph_contribution": 1,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.55,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "sedative-amplifier",
+          "stabilizer",
+          "cooling"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F5F0E8",
+        "color_secondary": "#E0D5C0",
+        "aroma_notes": [
+          {
+            "note": "mineral",
+            "position": "top"
+          },
+          {
+            "note": "seawater",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.1,
+          "sour": 0,
+          "salty": 0.2,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0.1,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.3
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "bufotoxin",
+      "slug": "bufotoxin",
+      "name": "Bufotoxin",
+      "taxonomy": {
+        "lore": "The white secretion that beads on the toad's back when threatened. Sonoran shamans learned to milk it and dry it to a resin. The traditional preparation is not the toad itself but what the toad refuses.",
+        "origin": "real",
+        "scientific_name": "Bufo alvarius secretion",
+        "appearance_text": "Waxy pale-yellow crystals, sometimes glassy where they were scraped fresh and dried in one piece. Bitter beyond bearing on the tongue.",
+        "appearance_img": null,
+        "type": "venom",
+        "category": "fauna-derived",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "alkaloid",
+            "concentration": 0.75
+          },
+          {
+            "class": "protein",
+            "concentration": 0.2
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "amphibian-secretions"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "high",
+        "stability_base": 6,
+        "extraction_yield": 0.75,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "hallucinogenic-amplifier",
+          "disinhibitor"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F0E8B8",
+        "color_secondary": "#C4B870",
+        "aroma_notes": [
+          {
+            "note": "bitter-scent",
+            "position": "top"
+          },
+          {
+            "note": "sulfur",
+            "position": "heart"
+          },
+          {
+            "note": "animal-decay",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 1,
+          "sour": 0.2,
+          "salty": 0.1,
+          "umami": 0,
+          "astringent": 0.7,
+          "metallic": 0.3,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "castoreum",
+      "slug": "castoreum",
+      "name": "Castoreum",
+      "taxonomy": {
+        "lore": "The gland of the beaver, prized by perfumers since Herodotus and by physicians nearly as long. Smells of leather and hay and something almost sweet. A drop lends warmth to what would otherwise be cold.",
+        "origin": "real",
+        "scientific_name": "Castor canadensis castor sac secretion",
+        "appearance_text": "Thick reddish-brown paste with a leather-like consistency. Dries into hardened dark chunks that soften again when warmed.",
+        "appearance_img": null,
+        "type": "organ",
+        "category": "fauna-derived",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "lipid",
+            "concentration": 0.5
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.4
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "rodent-glands"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 8,
+        "extraction_yield": 0.7,
+        "potency_base": 5,
+        "dose_response": "threshold",
+        "activation_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "warming",
+          "volatile-fixer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#6B4A2A",
+        "color_secondary": "#8B6B4A",
+        "aroma_notes": [
+          {
+            "note": "leather",
+            "position": "top"
+          },
+          {
+            "note": "musk",
+            "position": "heart"
+          },
+          {
+            "note": "honied",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.2,
+          "bitter": 0.4,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.5,
+          "astringent": 0.3,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "viscous",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "red-coral",
+      "slug": "red-coral",
+      "name": "Red Coral",
+      "taxonomy": {
+        "lore": "The bones of a colony of small animals that thought together and grew stone. Worn against illness in every Mediterranean village. Powdered and dissolved in vinegar, it lends its calcium to old bones and its color to weak blood.",
+        "origin": "real",
+        "scientific_name": "Corallium rubrum",
+        "appearance_text": "Deep coral-red branches with a fine crystalline texture. When broken, the inner structure shows concentric rings like small trees.",
+        "appearance_img": null,
+        "type": "shell",
+        "category": "fauna-derived",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.8
+          },
+          {
+            "class": "protein",
+            "concentration": 0.15
+          }
+        ],
+        "related_family": "coral-skeletons"
+      },
+      "reactive": {
+        "solubility": "acid-soluble",
+        "ph_contribution": 1,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.5,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "coagulant",
+          "boundary-sealer",
+          "warming"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#C13B2A",
+        "color_secondary": "#8B2B1F",
+        "aroma_notes": [
+          {
+            "note": "seawater",
+            "position": "top"
+          },
+          {
+            "note": "mineral",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.2,
+          "sour": 0.1,
+          "salty": 0.4,
+          "umami": 0.1,
+          "astringent": 0.3,
+          "metallic": 0.4,
+          "bright": 0.2
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.9
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    }
+  ]
+}

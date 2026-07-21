@@ -1,0 +1,711 @@
+{
+  "category": "mineral",
+  "ingredients": [
+    {
+      "id": "sea-salt",
+      "slug": "sea-salt",
+      "name": "Sea Salt",
+      "taxonomy": {
+        "lore": "Coarse crystals gathered from evaporated seawater. Preserves what it touches. The oldest ingredient still in daily use.",
+        "origin": "real",
+        "scientific_name": "Sodium chloride (with trace minerals)",
+        "appearance_text": "Irregular white crystals with faint grey and pink casts from trace minerals. Coarser than table salt, catches light on the facets.",
+        "appearance_img": null,
+        "type": "salt",
+        "category": "mineral",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.95
+          }
+        ],
+        "related_family": "halide-salts"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0.95,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "preservative",
+          "desiccant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F5F1EA",
+        "color_secondary": "#E8D5C0",
+        "aroma_notes": [
+          {
+            "note": "salt",
+            "position": "top"
+          },
+          {
+            "note": "mineral",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 1,
+          "umami": 0.2,
+          "astringent": 0.1,
+          "metallic": 0.1,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "alum",
+      "slug": "alum",
+      "name": "Alum",
+      "taxonomy": {
+        "lore": "A crystal that draws in water and holds it, that draws in blood and stops it. Kept in every barber's shop, every dyer's workroom, every apothecary's cabinet.",
+        "origin": "real",
+        "scientific_name": "Potassium aluminum sulfate",
+        "appearance_text": "Colorless to whitish octahedral crystals, glassy in appearance. Dissolves slowly in cold water; readily in hot.",
+        "appearance_img": null,
+        "type": "crystal",
+        "category": "mineral",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.85
+          },
+          {
+            "class": "oxide",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "sulfate-salts"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "low",
+        "stability_base": 9,
+        "extraction_yield": 0.7,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "stabilizer",
+          "desiccant",
+          "coagulant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F0F5F0",
+        "color_secondary": "#D4E0D4",
+        "aroma_notes": [
+          {
+            "note": "mineral",
+            "position": "top"
+          },
+          {
+            "note": "sour",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.2,
+          "sour": 0.5,
+          "salty": 0.3,
+          "umami": 0,
+          "astringent": 1,
+          "metallic": 0.4,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.8
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "sulfur",
+      "slug": "sulfur",
+      "name": "Sulfur",
+      "taxonomy": {
+        "lore": "Brimstone. The yellow powder of alchemy's second principle, called philosophical when refined and dangerous when not. Its smell is the smell of the earth remembering fire.",
+        "origin": "real",
+        "scientific_name": "Sulfur (S8)",
+        "appearance_text": "Bright yellow crystalline powder, sometimes forming needle-like clusters. Smells sharp when warmed. Burns with a blue flame.",
+        "appearance_img": null,
+        "type": "mineral",
+        "category": "mineral",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.3
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "native-elements"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "medium",
+        "stability_base": 9,
+        "extraction_yield": 0.65,
+        "potency_base": 6,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 4,
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "warming",
+          "denaturant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F5D033",
+        "color_secondary": "#E8B820",
+        "aroma_notes": [
+          {
+            "note": "sulfur",
+            "position": "top"
+          },
+          {
+            "note": "acrid",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.4,
+          "sour": 0.2,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0.5,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.6
+      }
+    },
+    {
+      "id": "iron-cubes",
+      "slug": "iron-cubes",
+      "name": "Iron Cubes",
+      "taxonomy": {
+        "lore": "Small worked cubes of cast iron, dropped into pots and preparations to give up their iron slowly. Older use says they keep the faery from spoiling the cooking. Newer use says they treat the tired blood.",
+        "origin": "real",
+        "scientific_name": "Iron (Fe)",
+        "appearance_text": "Small dark-grey cubes about a fingernail wide, sometimes with a patina of surface rust. Heavy for their size. Slight metallic ring when tapped.",
+        "appearance_img": null,
+        "type": "metal",
+        "category": "mineral",
+        "traits": [
+          "indestructible"
+        ],
+        "compound_classes": [
+          {
+            "class": "oxide",
+            "concentration": 0.3
+          },
+          {
+            "class": "mineral-salt",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "native-metals"
+      },
+      "reactive": {
+        "solubility": "acid-soluble",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 10,
+        "extraction_yield": 0.3,
+        "potency_base": 4,
+        "dose_response": "ceiling",
+        "ceiling_value": 5,
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "oxidizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#3B3B3B",
+        "color_secondary": "#8B4513",
+        "aroma_notes": [
+          {
+            "note": "metallic",
+            "position": "top"
+          },
+          {
+            "note": "mineral",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.2,
+          "sour": 0.1,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 1,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 1
+        },
+        "sound": "faint metallic ring when tapped against glass",
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "cinnabar",
+      "slug": "cinnabar",
+      "name": "Cinnabar",
+      "taxonomy": {
+        "lore": "The vermillion ore. Ground for pigment; refined with great caution for medicine. The Chinese apothecaries called it zhūshā, and knew the exact preparation that made it sedative rather than fatal.",
+        "origin": "real",
+        "scientific_name": "Mercury(II) sulfide",
+        "appearance_text": "Rich vermillion red crystals or powder, sometimes with darker streaks. Unusually heavy for its size. The color of arterial blood dried on stone.",
+        "appearance_img": null,
+        "type": "mineral",
+        "category": "mineral",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.5
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.6
+          }
+        ],
+        "related_family": "sulfide-ores"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "high",
+        "stability_base": 10,
+        "extraction_yield": 0.4,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 2,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "sedative-amplifier"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#B92933",
+        "color_secondary": "#7A1E23",
+        "aroma_notes": [
+          {
+            "note": "mineral",
+            "position": "top"
+          },
+          {
+            "note": "metallic",
+            "position": "heart"
+          },
+          {
+            "note": "sulfur",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.4,
+          "sour": 0.1,
+          "salty": 0.2,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0.8,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "arsenic",
+      "slug": "arsenic",
+      "name": "Arsenic",
+      "taxonomy": {
+        "lore": "The white powder that killed emperors and cured others. Fowler's Solution for a hundred and fifty years; still used, in modern hospitals, against a specific leukemia. Only ever a knife's edge from harm.",
+        "origin": "real",
+        "scientific_name": "Arsenic trioxide",
+        "appearance_text": "Fine white powder without odor. Sometimes forms glassy octahedral crystals. Innocuous in appearance and lethal in quantity.",
+        "appearance_img": null,
+        "type": "mineral",
+        "category": "mineral",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "oxide",
+            "concentration": 0.75
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "arsenic-compounds"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "lethal",
+        "stability_base": 10,
+        "extraction_yield": 0.85,
+        "potency_base": 9,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 2,
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "bioavailability-booster",
+          "denaturant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#FAFAF5",
+        "color_secondary": "#E8E5DC",
+        "aroma_notes": [
+          {
+            "note": "mineral",
+            "position": "top"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.3,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.1,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.8
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.9
+      }
+    },
+    {
+      "id": "amethyst",
+      "slug": "amethyst",
+      "name": "Amethyst",
+      "taxonomy": {
+        "lore": "Purple quartz, the stone of clear-headed sobriety. Once believed to keep the wearer from drunkenness. Now kept for the sleep it seems to bring to those who hold it close.",
+        "origin": "real",
+        "scientific_name": "Silicon dioxide with iron impurities",
+        "appearance_text": "Translucent violet crystal cluster, deeper at the tips fading to pale near the base. Facets catch and hold light.",
+        "appearance_img": null,
+        "type": "crystal",
+        "category": "mineral",
+        "traits": [
+          "quiescent"
+        ],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.1
+          }
+        ],
+        "related_family": "quartz-crystals"
+      },
+      "reactive": {
+        "solubility": "insoluble",
+        "ph_contribution": null,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "sedative-amplifier",
+          "dream-inducer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#7B4B94",
+        "color_secondary": "#C4A0D4",
+        "aroma_notes": [],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 1
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "bloodstone",
+      "slug": "bloodstone",
+      "name": "Bloodstone",
+      "taxonomy": {
+        "lore": "Dark green chalcedony spotted with red jasper, called heliotrope by the old naturalists. Carried by soldiers into battle. Pressed to wounds when belief mattered more than medicine, or perhaps was the medicine.",
+        "origin": "real",
+        "scientific_name": "Chalcedony with hematite inclusions",
+        "appearance_text": "Opaque dark green stone flecked with red spots, sometimes solid enough to look almost black. The red inclusions resemble blood spatter.",
+        "appearance_img": null,
+        "type": "crystal",
+        "category": "mineral",
+        "traits": [
+          "quiescent"
+        ],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.1
+          },
+          {
+            "class": "oxide",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "chalcedony-stones"
+      },
+      "reactive": {
+        "solubility": "insoluble",
+        "ph_contribution": null,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "coagulant",
+          "stabilizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#2C4A2C",
+        "color_secondary": "#8B2C2C",
+        "aroma_notes": [],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 1
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "selenite",
+      "slug": "selenite",
+      "name": "Selenite",
+      "taxonomy": {
+        "lore": "The moonstone of the old texts, though not the moonstone of the jewellers. A crystal so soft that fingernail can score it, that water will slowly dissolve. Named for a goddess who also erodes gently.",
+        "origin": "real",
+        "scientific_name": "Hydrated calcium sulfate",
+        "appearance_text": "Long transparent crystals with a fibrous silky sheen, sometimes forming towers or plates. Fragile. Cool to the touch even in warm rooms.",
+        "appearance_img": null,
+        "type": "crystal",
+        "category": "mineral",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "gypsum-crystals"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 4,
+        "extraction_yield": 0.35,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "boundary-sealer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#EFEDEA",
+        "color_secondary": "#D4D0C0",
+        "aroma_notes": [],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0,
+          "astringent": 0,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.9
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "tigers-eye",
+      "slug": "tigers-eye",
+      "name": "Tiger's Eye",
+      "taxonomy": {
+        "lore": "Chatoyant quartz with the eye of a great cat. Roman soldiers carried it into battle for courage. Focus what is scattered, defend what is under attack, hold what threatens to slip.",
+        "origin": "real",
+        "scientific_name": "Silicon dioxide with crocidolite inclusions",
+        "appearance_text": "Golden-brown stone with silky bands that shift and shimmer as the stone turns. The chatoyance moves across the surface like the pupil of an eye.",
+        "appearance_img": null,
+        "type": "crystal",
+        "category": "mineral",
+        "traits": [
+          "quiescent"
+        ],
+        "compound_classes": [
+          {
+            "class": "mineral-salt",
+            "concentration": 0.1
+          },
+          {
+            "class": "oxide",
+            "concentration": 0.15
+          }
+        ],
+        "related_family": "quartz-crystals"
+      },
+      "reactive": {
+        "solubility": "insoluble",
+        "ph_contribution": null,
+        "toxicity_base": "none",
+        "stability_base": 10,
+        "extraction_yield": 0,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "will-fortifier",
+          "warming"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#8B6F3A",
+        "color_secondary": "#D4A855",
+        "aroma_notes": [],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 1
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.6
+      }
+    }
+  ]
+}

@@ -1,0 +1,551 @@
+{
+  "tag_definitions": [
+    {
+      "slug": "accelerant",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "preservative"
+    },
+    {
+      "slug": "acid-releaser",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "alkalizer"
+    },
+    {
+      "slug": "alkalizer",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "acid-releaser"
+    },
+    {
+      "slug": "alkaloid-carrier",
+      "category": "compound",
+      "targets": [
+        "alkaloid"
+      ],
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": 0.5,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "amnesiac",
+      "category": "memory",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "mnemonic"
+    },
+    {
+      "slug": "binder",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "loosener"
+    },
+    {
+      "slug": "bioavailability-booster",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": true,
+      "effect_targets": null,
+      "boost": 0.6,
+      "severity": null,
+      "opposite_tag": "bioavailability-inhibitor"
+    },
+    {
+      "slug": "bioavailability-inhibitor",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": true,
+      "effect_targets": null,
+      "boost": null,
+      "severity": 0.5,
+      "opposite_tag": "bioavailability-booster"
+    },
+    {
+      "slug": "boundary-sealer",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "boundary-thinner"
+    },
+    {
+      "slug": "boundary-thinner",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "boundary-sealer"
+    },
+    {
+      "slug": "chelator",
+      "category": "compound",
+      "targets": [
+        "alkaloid",
+        "mineral-salt"
+      ],
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": 0.7,
+      "opposite_tag": null
+    },
+    {
+      "slug": "coagulant",
+      "category": "physical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "concentrator",
+      "category": "concentration",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "diffuser"
+    },
+    {
+      "slug": "cooling",
+      "category": "thermal",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": [
+        "cooling-effect"
+      ],
+      "boost": 0.3,
+      "severity": null,
+      "opposite_tag": "warming"
+    },
+    {
+      "slug": "crystallizer",
+      "category": "physical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "deliquescent",
+      "category": "physical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "desiccant"
+    },
+    {
+      "slug": "denaturant",
+      "category": "compound",
+      "targets": [
+        "protein",
+        "mucilage"
+      ],
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": 0.8,
+      "opposite_tag": null
+    },
+    {
+      "slug": "desiccant",
+      "category": "physical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "deliquescent"
+    },
+    {
+      "slug": "diffuser",
+      "category": "concentration",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "concentrator"
+    },
+    {
+      "slug": "disinhibitor",
+      "category": "compulsion",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "will-fortifier"
+    },
+    {
+      "slug": "dream-inducer",
+      "category": "perception",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "lucidity-guard"
+    },
+    {
+      "slug": "echo-binder",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "echo-dampener"
+    },
+    {
+      "slug": "echo-dampener",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "echo-binder"
+    },
+    {
+      "slug": "emulsifier",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "separator"
+    },
+    {
+      "slug": "foaming-agent",
+      "category": "physical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "hallucinogenic-amplifier",
+      "category": "perception",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": [
+        "perceptual-effect"
+      ],
+      "boost": 0.7,
+      "severity": null,
+      "opposite_tag": "reality-anchor"
+    },
+    {
+      "slug": "loosener",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "binder"
+    },
+    {
+      "slug": "lucidity-guard",
+      "category": "perception",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "dream-inducer"
+    },
+    {
+      "slug": "magnetizer",
+      "category": "attraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "repeller"
+    },
+    {
+      "slug": "mnemonic",
+      "category": "memory",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": [
+        "memory-effect"
+      ],
+      "boost": 0.5,
+      "severity": null,
+      "opposite_tag": "amnesiac"
+    },
+    {
+      "slug": "moment-anchor",
+      "category": "time",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "time-dilator"
+    },
+    {
+      "slug": "oxidizer",
+      "category": "thermal",
+      "targets": [
+        "volatile-oil",
+        "flavonoid"
+      ],
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": 0.6,
+      "opposite_tag": "reducer"
+    },
+    {
+      "slug": "perception-shifter",
+      "category": "perception",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "preservative",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "accelerant"
+    },
+    {
+      "slug": "radical-scavenger",
+      "category": "protective",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "reality-anchor",
+      "category": "perception",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "hallucinogenic-amplifier"
+    },
+    {
+      "slug": "reducer",
+      "category": "thermal",
+      "targets": [
+        "oxide"
+      ],
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": 0.5,
+      "opposite_tag": "oxidizer"
+    },
+    {
+      "slug": "repeller",
+      "category": "attraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "magnetizer"
+    },
+    {
+      "slug": "resonance-tuner",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "sedative-amplifier",
+      "category": "effect",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": [
+        "sedative-effect"
+      ],
+      "boost": 0.5,
+      "severity": null,
+      "opposite_tag": "stimulant-amplifier"
+    },
+    {
+      "slug": "separator",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "emulsifier"
+    },
+    {
+      "slug": "silencer",
+      "category": "memory",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "solvent-shifter",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "stabilizer",
+      "category": "protective",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": null
+    },
+    {
+      "slug": "stimulant-amplifier",
+      "category": "effect",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": [
+        "stimulant-effect"
+      ],
+      "boost": 0.5,
+      "severity": null,
+      "opposite_tag": "sedative-amplifier"
+    },
+    {
+      "slug": "time-dilator",
+      "category": "time",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "moment-anchor"
+    },
+    {
+      "slug": "veil-drawer",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "veil-piercer"
+    },
+    {
+      "slug": "veil-piercer",
+      "category": "metaphysical",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "veil-drawer"
+    },
+    {
+      "slug": "volatile-fixer",
+      "category": "extraction",
+      "targets": [
+        "volatile-oil"
+      ],
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": 0.4,
+      "severity": null,
+      "opposite_tag": "volatile-releaser"
+    },
+    {
+      "slug": "volatile-releaser",
+      "category": "extraction",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "volatile-fixer"
+    },
+    {
+      "slug": "warming",
+      "category": "thermal",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": [
+        "warming-effect"
+      ],
+      "boost": 0.3,
+      "severity": null,
+      "opposite_tag": "cooling"
+    },
+    {
+      "slug": "will-fortifier",
+      "category": "compulsion",
+      "targets": null,
+      "targets_any_compound": false,
+      "effect_targets": null,
+      "boost": null,
+      "severity": null,
+      "opposite_tag": "disinhibitor"
+    }
+  ]
+}

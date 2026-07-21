@@ -1,0 +1,5 @@
+# pnpm settings live here in pnpm 11+ (moved out of package.json's "pnpm" field).
+# esbuild is a transitive dep of tsx and vitest. Modern esbuild ships prebuilt
+# platform binaries, so this is mainly to silence the ignored-build-scripts warning.
+allowBuilds:
+  esbuild: true

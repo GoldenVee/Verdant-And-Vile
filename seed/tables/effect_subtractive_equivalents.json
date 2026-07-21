@@ -1,0 +1,44 @@
+{
+  "effect_subtractive_equivalents": [
+    {
+      "standard_effect": "memory_recall",
+      "subtractive_equivalent": "memory_erasure"
+    },
+    {
+      "standard_effect": "sedation",
+      "subtractive_equivalent": "emotional_absence"
+    },
+    {
+      "standard_effect": "perceptual_enhancement",
+      "subtractive_equivalent": "sensory_removal"
+    },
+    {
+      "standard_effect": "time_dilation",
+      "subtractive_equivalent": "time_erasure"
+    },
+    {
+      "standard_effect": "concealment",
+      "subtractive_equivalent": "unfindability"
+    },
+    {
+      "standard_effect": "stimulation",
+      "subtractive_equivalent": "motivational_erasure"
+    },
+    {
+      "standard_effect": "warming_sensation",
+      "subtractive_equivalent": "warmth_absence"
+    },
+    {
+      "standard_effect": "cooling_sensation",
+      "subtractive_equivalent": "coolness_absence"
+    },
+    {
+      "standard_effect": "dream_enhancement",
+      "subtractive_equivalent": "dream_erasure"
+    },
+    {
+      "standard_effect": "emotional_amplification",
+      "subtractive_equivalent": "emotional_muting"
+    }
+  ]
+}

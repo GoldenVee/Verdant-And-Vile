@@ -1,0 +1,985 @@
+{
+  "category": "botanical",
+  "ingredients": [
+    {
+      "id": "foxglove",
+      "slug": "foxglove",
+      "name": "Foxglove",
+      "taxonomy": {
+        "lore": "The leaves of a foxglove, said to be used by foxes and faerie alike. A single leaf can steady a failing heart. Three leaves can stop a healthy one.",
+        "origin": "real",
+        "scientific_name": "Digitalis purpurea",
+        "appearance_text": "Long ovate leaves with prominent veins, downy on the underside. Bruises release a faint bitter scent.",
+        "appearance_img": null,
+        "type": "leaf",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "glycoside",
+            "concentration": 0.85
+          },
+          {
+            "class": "alkaloid",
+            "concentration": 0.15
+          }
+        ],
+        "related_family": "Plantaginaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "high",
+        "stability_base": 6,
+        "extraction_yield": 0.7,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 4,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#4A6B3A",
+        "color_secondary": "#7B8940",
+        "aroma_notes": [
+          {
+            "note": "bitter-scent",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "stale",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.9,
+          "sour": 0.1,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.6,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "valerian",
+      "slug": "valerian",
+      "name": "Valerian",
+      "taxonomy": {
+        "lore": "The root that smells of forgotten cellars. Cats grow drowsy at the scent. Humans, taking it steeped, drift toward the kind of sleep that leaves no dreams.",
+        "origin": "real",
+        "scientific_name": "Valeriana officinalis",
+        "appearance_text": "Twisted pale-brown root with fibrous branches. Freshly cut, releases an odor between old socks and forest floor.",
+        "appearance_img": null,
+        "type": "root",
+        "category": "botanical",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "volatile-oil",
+            "concentration": 0.6
+          },
+          {
+            "class": "alkaloid",
+            "concentration": 0.2
+          },
+          {
+            "class": "mucilage",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "Caprifoliaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 5,
+        "extraction_yield": 0.75,
+        "potency_base": 5,
+        "dose_response": "ceiling",
+        "ceiling_value": 6,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "sedative-amplifier"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#6B4A2A",
+        "color_secondary": "#8B7355",
+        "aroma_notes": [
+          {
+            "note": "earth",
+            "position": "top"
+          },
+          {
+            "note": "musk",
+            "position": "heart"
+          },
+          {
+            "note": "stale",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.5,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.2,
+          "astringent": 0.4,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "neutral",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.6
+      }
+    },
+    {
+      "id": "belladonna",
+      "slug": "belladonna",
+      "name": "Belladonna",
+      "taxonomy": {
+        "lore": "The beautiful lady. Berries dark as pupils dilated in candlelight. Once taken cosmetically to widen the eye; the dose that makes you beautiful is very close to the dose that makes you dead.",
+        "origin": "real",
+        "scientific_name": "Atropa belladonna",
+        "appearance_text": "Glossy black berries the size of small cherries, held in a green calyx that opens like a five-pointed star.",
+        "appearance_img": null,
+        "type": "berry",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "alkaloid",
+            "concentration": 0.9
+          },
+          {
+            "class": "flavonoid",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Solanaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "lethal",
+        "stability_base": 4,
+        "extraction_yield": 0.8,
+        "potency_base": 9,
+        "dose_response": "threshold",
+        "activation_threshold": 3,
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "hallucinogenic-amplifier",
+          "disinhibitor"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#1A0B1F",
+        "color_secondary": "#4B2445",
+        "aroma_notes": [
+          {
+            "note": "sweet",
+            "position": "top"
+          },
+          {
+            "note": "berry",
+            "position": "heart"
+          },
+          {
+            "note": "plant-decay",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.7,
+          "bitter": 0.3,
+          "sour": 0.2,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.1,
+          "metallic": 0,
+          "bright": 0.2
+        },
+        "texture": {
+          "type": "viscous",
+          "intensity": 0.4
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "willow-bark",
+      "slug": "willow-bark",
+      "name": "Willow Bark",
+      "taxonomy": {
+        "lore": "Peeled in strips from the sorrowing tree that leans over water. Nature's pain killer derived from the weeping sap.",
+        "origin": "real",
+        "scientific_name": "Salix alba",
+        "appearance_text": "Reddish-brown strips of bark, curling as they dry. The inner surface is paler, marked with faint horizontal lines.",
+        "appearance_img": null,
+        "type": "bark",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "glycoside",
+            "concentration": 0.7
+          },
+          {
+            "class": "tannin",
+            "concentration": 0.5
+          },
+          {
+            "class": "flavonoid",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "Salicaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "low",
+        "stability_base": 8,
+        "extraction_yield": 0.65,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "acid-releaser"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#8B4513",
+        "color_secondary": "#A0522D",
+        "aroma_notes": [
+          {
+            "note": "wood",
+            "position": "top"
+          },
+          {
+            "note": "bitter-scent",
+            "position": "heart"
+          },
+          {
+            "note": "earth",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.8,
+          "sour": 0.2,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.8,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.7
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "chamomile",
+      "slug": "chamomile",
+      "name": "Chamomile",
+      "taxonomy": {
+        "lore": "Small white flowers with yellow hearts, gathered when they smell of apples. The gentlest tea in the apothecary's cabinet, which is not to say the least useful.",
+        "origin": "real",
+        "scientific_name": "Matricaria chamomilla",
+        "appearance_text": "Daisy-like blossoms less than an inch across, white ray petals surrounding a golden dome.",
+        "appearance_img": null,
+        "type": "flower",
+        "category": "botanical",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "volatile-oil",
+            "concentration": 0.5
+          },
+          {
+            "class": "flavonoid",
+            "concentration": 0.4
+          },
+          {
+            "class": "mucilage",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Asteraceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 7,
+        "extraction_yield": 0.7,
+        "potency_base": 3,
+        "dose_response": "ceiling",
+        "ceiling_value": 5,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "sedative-amplifier",
+          "cooling"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#FFE066",
+        "color_secondary": "#FDFBD3",
+        "aroma_notes": [
+          {
+            "note": "apple",
+            "position": "top"
+          },
+          {
+            "note": "herbaceous-soft",
+            "position": "heart"
+          },
+          {
+            "note": "honied",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.4,
+          "bitter": 0.3,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0,
+          "bright": 0.5
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.3
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "wormwood",
+      "slug": "wormwood",
+      "name": "Wormwood",
+      "taxonomy": {
+        "lore": "Silver-leaved and bitter beyond bearing. Grows where the earth has been cursed or forgotten. Small amounts sharpen the mind; more, and the mind sharpens on nothing.",
+        "origin": "real",
+        "scientific_name": "Artemisia absinthium",
+        "appearance_text": "Deeply lobed silvery-green leaves covered in fine hairs. The whole plant carries a resinous bitter smell.",
+        "appearance_img": null,
+        "type": "leaf",
+        "category": "botanical",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "volatile-oil",
+            "concentration": 0.7
+          },
+          {
+            "class": "flavonoid",
+            "concentration": 0.3
+          },
+          {
+            "class": "tannin",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "Asteraceae"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "medium",
+        "stability_base": 6,
+        "extraction_yield": 0.75,
+        "potency_base": 6,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 5,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "bioavailability-booster",
+          "warming"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#8FA88E",
+        "color_secondary": "#C8CFA8",
+        "aroma_notes": [
+          {
+            "note": "bitter-scent",
+            "position": "top"
+          },
+          {
+            "note": "herbaceous-green",
+            "position": "heart"
+          },
+          {
+            "note": "medicinal",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 1,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.7,
+          "metallic": 0.1,
+          "bright": 0.2
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "rosemary",
+      "slug": "rosemary",
+      "name": "Rosemary",
+      "taxonomy": {
+        "lore": "For remembrance, the old saying goes. Woven into wedding wreaths and funeral garlands both. The needle-leaves hold the smell of pine and something warmer.",
+        "origin": "real",
+        "scientific_name": "Rosmarinus officinalis",
+        "appearance_text": "Needle-shaped leaves dark green above, pale beneath. Woody stems. The whole plant releases scent when brushed.",
+        "appearance_img": null,
+        "type": "leaf",
+        "category": "botanical",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "volatile-oil",
+            "concentration": 0.75
+          },
+          {
+            "class": "flavonoid",
+            "concentration": 0.3
+          },
+          {
+            "class": "tannin",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "Lamiaceae"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 8,
+        "extraction_yield": 0.7,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "mnemonic",
+          "warming",
+          "volatile-fixer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#2D5A3D",
+        "color_secondary": "#7BA05B",
+        "aroma_notes": [
+          {
+            "note": "resin",
+            "position": "top"
+          },
+          {
+            "note": "herbaceous-green",
+            "position": "heart"
+          },
+          {
+            "note": "wood",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.4,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0,
+          "bright": 0.6
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.4
+        },
+        "sound": null,
+        "temperature_feel": "warming",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.5
+      }
+    },
+    {
+      "id": "ginger",
+      "slug": "ginger",
+      "name": "Ginger",
+      "taxonomy": {
+        "lore": "The warming root. Sailors carried it against seasickness; midwives against the cold months of a hard birth. Its heat is the comfort of home.",
+        "origin": "real",
+        "scientific_name": "Zingiber officinale",
+        "appearance_text": "Knobbed rhizome with pale tan skin, yellow flesh inside. Fresh cuts release a sharp warm aroma.",
+        "appearance_img": null,
+        "type": "root",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "volatile-oil",
+            "concentration": 0.6
+          },
+          {
+            "class": "resin",
+            "concentration": 0.4
+          },
+          {
+            "class": "polysaccharide",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "Zingiberaceae"
+      },
+      "reactive": {
+        "solubility": "universal",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 7,
+        "extraction_yield": 0.8,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "warming",
+          "bioavailability-booster"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#E5B570",
+        "color_secondary": "#F4E4B8",
+        "aroma_notes": [
+          {
+            "note": "sharp-spice",
+            "position": "top"
+          },
+          {
+            "note": "warm-spice",
+            "position": "heart"
+          },
+          {
+            "note": "wood",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.2,
+          "bitter": 0.1,
+          "sour": 0.1,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0,
+          "bright": 0.9
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "burning",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.6
+      }
+    },
+    {
+      "id": "mandrake",
+      "slug": "mandrake",
+      "name": "Mandrake",
+      "taxonomy": {
+        "lore": "The root shaped like a person, said to scream when pulled from the earth. Whether the scream is real or only felt afterward is a matter the apothecary declines to answer.",
+        "origin": "real",
+        "scientific_name": "Mandragora",
+        "appearance_text": "Forked taproot with a pale surface and dense white flesh. Sometimes eerily anthropomorphic when the fork bifurcates cleanly.",
+        "appearance_img": null,
+        "type": "root",
+        "category": "botanical",
+        "traits": [
+          "echoic"
+        ],
+        "compound_classes": [
+          {
+            "class": "alkaloid",
+            "concentration": 0.8
+          },
+          {
+            "class": "mucilage",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "Solanaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "high",
+        "stability_base": 5,
+        "extraction_yield": 0.7,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "hallucinogenic-amplifier",
+          "dream-inducer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#E8DCC4",
+        "color_secondary": "#B8A582",
+        "aroma_notes": [
+          {
+            "note": "earth",
+            "position": "top"
+          },
+          {
+            "note": "musk",
+            "position": "heart"
+          },
+          {
+            "note": "forgotten",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.7,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.3,
+          "astringent": 0.4,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.7
+        },
+        "sound": "faint hush when handled, easily dismissed as breath",
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "yarrow",
+      "slug": "yarrow",
+      "name": "Yarrow",
+      "taxonomy": {
+        "lore": "Soldier's woundwort, the herb of Achilles. The tiny white flowers cluster like small clouds. Pressed into a cut, they slow the blood.",
+        "origin": "real",
+        "scientific_name": "Achillea millefolium",
+        "appearance_text": "Flat-topped clusters of tiny white flowers held above finely divided fern-like leaves.",
+        "appearance_img": null,
+        "type": "flower",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "flavonoid",
+            "concentration": 0.6
+          },
+          {
+            "class": "tannin",
+            "concentration": 0.5
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "Asteraceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 7,
+        "extraction_yield": 0.65,
+        "potency_base": 4,
+        "dose_response": "linear",
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "coagulant",
+          "stabilizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F0EDE5",
+        "color_secondary": "#D4CFA8",
+        "aroma_notes": [
+          {
+            "note": "herbaceous-soft",
+            "position": "top"
+          },
+          {
+            "note": "green",
+            "position": "heart"
+          },
+          {
+            "note": "wood",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.6,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.7,
+          "metallic": 0.1,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "powdery",
+          "intensity": 0.4
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "nettle",
+      "slug": "nettle",
+      "name": "Nettle",
+      "taxonomy": {
+        "lore": "Sting the hand that grasps it. Boil the sting away and it becomes the strongest of the spring tonics. A lesson in what patience does to a difficult thing.",
+        "origin": "real",
+        "scientific_name": "Urtica dioica",
+        "appearance_text": "Heart-shaped serrated leaves covered in fine stinging hairs. Deep green, borne on square stems.",
+        "appearance_img": null,
+        "type": "leaf",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "flavonoid",
+            "concentration": 0.5
+          },
+          {
+            "class": "mineral-salt",
+            "concentration": 0.6
+          },
+          {
+            "class": "polysaccharide",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "Urticaceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 5,
+        "extraction_yield": 0.7,
+        "potency_base": 3,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "bioavailability-booster"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#3A5F2D",
+        "color_secondary": "#6B8E3D",
+        "aroma_notes": [
+          {
+            "note": "green",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.3,
+          "sour": 0,
+          "salty": 0.4,
+          "umami": 0.5,
+          "astringent": 0.3,
+          "metallic": 0.4,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.5
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.4
+      }
+    },
+    {
+      "id": "poppy",
+      "slug": "poppy",
+      "name": "Poppy",
+      "taxonomy": {
+        "lore": "The flower of forgetful sleep. The seedheads bleed a white milk that dries to something the color of old parchment. Careful preparation makes it a mercy. Careless makes it a grave.",
+        "origin": "real",
+        "scientific_name": "Papaver somniferum",
+        "appearance_text": "Round green seed pods with crown-like tops. The dried latex is a dark tarry substance clinging to scored surfaces.",
+        "appearance_img": null,
+        "type": "seed",
+        "category": "botanical",
+        "traits": [],
+        "compound_classes": [
+          {
+            "class": "alkaloid",
+            "concentration": 0.85
+          },
+          {
+            "class": "lipid",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "Papaveraceae"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "high",
+        "stability_base": 8,
+        "extraction_yield": 0.75,
+        "potency_base": 8,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 6,
+        "heat_response": "neutral",
+        "synergy_tags": [
+          "sedative-amplifier",
+          "disinhibitor"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#4A3428",
+        "color_secondary": "#8B6B4A",
+        "aroma_notes": [
+          {
+            "note": "sweet",
+            "position": "top"
+          },
+          {
+            "note": "nutty",
+            "position": "heart"
+          },
+          {
+            "note": "forgotten",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.4,
+          "bitter": 0.5,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0.2,
+          "astringent": 0.3,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "gritty",
+          "intensity": 0.6
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.7
+      }
+    }
+  ]
+}

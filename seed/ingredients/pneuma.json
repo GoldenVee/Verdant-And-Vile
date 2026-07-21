@@ -1,0 +1,485 @@
+{
+  "category": "pneuma",
+  "ingredients": [
+    {
+      "id": "rime-frost",
+      "slug": "rime-frost",
+      "name": "Rime Frost",
+      "taxonomy": {
+        "lore": "The white feather-frost that grows only when a cold that had teeth met a fog that had none. Scraped from north-facing branches before the sun rises to touch them. It is not water and it is not air; it is the argument between the two, held in solid form.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Delicate spike-crystals with a feathered structure, brilliantly white against the dark bark they clung to. Collapses to droplets at the wrong temperature and rises as vapor at any warmth beyond breath.",
+        "appearance_img": null,
+        "type": "breath",
+        "category": "pneuma",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "essence-vapor",
+            "concentration": 0.8
+          }
+        ],
+        "related_family": "hoarfrost-captures"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 2,
+        "extraction_yield": 0.7,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "cooling",
+          "preservative",
+          "moment-anchor"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#EAF2F5",
+        "color_secondary": "#B8CFD8",
+        "aroma_notes": [
+          {
+            "note": "ozone",
+            "position": "top"
+          },
+          {
+            "note": "petrichor",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0.1,
+          "bright": 0.7
+        },
+        "texture": {
+          "type": "crystalline",
+          "intensity": 0.3
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.6
+      }
+    },
+    {
+      "id": "distilled-aether",
+      "slug": "distilled-aether",
+      "name": "Distilled Aether",
+      "taxonomy": {
+        "lore": "The fifth element of the old philosophers, held for years to be a fiction. Distilled from very high altitude air passed through a specific chain of vessels the theory of which was lost twice and rediscovered once. Amplifies whatever it touches.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Clear liquid with a faint blue-white luminosity that pulses slowly. Moves against gravity by small amounts when not being watched. Small quantities suggest larger space than they occupy.",
+        "appearance_img": null,
+        "type": "essence",
+        "category": "pneuma",
+        "traits": [
+          "catalyst",
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "essence-vapor",
+            "concentration": 0.95
+          }
+        ],
+        "related_family": "philosophical-elements"
+      },
+      "reactive": {
+        "solubility": "universal",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 3,
+        "extraction_yield": 0.9,
+        "potency_base": 8,
+        "dose_response": "ceiling",
+        "ceiling_value": 6,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "bioavailability-booster",
+          "volatile-fixer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#D8E8F5",
+        "color_secondary": "#F5F5F5",
+        "aroma_notes": [
+          {
+            "note": "ozone",
+            "position": "top"
+          },
+          {
+            "note": "storm-air",
+            "position": "heart"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0,
+          "metallic": 0.2,
+          "bright": 0.9
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.3
+        },
+        "sound": "faint high tone at the edge of hearing",
+        "temperature_feel": "cold",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "rising",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "will-o-the-wisp",
+      "slug": "will-o-the-wisp",
+      "name": "Will-o'-the-Wisp",
+      "taxonomy": {
+        "lore": "The pale swamp-light that leads travelers off paths. Caught fresh in a wide-mouthed jar left open in the fen at midnight. Whatever it lights, one sees; whatever direction it turns, one follows without meaning to.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "A small drifting flame the color of moonlit ice, held loosely in its container. Casts no heat and no shadow. Turns slowly when approached, always facing away.",
+        "appearance_img": null,
+        "type": "aura",
+        "category": "pneuma",
+        "traits": [
+          "echoic",
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "essence-vapor",
+            "concentration": 0.7
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "swamp-lights"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 3,
+        "extraction_yield": 0.6,
+        "potency_base": 7,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 4,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "hallucinogenic-amplifier",
+          "magnetizer",
+          "dream-inducer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#B8E8D8",
+        "color_secondary": "#7BCFA8",
+        "aroma_notes": [
+          {
+            "note": "petrichor",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "plant-decay",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.2,
+          "bitter": 0.3,
+          "sour": 0.1,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0.1,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.2
+        },
+        "sound": "very faint whisper, always seeming to come from just behind",
+        "temperature_feel": "cold",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "seeking",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "aphrodites-seafoam",
+      "slug": "aphrodites-seafoam",
+      "name": "Aphrodite's Seafoam",
+      "taxonomy": {
+        "lore": "Gathered at first light on beaches where a wave has broken against no witnesses. The Greek philosophers said the goddess of love was born from such foam; the Greek apothecaries said certain small amounts of it did much of her work. A pale pink shimmer that lasts precisely as long as a sea-breath.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Iridescent pink-white foam holding its bubbles longer than physics allows. Smells first of the sea and then of something warmer that requires closer inspection to identify.",
+        "appearance_img": null,
+        "type": "essence",
+        "category": "pneuma",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "essence-vapor",
+            "concentration": 0.75
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "sea-captures"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 2,
+        "extraction_yield": 0.75,
+        "potency_base": 6,
+        "dose_response": "ceiling",
+        "ceiling_value": 5,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "disinhibitor",
+          "warming",
+          "magnetizer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#F5D8E0",
+        "color_secondary": "#F5F5F5",
+        "aroma_notes": [
+          {
+            "note": "seawater",
+            "position": "top"
+          },
+          {
+            "note": "floral",
+            "position": "heart"
+          },
+          {
+            "note": "musk",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.4,
+          "bitter": 0,
+          "sour": 0.1,
+          "salty": 0.5,
+          "umami": 0.2,
+          "astringent": 0.1,
+          "metallic": 0,
+          "bright": 0.6
+        },
+        "texture": {
+          "type": "effervescent",
+          "intensity": 0.5
+        },
+        "sound": "faint sound of distant surf",
+        "temperature_feel": "warming",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "rising",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "feywind",
+      "slug": "feywind",
+      "name": "Feywind",
+      "taxonomy": {
+        "lore": "The particular breeze that comes without weather to warn of it and passes just before the fair folk are seen. Caught in a bell-shaped jar hung on a hawthorn branch at dusk. Smells slightly of green and slightly of something walking away.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "A faint spiraling suggestion of movement in a sealed vessel, visible only when the light is right. Sometimes carries a leaf that shouldn't be there.",
+        "appearance_img": null,
+        "type": "breath",
+        "category": "pneuma",
+        "traits": [
+          "echoic",
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "essence-vapor",
+            "concentration": 0.7
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.3
+          }
+        ],
+        "related_family": "fae-atmospherics"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 2,
+        "extraction_yield": 0.65,
+        "potency_base": 6,
+        "dose_response": "threshold",
+        "activation_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "boundary-thinner",
+          "dream-inducer",
+          "veil-piercer"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#D0E8C8",
+        "color_secondary": "#B8CFA0",
+        "aroma_notes": [
+          {
+            "note": "green",
+            "position": "top"
+          },
+          {
+            "note": "petrichor",
+            "position": "heart"
+          },
+          {
+            "note": "forgotten",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.2,
+          "bitter": 0.1,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.1,
+          "metallic": 0,
+          "bright": 0.5
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.2
+        },
+        "sound": "the sound of leaves moving where no leaves are visible",
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "seeking",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "petrichor",
+      "slug": "petrichor",
+      "name": "Petrichor",
+      "taxonomy": {
+        "lore": "The smell of rain falling on earth that has been dry too long, distilled into a liquid that keeps its own scent for a decade. The word means the blood of stones. Some apothecaries claim it holds memories of the places it was collected from, and will not sell it without asking where the buyer intends to use it.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Pale amber liquid that seems to hold light without reflecting it. Smells of first rain on baked stone, mineral and vegetal and strangely nostalgic.",
+        "appearance_img": null,
+        "type": "breath",
+        "category": "pneuma",
+        "traits": [
+          "echoic"
+        ],
+        "compound_classes": [
+          {
+            "class": "essence-vapor",
+            "concentration": 0.75
+          },
+          {
+            "class": "volatile-oil",
+            "concentration": 0.25
+          }
+        ],
+        "related_family": "atmospheric-captures"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "none",
+        "stability_base": 4,
+        "extraction_yield": 0.8,
+        "potency_base": 5,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "mnemonic",
+          "echo-binder",
+          "cooling"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#D4B87A",
+        "color_secondary": "#A88E58",
+        "aroma_notes": [
+          {
+            "note": "petrichor",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "mineral",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.2,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.2,
+          "astringent": 0.2,
+          "metallic": 0.1,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.4
+        },
+        "sound": "distant sound of first heavy raindrops on dry ground",
+        "temperature_feel": "cold",
+        "luminosity": "glossy",
+        "motion_tendency": "still",
+        "aesthetic_weight": 0.7
+      }
+    }
+  ]
+}

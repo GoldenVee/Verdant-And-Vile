@@ -1,0 +1,91 @@
+{
+  "category": "aberrant",
+  "ingredients": [
+    {
+      "id": "hanahaki-petals",
+      "slug": "hanahaki-petals",
+      "name": "Hanahaki Petals",
+      "taxonomy": {
+        "lore": "The petals come from the throat, not from the flower. An old and quietly common affliction: an unspoken longing takes root in the chest and blooms until it is voiced or coughed out. Some apothecaries only work with petals from an affliction that ended in the loved one being told. Others prefer the ones that ended silently.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Soft petals in shades that vary with the source, most often pale pink darkening toward the base where the throat held them. Faintly damp when fresh. Carry a scent of flower and something warmer beneath.",
+        "appearance_img": null,
+        "type": "flower",
+        "category": "aberrant",
+        "traits": [
+          "echoic"
+        ],
+        "compound_classes": [
+          {
+            "class": "volatile-oil",
+            "concentration": 0.4
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.6
+          },
+          {
+            "class": "unstable-compound",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "unspoken-flora"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 4,
+        "extraction_yield": 0.7,
+        "potency_base": 7,
+        "dose_response": "threshold",
+        "activation_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "echo-binder",
+          "mnemonic",
+          "boundary-thinner"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#D48B9A",
+        "color_secondary": "#8B3B4A",
+        "aroma_notes": [
+          {
+            "note": "floral",
+            "position": "top"
+          },
+          {
+            "note": "sweet",
+            "position": "heart"
+          },
+          {
+            "note": "sickroom",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.3,
+          "bitter": 0.2,
+          "sour": 0.1,
+          "salty": 0.1,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0.2,
+          "bright": 0.3
+        },
+        "texture": {
+          "type": "fibrous",
+          "intensity": 0.4
+        },
+        "sound": "a held breath that never quite reaches speech",
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "seeking",
+        "aesthetic_weight": 0.8
+      }
+    }
+  ]
+}

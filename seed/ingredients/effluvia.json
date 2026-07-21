@@ -1,0 +1,494 @@
+{
+  "category": "effluvia",
+  "ingredients": [
+    {
+      "id": "miasma",
+      "slug": "miasma",
+      "name": "Miasma",
+      "taxonomy": {
+        "lore": "The bad air of the old physicians, blamed for every fever before the smallness of things was understood. Rises thickest from standing water and old sickrooms. Bottled, it still believes in its own theory of disease.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Sluggish grey-green vapor that pools low in its container rather than rising. Clings to glass. Refuses to mix cleanly with clearer substances.",
+        "appearance_img": null,
+        "type": "vapor",
+        "category": "effluvia",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "noxious-vapor",
+            "concentration": 0.9
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "disease-vapors"
+      },
+      "reactive": {
+        "solubility": "nonpolar",
+        "ph_contribution": 0,
+        "toxicity_base": "high",
+        "stability_base": 2,
+        "extraction_yield": 0.6,
+        "potency_base": 7,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 3,
+        "heat_response": "enhanced-by-heat",
+        "synergy_tags": [
+          "accelerant",
+          "denaturant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#5A6B52",
+        "color_secondary": "#3B453A",
+        "aroma_notes": [
+          {
+            "note": "plant-decay",
+            "position": "top"
+          },
+          {
+            "note": "sulfur",
+            "position": "heart"
+          },
+          {
+            "note": "stale",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.6,
+          "sour": 0.3,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.4,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.3
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "charnel-damp",
+      "slug": "charnel-damp",
+      "name": "Charnel Damp",
+      "taxonomy": {
+        "lore": "The wet chill that rises from old burial ground on warm evenings. Collected in lead-lined jars by those willing to spend a night among the stones. Spreads its condition to whatever sits near it, given time.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Dark oily condensation that beads on the inside of its container without ever fully evaporating. A faint film clings to anything it touches.",
+        "appearance_img": null,
+        "type": "vapor",
+        "category": "effluvia",
+        "traits": [
+          "volatile",
+          "decaying"
+        ],
+        "compound_classes": [
+          {
+            "class": "noxious-vapor",
+            "concentration": 0.8
+          },
+          {
+            "class": "carbon-residue",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "grave-emanations"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": -1,
+        "toxicity_base": "high",
+        "stability_base": 1,
+        "extraction_yield": 0.65,
+        "potency_base": 6,
+        "dose_response": "linear",
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "accelerant",
+          "denaturant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#3B3A2E",
+        "color_secondary": "#1F1E18",
+        "aroma_notes": [
+          {
+            "note": "animal-decay",
+            "position": "top"
+          },
+          {
+            "note": "earth",
+            "position": "heart"
+          },
+          {
+            "note": "stale",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.7,
+          "sour": 0.2,
+          "salty": 0,
+          "umami": 0.1,
+          "astringent": 0.5,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "viscous",
+          "intensity": 0.4
+        },
+        "sound": null,
+        "temperature_feel": "cold",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "plague-breath",
+      "slug": "plague-breath",
+      "name": "Plague Breath",
+      "taxonomy": {
+        "lore": "Held to be the exhalation of the sick, caught in silk before the sickbed's last hour. Whether contagion travels in it or only the fear of contagion, the old physicians never agreed and the modern apothecary declines to test it personally.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Nearly invisible in its vessel, betrayed only by a faint fogging of the glass and a smell that arrives before any visible substance does.",
+        "appearance_img": null,
+        "type": "breath",
+        "category": "effluvia",
+        "traits": [
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "noxious-vapor",
+            "concentration": 0.85
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.4
+          }
+        ],
+        "related_family": "contagion-breaths"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "lethal",
+        "stability_base": 3,
+        "extraction_yield": 0.7,
+        "potency_base": 9,
+        "dose_response": "threshold",
+        "activation_threshold": 2,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "denaturant",
+          "accelerant"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#6B5A5A",
+        "color_secondary": "#4A3B3B",
+        "aroma_notes": [
+          {
+            "note": "animal-decay",
+            "position": "top"
+          },
+          {
+            "note": "sour",
+            "position": "heart"
+          },
+          {
+            "note": "medicinal",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.5,
+          "sour": 0.4,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.3,
+          "metallic": 0.2,
+          "bright": 0
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.2
+        },
+        "sound": "faint labored breathing, always slightly out of time with the room",
+        "temperature_feel": "warming",
+        "luminosity": "dull",
+        "motion_tendency": "seeking",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "corpse-candle-vapor",
+      "slug": "corpse-candle-vapor",
+      "name": "Corpse Candle Vapor",
+      "taxonomy": {
+        "lore": "The pale light seen along Welsh roads before a death, said to trace the path the funeral procession would later walk. Caught in glass at the moment it guttered out. Shows those who hold it what they are not ready to see.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "A faint waxen glow trapped in still vapor, the color of a candle flame seen through fog. Dims and brightens on no discernible rhythm.",
+        "appearance_img": null,
+        "type": "aura",
+        "category": "effluvia",
+        "traits": [
+          "echoic",
+          "volatile"
+        ],
+        "compound_classes": [
+          {
+            "class": "noxious-vapor",
+            "concentration": 0.6
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.5
+          }
+        ],
+        "related_family": "death-omens"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 2,
+        "extraction_yield": 0.55,
+        "potency_base": 7,
+        "dose_response": "hormetic",
+        "hormetic_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "boundary-thinner",
+          "hallucinogenic-amplifier"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#D8C88A",
+        "color_secondary": "#8B7A4A",
+        "aroma_notes": [
+          {
+            "note": "wax",
+            "position": "top"
+          },
+          {
+            "note": "stale",
+            "position": "heart"
+          },
+          {
+            "note": "forgotten",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0.1,
+          "bitter": 0.3,
+          "sour": 0,
+          "salty": 0,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0.1,
+          "bright": 0.2
+        },
+        "texture": {
+          "type": "thin",
+          "intensity": 0.2
+        },
+        "sound": "a sound like a candle guttering, heard from another room",
+        "temperature_feel": "cold",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "seeking",
+        "aesthetic_weight": 0.8
+      }
+    },
+    {
+      "id": "sin-eaters-exhale",
+      "slug": "sin-eaters-exhale",
+      "name": "Sin-Eater's Exhale",
+      "taxonomy": {
+        "lore": "Collected from those who once took a meal from a dead man's chest and called the debt paid, carrying the weight of what they consumed in every breath after. What was transferred to them, transfers again here. The apothecary does not ask what burden it once was.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "A heavy grey vapor that sinks rather than settles, seeming to press against the bottom of its container as though held down by something.",
+        "appearance_img": null,
+        "type": "breath",
+        "category": "effluvia",
+        "traits": [
+          "echoic"
+        ],
+        "compound_classes": [
+          {
+            "class": "noxious-vapor",
+            "concentration": 0.5
+          },
+          {
+            "class": "unknown-substance",
+            "concentration": 0.6
+          }
+        ],
+        "related_family": "burden-transfers"
+      },
+      "reactive": {
+        "solubility": "polar",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 3,
+        "extraction_yield": 0.6,
+        "potency_base": 7,
+        "dose_response": "threshold",
+        "activation_threshold": 3,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "amnesiac",
+          "disinhibitor",
+          "echo-binder"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#4A4642",
+        "color_secondary": "#2B2926",
+        "aroma_notes": [
+          {
+            "note": "stale",
+            "position": "top"
+          },
+          {
+            "note": "bread",
+            "position": "heart"
+          },
+          {
+            "note": "animal-decay",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.6,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0.4,
+          "astringent": 0.3,
+          "metallic": 0,
+          "bright": 0
+        },
+        "texture": {
+          "type": "viscous",
+          "intensity": 0.4
+        },
+        "sound": "a held breath that never quite releases",
+        "temperature_feel": "neutral",
+        "luminosity": "dull",
+        "motion_tendency": "settling",
+        "aesthetic_weight": 0.7
+      }
+    },
+    {
+      "id": "ectoplasm",
+      "slug": "ectoplasm",
+      "name": "Ectoplasm",
+      "taxonomy": {
+        "lore": "The pale substance that manifests at the edges of a séance, real enough to photograph and never real enough to hold. Whether it was ever what it claimed to be, some apothecaries insist their supply is genuine. Others do not ask.",
+        "origin": "fictional",
+        "scientific_name": null,
+        "appearance_text": "Translucent whitish-grey strands, faintly luminous, that seem to fray and reform at the edges. Cold to the touch in a way that has nothing to do with temperature.",
+        "appearance_img": null,
+        "type": "residue",
+        "category": "effluvia",
+        "traits": [
+          "volatile",
+          "shy"
+        ],
+        "compound_classes": [
+          {
+            "class": "unknown-substance",
+            "concentration": 0.7
+          },
+          {
+            "class": "protein",
+            "concentration": 0.2
+          }
+        ],
+        "related_family": "seance-manifestations"
+      },
+      "reactive": {
+        "solubility": "universal",
+        "ph_contribution": 0,
+        "toxicity_base": "low",
+        "stability_base": 2,
+        "extraction_yield": 0.5,
+        "potency_base": 5,
+        "dose_response": "ceiling",
+        "ceiling_value": 4,
+        "heat_response": "destroyed-by-heat",
+        "synergy_tags": [
+          "veil-piercer",
+          "echo-binder"
+        ],
+        "antagonist_tags": []
+      },
+      "sensory": {
+        "color_base": "#E5E5E0",
+        "color_secondary": "#C4C4BA",
+        "aroma_notes": [
+          {
+            "note": "stale",
+            "position": "top"
+          },
+          {
+            "note": "mineral",
+            "position": "heart"
+          },
+          {
+            "note": "forgotten",
+            "position": "base"
+          }
+        ],
+        "taste_profile": {
+          "sweet": 0,
+          "bitter": 0.2,
+          "sour": 0,
+          "salty": 0.1,
+          "umami": 0,
+          "astringent": 0.2,
+          "metallic": 0.2,
+          "bright": 0.1
+        },
+        "texture": {
+          "type": "viscous",
+          "intensity": 0.3
+        },
+        "sound": "a faint sound like fabric, though nothing woven is present",
+        "temperature_feel": "cold",
+        "luminosity": "phosphorescent",
+        "motion_tendency": "seeking",
+        "aesthetic_weight": 0.8
+      }
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "solvents": [
+    {
+      "id": "water",
+      "slug": "water",
+      "name": "Water",
+      "lore": null,
+      "polarity": "polar",
+      "base_ph": 7.0,
+      "compatible_outcomes": [
+        "potion",
+        "concentrate",
+        "reduction",
+        "liniment",
+        "aromatic",
+        "vapors",
+        "paste",
+        "powder-balls",
+        "veil",
+        "eye-drops"
+      ],
+      "stability_modifier": 0.7,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#EAF2F5",
+        "viscosity": "thin",
+        "luminosity": "glossy"
+      },
+      "category_affinity": {
+        "strong": ["botanical", "fungal"],
+        "weak": ["mineral", "pneuma"]
+      },
+      "category_resistance": {
+        "strong": ["effluvia"],
+        "weak": ["cosmic"]
+      },
+      "signature_transformation": null,
+      "physical_form": "liquid"
+    },
+    {
+      "id": "spirits",
+      "slug": "spirits",
+      "name": "Spirits",
+      "lore": null,
+      "polarity": "universal",
+      "base_ph": 6.5,
+      "compatible_outcomes": [
+        "potion",
+        "concentrate",
+        "liniment",
+        "aromatic",
+        "vapors",
+        "pellet",
+        "powder-balls",
+        "veil"
+      ],
+      "stability_modifier": 2.0,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#F0F0EC",
+        "viscosity": "thin",
+        "luminosity": "glossy"
+      },
+      "category_affinity": {
+        "strong": ["botanical", "fungal", "fauna-derived"],
+        "weak": ["alchemical"]
+      },
+      "category_resistance": {
+        "strong": ["pneuma"],
+        "weak": ["aberrant"]
+      },
+      "signature_transformation": null,
+      "physical_form": "liquid"
+    },
+    {
+      "id": "oil",
+      "slug": "oil",
+      "name": "Oil",
+      "lore": null,
+      "polarity": "nonpolar",
+      "base_ph": null,
+      "compatible_outcomes": [
+        "concentrate",
+        "liniment",
+        "balm",
+        "aromatic",
+        "vapors",
+        "paste",
+        "veil",
+        "eye-drops"
+      ],
+      "stability_modifier": 1.3,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#D4A855",
+        "viscosity": "viscous",
+        "luminosity": "glossy"
+      },
+      "category_affinity": {
+        "strong": ["botanical", "fauna-derived"],
+        "weak": ["fungal"]
+      },
+      "category_resistance": {
+        "strong": ["mineral", "effluvia"],
+        "weak": ["pneuma"]
+      },
+      "signature_transformation": null,
+      "physical_form": "liquid"
+    },
+    {
+      "id": "vinegar",
+      "slug": "vinegar",
+      "name": "Vinegar",
+      "lore": null,
+      "polarity": "acid-soluble",
+      "base_ph": 2.5,
+      "compatible_outcomes": [
+        "potion",
+        "concentrate",
+        "reduction",
+        "liniment",
+        "aromatic",
+        "vapors",
+        "paste",
+        "powder-balls",
+        "veil"
+      ],
+      "stability_modifier": 1.5,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#E8D580",
+        "viscosity": "thin",
+        "luminosity": "glossy"
+      },
+      "category_affinity": {
+        "strong": ["mineral", "fauna-derived", "alchemical"],
+        "weak": ["botanical"]
+      },
+      "category_resistance": {
+        "strong": ["pneuma"],
+        "weak": ["cosmic"]
+      },
+      "signature_transformation": null,
+      "physical_form": "liquid"
+    },
+    {
+      "id": "honey",
+      "slug": "honey",
+      "name": "Honey",
+      "lore": null,
+      "polarity": "polar",
+      "base_ph": 4.0,
+      "compatible_outcomes": [
+        "potion",
+        "reduction",
+        "balm",
+        "pellet",
+        "paste",
+        "powder-balls",
+        "eye-drops"
+      ],
+      "stability_modifier": 3.0,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#D4903A",
+        "viscosity": "viscous",
+        "luminosity": "glossy"
+      },
+      "category_affinity": {
+        "strong": ["botanical", "pneuma"],
+        "weak": ["fungal", "fauna-derived"]
+      },
+      "category_resistance": {
+        "strong": ["alchemical"],
+        "weak": ["effluvia"]
+      },
+      "signature_transformation": null,
+      "physical_form": "liquid"
+    },
+    {
+      "id": "ichor",
+      "slug": "ichor",
+      "name": "Ichor",
+      "lore": null,
+      "polarity": "polar",
+      "base_ph": null,
+      "compatible_outcomes": [
+        "potion",
+        "concentrate",
+        "reduction",
+        "liniment",
+        "balm",
+        "aromatic",
+        "sachet",
+        "vapors",
+        "pellet",
+        "paste",
+        "powder-balls",
+        "veil",
+        "eye-drops"
+      ],
+      "stability_modifier": 0.4,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#FFD700",
+        "viscosity": "viscous",
+        "luminosity": "phosphorescent"
+      },
+      "category_affinity": {
+        "strong": ["fauna-derived", "aberrant"],
+        "weak": ["pneuma", "cosmic"]
+      },
+      "category_resistance": {
+        "strong": ["alchemical"],
+        "weak": ["mineral"]
+      },
+      "signature_transformation": {
+        "type": "additive-elevation",
+        "summary": "you become more"
+      },
+      "physical_form": "liquid"
+    },
+    {
+      "id": "prism",
+      "slug": "prism",
+      "name": "Prism",
+      "lore": null,
+      "polarity": "universal",
+      "base_ph": null,
+      "compatible_outcomes": [
+        "potion",
+        "concentrate",
+        "reduction",
+        "liniment",
+        "balm",
+        "aromatic",
+        "sachet",
+        "vapors",
+        "pellet",
+        "paste",
+        "powder-balls",
+        "veil",
+        "eye-drops"
+      ],
+      "stability_modifier": 1.0,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#F5F0FA",
+        "viscosity": "thin",
+        "luminosity": "phosphorescent"
+      },
+      "category_affinity": {
+        "strong": ["aberrant", "cosmic"],
+        "weak": ["pneuma", "mineral"]
+      },
+      "category_resistance": {
+        "strong": [],
+        "weak": ["fauna-derived"]
+      },
+      "signature_transformation": {
+        "type": "refractive-alteration",
+        "summary": "you become other"
+      },
+      "physical_form": "liquid"
+    },
+    {
+      "id": "lacuna",
+      "slug": "lacuna",
+      "name": "Lacuna",
+      "lore": null,
+      "polarity": "anti-solvent",
+      "base_ph": null,
+      "compatible_outcomes": [
+        "potion",
+        "concentrate",
+        "reduction",
+        "liniment",
+        "balm",
+        "aromatic",
+        "sachet",
+        "vapors",
+        "pellet",
+        "paste",
+        "powder-balls",
+        "veil",
+        "eye-drops"
+      ],
+      "stability_modifier": 5.0,
+      "heat_default": "warm",
+      "aesthetic_base": {
+        "color": "#1A1A1A",
+        "viscosity": "thin",
+        "luminosity": "light-swallowing"
+      },
+      "category_affinity": {
+        "strong": ["aberrant", "cosmic"],
+        "weak": ["effluvia", "pneuma"]
+      },
+      "category_resistance": {
+        "strong": ["botanical", "fauna-derived"],
+        "weak": ["fungal"]
+      },
+      "signature_transformation": {
+        "type": "subtractive-erasure",
+        "summary": "you become less"
+      },
+      "physical_form": "liquid"
+    }
+  ]
+}

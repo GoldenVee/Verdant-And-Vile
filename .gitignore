@@ -1,0 +1,12 @@
+# Local, gitignored ADR directory (see CLAUDE.md; ADRs are not in the public repo)
+docs/adr/
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Env
+.env
+.env.*
+!.env.example

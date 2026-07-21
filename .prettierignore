@@ -1,0 +1,9 @@
+dist
+node_modules
+pnpm-lock.yaml
+drizzle
+seed
+
+# Authored prose and design docs; not auto-formatted.
+*.md
+docs
