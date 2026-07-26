@@ -1,20 +1,27 @@
-// Pipeline composition. Runs rules in order, short-circuiting on the first Err. The
-// rule list is intentionally empty for now; the seven v1 rules land here one file at a
-// time:
+// Pipeline composition. `buildRules` is the composition root: it wires each rule with
+// the dependencies it needs (rules that need lookup tables are factories closing over
+// them; dependency-free rules are plain objects). `runPipeline` stays ignorant of
+// dependencies and simply runs rules in order, short-circuiting on the first Err.
 //
+// Rule order:
 //   SolventMatchRule -> AntagonismRule -> SynergyRule -> DoseCurveRule
 //     -> StabilityRule -> ToxicityRule -> SignatureTransformRule
 
 import { ok, type Result } from '../domain/result.js';
+import type { PipelineData } from '../domain/types.js';
 import type { BrewingContext } from './context.js';
 import type { Failure, Rule } from './rule.js';
+import { makeAntagonismRule } from './rules/antagonism.js';
 import { solventMatchRule } from './rules/solvent-match.js';
 
-export const RULES: Rule[] = [solventMatchRule];
+// Assembles the ordered rule list, injecting static data into the rules that need it.
+export function buildRules(data: PipelineData): Rule[] {
+  return [solventMatchRule, makeAntagonismRule(data)];
+}
 
 export function runPipeline(
   context: BrewingContext,
-  rules: Rule[] = RULES,
+  rules: Rule[],
 ): Result<BrewingContext, Failure> {
   let current = context;
   for (const rule of rules) {

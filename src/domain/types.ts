@@ -17,6 +17,7 @@ import type {
   Polarity,
   SignatureType,
   Solubility,
+  SynergyPairType,
   TasteKey,
   TemperatureFeel,
   TextureType,
@@ -127,6 +128,51 @@ export interface AestheticBase {
 export interface SignatureTransformation {
   type: SignatureType;
   summary: string;
+}
+
+// ---- Static lookup tables (the pipeline "rulebook") ----
+// Loaded once from the DB and injected into rules that need them. Read-only; not part
+// of per-combination state.
+
+export interface TagDefinition {
+  slug: string;
+  category: string;
+  // Compound classes this tag acts on (for tag-targets-compound patterns).
+  targets: string[] | null;
+  // True when the tag acts on any compound class (bioavailability booster/inhibitor).
+  targetsAnyCompound: boolean;
+  // Effect types this tag amplifies (parked gap; not yet backed by ingredient data).
+  effectTargets: string[] | null;
+  // Synergy boost when the tag amplifies its targets.
+  boost: number | null;
+  // Antagonism severity when the tag neutralizes its targets.
+  severity: number | null;
+  oppositeTag: string | null;
+}
+
+export interface SynergyPair {
+  tagA: string;
+  tagB: string;
+  type: SynergyPairType;
+  boost: number | null;
+  severity: number | null;
+  complementaryCeiling: number | null;
+  balancedCeiling: number | null;
+  strainingCeiling: number | null;
+  warningTemplate: string;
+}
+
+// The static data a pipeline run reads. Injected into rules that need it via a factory.
+export interface PipelineData {
+  tagDefinitions: Map<string, TagDefinition>;
+  synergyPairs: SynergyPair[];
+}
+
+// A scaled tag pair AntagonismRule classified as complementary, deferred to SynergyRule.
+export interface DeferredComplementaryPair {
+  a: CombinationIngredient;
+  b: CombinationIngredient;
+  boost: number;
 }
 
 // The assembled solvent record.

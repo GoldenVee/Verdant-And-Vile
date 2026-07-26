@@ -4,12 +4,22 @@
 
 import { combinationSeed, prngFor, type Prng } from '../domain/prng.js';
 import type { FailureReason, Outcome } from '../domain/enums.js';
-import type { CombinationIngredient, Ingredient, Solvent } from '../domain/types.js';
+import type {
+  CombinationIngredient,
+  DeferredComplementaryPair,
+  Ingredient,
+  PipelineData,
+  Solvent,
+} from '../domain/types.js';
 
 export interface PipelineInput {
   ingredients: Ingredient[];
   solvent: Solvent;
   outcome: Outcome;
+}
+
+export function emptyPipelineData(): PipelineData {
+  return { tagDefinitions: new Map(), synergyPairs: [] };
 }
 
 export interface BrewingContext {
@@ -27,6 +37,9 @@ export interface BrewingContext {
 
   // Set true by SolventMatchRule on a successful pass.
   solventValidated: boolean;
+
+  // Scaled pairs AntagonismRule classified as complementary, consumed by SynergyRule.
+  deferredComplementaryPairs: DeferredComplementaryPair[];
 
   // Accumulated across rules.
   warnings: string[];
@@ -61,6 +74,7 @@ export function createContext(input: PipelineInput): BrewingContext {
     masterSeed,
     prngFor: (ruleName: string) => prngFor(masterSeed, ruleName),
     solventValidated: false,
+    deferredComplementaryPairs: [],
     warnings: [],
     failed: false,
     failureReason: null,

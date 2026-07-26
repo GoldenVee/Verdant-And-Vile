@@ -2,7 +2,13 @@
 // sensible defaults; pass overrides for the fields under test.
 
 import { OUTCOMES } from '../../src/domain/enums.js';
-import type { Ingredient, Solvent } from '../../src/domain/types.js';
+import type {
+  Ingredient,
+  PipelineData,
+  Solvent,
+  SynergyPair,
+  TagDefinition,
+} from '../../src/domain/types.js';
 
 export function makeIngredient(overrides: Partial<Ingredient> = {}): Ingredient {
   return {
@@ -92,4 +98,55 @@ export function makeFictionalSolvent(overrides: Partial<Solvent> = {}): Solvent 
     signatureTransformation: { type: 'subtractive-erasure', summary: 'you become less' },
     ...overrides,
   });
+}
+
+export function makeTagDef(overrides: Partial<TagDefinition> & { slug: string }): TagDefinition {
+  return {
+    category: 'interaction',
+    targets: null,
+    targetsAnyCompound: false,
+    effectTargets: null,
+    boost: null,
+    severity: null,
+    oppositeTag: null,
+    ...overrides,
+  };
+}
+
+export function makeSynergyPair(p: {
+  tagA: string;
+  tagB: string;
+  type: SynergyPair['type'];
+  boost?: number | null;
+  severity?: number | null;
+  complementaryCeiling?: number | null;
+  balancedCeiling?: number | null;
+  strainingCeiling?: number | null;
+  warningTemplate?: string;
+}): SynergyPair {
+  return {
+    tagA: p.tagA,
+    tagB: p.tagB,
+    type: p.type,
+    boost: p.boost ?? null,
+    severity: p.severity ?? null,
+    complementaryCeiling: p.complementaryCeiling ?? null,
+    balancedCeiling: p.balancedCeiling ?? null,
+    strainingCeiling: p.strainingCeiling ?? null,
+    warningTemplate: p.warningTemplate ?? '{A} and {B} interact.',
+  };
+}
+
+export function makePipelineData(
+  opts: { tags?: TagDefinition[]; pairs?: SynergyPair[] } = {},
+): PipelineData {
+  const tagDefinitions = new Map<string, TagDefinition>();
+  for (const tag of opts.tags ?? []) tagDefinitions.set(tag.slug, tag);
+  return { tagDefinitions, synergyPairs: opts.pairs ?? [] };
+}
+
+// A complementary pair of tag definitions that oppose each other (each names the other
+// as its opposite), for opposite-tag antagonism tests.
+export function makeOppositeTags(a: string, b: string): TagDefinition[] {
+  return [makeTagDef({ slug: a, oppositeTag: b }), makeTagDef({ slug: b, oppositeTag: a })];
 }
