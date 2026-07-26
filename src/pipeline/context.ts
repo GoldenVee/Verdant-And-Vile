@@ -4,7 +4,7 @@
 
 import { combinationSeed, prngFor, type Prng } from '../domain/prng.js';
 import type { FailureReason, Outcome } from '../domain/enums.js';
-import type { Ingredient, Solvent } from '../domain/types.js';
+import type { CombinationIngredient, Ingredient, Solvent } from '../domain/types.js';
 
 export interface PipelineInput {
   ingredients: Ingredient[];
@@ -13,9 +13,10 @@ export interface PipelineInput {
 }
 
 export interface BrewingContext {
-  // Inputs. `ingredients` starts as raw records and is replaced by CombinationIngredient
-  // wrappers once SolventMatchRule is implemented.
-  ingredients: Ingredient[];
+  // Ingredients are wrapped at context creation with empty weight data, so the type is
+  // stable across the whole pipeline. SolventMatchRule populates the weights; later
+  // rules read and extend them.
+  ingredients: CombinationIngredient[];
   solvent: Solvent;
   outcome: Outcome;
 
@@ -23,6 +24,9 @@ export interface BrewingContext {
   // rule can pollute another's randomness.
   masterSeed: string;
   prngFor(ruleName: string): Prng;
+
+  // Set true by SolventMatchRule on a successful pass.
+  solventValidated: boolean;
 
   // Accumulated across rules.
   warnings: string[];
@@ -32,6 +36,18 @@ export interface BrewingContext {
   failureReason: FailureReason | null;
 }
 
+function wrap(ingredient: Ingredient): CombinationIngredient {
+  return {
+    ingredient,
+    weightData: {
+      chemicalExtractionWeight: 0,
+      presenceWeight: 0,
+      extractionYieldModifier: 0,
+      warnings: [],
+    },
+  };
+}
+
 export function createContext(input: PipelineInput): BrewingContext {
   const masterSeed = combinationSeed(
     input.ingredients.map((i) => i.id),
@@ -39,11 +55,12 @@ export function createContext(input: PipelineInput): BrewingContext {
     input.outcome,
   );
   return {
-    ingredients: input.ingredients,
+    ingredients: input.ingredients.map(wrap),
     solvent: input.solvent,
     outcome: input.outcome,
     masterSeed,
     prngFor: (ruleName: string) => prngFor(masterSeed, ruleName),
+    solventValidated: false,
     warnings: [],
     failed: false,
     failureReason: null,

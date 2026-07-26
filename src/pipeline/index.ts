@@ -8,8 +8,9 @@
 import { ok, type Result } from '../domain/result.js';
 import type { BrewingContext } from './context.js';
 import type { Failure, Rule } from './rule.js';
+import { solventMatchRule } from './rules/solvent-match.js';
 
-export const RULES: Rule[] = [];
+export const RULES: Rule[] = [solventMatchRule];
 
 export function runPipeline(
   context: BrewingContext,

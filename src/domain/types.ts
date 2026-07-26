@@ -89,6 +89,30 @@ export interface Ingredient {
   aestheticWeight: number;
 }
 
+// Pipeline-derived weights attached to an ingredient during a combination. The
+// original ingredient record stays immutable; this holds the mutable per-rule state.
+// SolventMatchRule populates these fields; later rules add more (potency, dose state).
+export interface WeightData {
+  // How much of the ingredient's chemistry enters the medium (0.0-1.0). Set by
+  // SolventMatchRule, reduced by AntagonismRule.
+  chemicalExtractionWeight: number;
+  // How much the ingredient is physically/sensorily present (0.0-1.0). Set
+  // independently of extraction; insoluble ingredients still have presence.
+  presenceWeight: number;
+  // Additive modifier from category affinity/resistance (-0.50 to +0.30).
+  extractionYieldModifier: number;
+  // Human-readable per-ingredient notes surfaced to the final result.
+  warnings: string[];
+}
+
+// An ingredient wrapped with its computed weight data for the duration of a
+// combination. Downstream rules read ci.ingredient.<prop> for immutable properties
+// and ci.weightData.<field> for pipeline state.
+export interface CombinationIngredient {
+  ingredient: Ingredient;
+  weightData: WeightData;
+}
+
 export interface CategoryTiers {
   strong: Category[];
   weak: Category[];
