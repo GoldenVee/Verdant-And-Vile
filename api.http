@@ -1,0 +1,97 @@
+# Manual API requests for local testing.
+#
+# Requires the VS Code "REST Client" extension (humao.rest-client). Click the
+# "Send Request" link above any request below. Start the server first with `pnpm dev`.
+#
+# Keep this file current as endpoints change; it doubles as a live map of the API surface.
+
+@base = http://localhost:3000
+
+### Health check
+GET {{base}}/health
+
+
+### ---------- Ingredients ----------
+
+### List all ingredients (57, each with compounds, aroma notes, and tags assembled)
+GET {{base}}/ingredients
+
+### A real botanical with a related family and a hormetic dose curve
+GET {{base}}/ingredients/foxglove
+
+### A botanical carrying the volatile trait
+GET {{base}}/ingredients/valerian
+
+### The only aberrant ingredient currently authored
+GET {{base}}/ingredients/hanahaki-petals
+
+### Not found: expect 404 with { error: { code: "NOT_FOUND", message } }
+GET {{base}}/ingredients/nonexistent
+
+
+### ---------- Solvents ----------
+
+### List all solvents (5 grounded, 3 fictional)
+GET {{base}}/solvents
+
+### Grounded solvent: restricted outcome compatibility
+GET {{base}}/solvents/water
+
+### Fictional solvent: bypasses outcome gates, carries a signature transformation
+GET {{base}}/solvents/lacuna
+
+### Not found: expect 404
+GET {{base}}/solvents/nonexistent
+
+
+### ---------- Combinations (pipeline stubbed) ----------
+
+### Valid request shape. Passes schema validation, then returns 501 NOT_IMPLEMENTED
+### until the rules pipeline is built.
+POST {{base}}/combinations
+Content-Type: application/json
+
+{
+  "ingredients": ["foxglove", "valerian"],
+  "solvent": "water",
+  "outcome": "potion"
+}
+
+### Validation failure: too few ingredients (minimum 2). Expect 400 VALIDATION_ERROR.
+POST {{base}}/combinations
+Content-Type: application/json
+
+{
+  "ingredients": ["foxglove"],
+  "solvent": "water",
+  "outcome": "potion"
+}
+
+### Validation failure: too many ingredients (maximum 4). Expect 400.
+POST {{base}}/combinations
+Content-Type: application/json
+
+{
+  "ingredients": ["foxglove", "valerian", "belladonna", "chamomile", "yarrow"],
+  "solvent": "water",
+  "outcome": "potion"
+}
+
+### Validation failure: outcome not in the enum. Expect 400.
+POST {{base}}/combinations
+Content-Type: application/json
+
+{
+  "ingredients": ["foxglove", "valerian"],
+  "solvent": "water",
+  "outcome": "nonsense"
+}
+
+### Validation failure: missing required field (solvent). Expect 400.
+POST {{base}}/combinations
+Content-Type: application/json
+
+{
+  "ingredients": ["foxglove", "valerian"],
+  "outcome": "potion"
+}
