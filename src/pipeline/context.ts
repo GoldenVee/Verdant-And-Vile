@@ -56,6 +56,7 @@ function wrap(ingredient: Ingredient): CombinationIngredient {
       chemicalExtractionWeight: 0,
       presenceWeight: 0,
       extractionYieldModifier: 0,
+      potencyMultiplier: 1,
       warnings: [],
     },
   };

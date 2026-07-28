@@ -102,6 +102,10 @@ export interface WeightData {
   presenceWeight: number;
   // Additive modifier from category affinity/resistance (-0.50 to +0.30).
   extractionYieldModifier: number;
+  // Accumulated synergy amplification (starts at 1.0, capped per solvent). Set by
+  // SynergyRule on a field separate from extraction weight: extraction weight is how
+  // much dissolved, potency multiplier is how effective what dissolved is.
+  potencyMultiplier: number;
   // Human-readable per-ingredient notes surfaced to the final result.
   warnings: string[];
 }

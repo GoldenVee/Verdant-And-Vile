@@ -13,10 +13,11 @@ import type { BrewingContext } from './context.js';
 import type { Failure, Rule } from './rule.js';
 import { makeAntagonismRule } from './rules/antagonism.js';
 import { solventMatchRule } from './rules/solvent-match.js';
+import { makeSynergyRule } from './rules/synergy.js';
 
 // Assembles the ordered rule list, injecting static data into the rules that need it.
 export function buildRules(data: PipelineData): Rule[] {
-  return [solventMatchRule, makeAntagonismRule(data)];
+  return [solventMatchRule, makeAntagonismRule(data), makeSynergyRule(data)];
 }
 
 export function runPipeline(
