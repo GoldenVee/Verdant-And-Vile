@@ -6,6 +6,7 @@ import type {
   AromaPosition,
   Category,
   DoseResponse,
+  DoseState,
   HeatDefault,
   HeatResponse,
   IngredientType,
@@ -106,6 +107,12 @@ export interface WeightData {
   // SynergyRule on a field separate from extraction weight: extraction weight is how
   // much dissolved, potency multiplier is how effective what dissolved is.
   potencyMultiplier: number;
+  // Final potency contribution after dose-curve resolution (may be negative on a
+  // hormetic flip). Set by DoseCurveRule; null until then. Primary input to Stability
+  // and Toxicity.
+  effectivePotency: number | null;
+  // Dose-curve outcome classification. Set by DoseCurveRule; null until then.
+  doseState: DoseState | null;
   // Human-readable per-ingredient notes surfaced to the final result.
   warnings: string[];
 }
@@ -116,6 +123,9 @@ export interface WeightData {
 export interface CombinationIngredient {
   ingredient: Ingredient;
   weightData: WeightData;
+  // Dose response after Prism refraction (equals the ingredient's own response under any
+  // other solvent). Set by DoseCurveRule; null until then.
+  refractedResponse: DoseResponse | null;
 }
 
 export interface CategoryTiers {

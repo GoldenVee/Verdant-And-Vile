@@ -41,6 +41,9 @@ export interface BrewingContext {
   // Scaled pairs AntagonismRule classified as complementary, consumed by SynergyRule.
   deferredComplementaryPairs: DeferredComplementaryPair[];
 
+  // Cumulative compound-class load, keyed by compound class. Set by DoseCurveRule.
+  cumulativeLoads: Map<string, number>;
+
   // Accumulated across rules.
   warnings: string[];
 
@@ -57,8 +60,11 @@ function wrap(ingredient: Ingredient): CombinationIngredient {
       presenceWeight: 0,
       extractionYieldModifier: 0,
       potencyMultiplier: 1,
+      effectivePotency: null,
+      doseState: null,
       warnings: [],
     },
+    refractedResponse: null,
   };
 }
 
@@ -76,6 +82,7 @@ export function createContext(input: PipelineInput): BrewingContext {
     prngFor: (ruleName: string) => prngFor(masterSeed, ruleName),
     solventValidated: false,
     deferredComplementaryPairs: [],
+    cumulativeLoads: new Map(),
     warnings: [],
     failed: false,
     failureReason: null,
