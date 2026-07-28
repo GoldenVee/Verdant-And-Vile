@@ -14,11 +14,18 @@ import type { Failure, Rule } from './rule.js';
 import { makeAntagonismRule } from './rules/antagonism.js';
 import { doseCurveRule } from './rules/dose-curve.js';
 import { solventMatchRule } from './rules/solvent-match.js';
+import { stabilityRule } from './rules/stability.js';
 import { makeSynergyRule } from './rules/synergy.js';
 
 // Assembles the ordered rule list, injecting static data into the rules that need it.
 export function buildRules(data: PipelineData): Rule[] {
-  return [solventMatchRule, makeAntagonismRule(data), makeSynergyRule(data), doseCurveRule];
+  return [
+    solventMatchRule,
+    makeAntagonismRule(data),
+    makeSynergyRule(data),
+    doseCurveRule,
+    stabilityRule,
+  ];
 }
 
 export function runPipeline(

@@ -3,7 +3,7 @@
 // context (never coupled to HTTP or DB concerns).
 
 import { combinationSeed, prngFor, type Prng } from '../domain/prng.js';
-import type { FailureReason, Outcome } from '../domain/enums.js';
+import type { FailureReason, Outcome, StabilityState } from '../domain/enums.js';
 import type {
   CombinationIngredient,
   DeferredComplementaryPair,
@@ -44,6 +44,13 @@ export interface BrewingContext {
   // Cumulative compound-class load, keyed by compound class. Set by DoseCurveRule.
   cumulativeLoads: Map<string, number>;
 
+  // Set by SynergyRule pass 2 (Lacuna); null until then. Read by StabilityRule Stage 7.
+  permanenceScale: number | null;
+
+  // Set by StabilityRule.
+  stability: number | null;
+  stabilityState: StabilityState | null;
+
   // Accumulated across rules.
   warnings: string[];
 
@@ -83,6 +90,9 @@ export function createContext(input: PipelineInput): BrewingContext {
     solventValidated: false,
     deferredComplementaryPairs: [],
     cumulativeLoads: new Map(),
+    permanenceScale: null,
+    stability: null,
+    stabilityState: null,
     warnings: [],
     failed: false,
     failureReason: null,
