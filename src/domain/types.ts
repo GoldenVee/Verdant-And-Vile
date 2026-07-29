@@ -6,6 +6,8 @@ import type {
   AromaPosition,
   Category,
   DoseResponse,
+  DoseState,
+  EffectDomain,
   HeatDefault,
   HeatResponse,
   IngredientType,
@@ -17,10 +19,12 @@ import type {
   Polarity,
   SignatureType,
   Solubility,
+  SynergyPairType,
   TasteKey,
   TemperatureFeel,
   TextureType,
   ToxicityLevel,
+  ToxicityState,
   Trait,
 } from './enums.js';
 
@@ -89,6 +93,43 @@ export interface Ingredient {
   aestheticWeight: number;
 }
 
+// Pipeline-derived weights attached to an ingredient during a combination. The
+// original ingredient record stays immutable; this holds the mutable per-rule state.
+// SolventMatchRule populates these fields; later rules add more (potency, dose state).
+export interface WeightData {
+  // How much of the ingredient's chemistry enters the medium (0.0-1.0). Set by
+  // SolventMatchRule, reduced by AntagonismRule.
+  chemicalExtractionWeight: number;
+  // How much the ingredient is physically/sensorily present (0.0-1.0). Set
+  // independently of extraction; insoluble ingredients still have presence.
+  presenceWeight: number;
+  // Additive modifier from category affinity/resistance (-0.50 to +0.30).
+  extractionYieldModifier: number;
+  // Accumulated synergy amplification (starts at 1.0, capped per solvent). Set by
+  // SynergyRule on a field separate from extraction weight: extraction weight is how
+  // much dissolved, potency multiplier is how effective what dissolved is.
+  potencyMultiplier: number;
+  // Final potency contribution after dose-curve resolution (may be negative on a
+  // hormetic flip). Set by DoseCurveRule; null until then. Primary input to Stability
+  // and Toxicity.
+  effectivePotency: number | null;
+  // Dose-curve outcome classification. Set by DoseCurveRule; null until then.
+  doseState: DoseState | null;
+  // Human-readable per-ingredient notes surfaced to the final result.
+  warnings: string[];
+}
+
+// An ingredient wrapped with its computed weight data for the duration of a
+// combination. Downstream rules read ci.ingredient.<prop> for immutable properties
+// and ci.weightData.<field> for pipeline state.
+export interface CombinationIngredient {
+  ingredient: Ingredient;
+  weightData: WeightData;
+  // Dose response after Prism refraction (equals the ingredient's own response under any
+  // other solvent). Set by DoseCurveRule; null until then.
+  refractedResponse: DoseResponse | null;
+}
+
 export interface CategoryTiers {
   strong: Category[];
   weak: Category[];
@@ -103,6 +144,73 @@ export interface AestheticBase {
 export interface SignatureTransformation {
   type: SignatureType;
   summary: string;
+}
+
+// ---- Static lookup tables (the pipeline "rulebook") ----
+// Loaded once from the DB and injected into rules that need them. Read-only; not part
+// of per-combination state.
+
+export interface TagDefinition {
+  slug: string;
+  category: string;
+  // Compound classes this tag acts on (for tag-targets-compound patterns).
+  targets: string[] | null;
+  // True when the tag acts on any compound class (bioavailability booster/inhibitor).
+  targetsAnyCompound: boolean;
+  // Effect types this tag amplifies (parked gap; not yet backed by ingredient data).
+  effectTargets: string[] | null;
+  // Synergy boost when the tag amplifies its targets.
+  boost: number | null;
+  // Antagonism severity when the tag neutralizes its targets.
+  severity: number | null;
+  oppositeTag: string | null;
+}
+
+export interface SynergyPair {
+  tagA: string;
+  tagB: string;
+  type: SynergyPairType;
+  boost: number | null;
+  severity: number | null;
+  complementaryCeiling: number | null;
+  balancedCeiling: number | null;
+  strainingCeiling: number | null;
+  warningTemplate: string;
+}
+
+// The static data a pipeline run reads. Injected into rules that need it via a factory.
+export interface PipelineData {
+  tagDefinitions: Map<string, TagDefinition>;
+  synergyPairs: SynergyPair[];
+}
+
+// A scaled tag pair AntagonismRule classified as complementary, deferred to SynergyRule.
+export interface DeferredComplementaryPair {
+  a: CombinationIngredient;
+  b: CombinationIngredient;
+  boost: number;
+}
+
+// A Lacuna subtractive transmutation record. Written by SynergyRule pass 2, read by
+// ToxicityRule to route psychic/sensory contributions by effect domain.
+export interface LacunaTransmuteMarker {
+  ingredientId: string;
+  originalEffect: string;
+  transmutedEffect: string;
+  effectDomain: EffectDomain;
+}
+
+// Three-dimensional toxicity, each 0-10.
+export interface Toxicity {
+  somatic: number;
+  psychic: number;
+  sensory: number;
+}
+
+export interface ToxicityStateObject {
+  somatic: ToxicityState;
+  psychic: ToxicityState;
+  sensory: ToxicityState;
 }
 
 // The assembled solvent record.

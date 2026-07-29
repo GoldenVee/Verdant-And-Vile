@@ -3,8 +3,17 @@
 // context (never coupled to HTTP or DB concerns).
 
 import { combinationSeed, prngFor, type Prng } from '../domain/prng.js';
-import type { FailureReason, Outcome } from '../domain/enums.js';
-import type { Ingredient, Solvent } from '../domain/types.js';
+import type { FailureReason, Outcome, StabilityState } from '../domain/enums.js';
+import type {
+  CombinationIngredient,
+  DeferredComplementaryPair,
+  Ingredient,
+  LacunaTransmuteMarker,
+  PipelineData,
+  Solvent,
+  Toxicity,
+  ToxicityStateObject,
+} from '../domain/types.js';
 
 export interface PipelineInput {
   ingredients: Ingredient[];
@@ -12,10 +21,15 @@ export interface PipelineInput {
   outcome: Outcome;
 }
 
+export function emptyPipelineData(): PipelineData {
+  return { tagDefinitions: new Map(), synergyPairs: [] };
+}
+
 export interface BrewingContext {
-  // Inputs. `ingredients` starts as raw records and is replaced by CombinationIngredient
-  // wrappers once SolventMatchRule is implemented.
-  ingredients: Ingredient[];
+  // Ingredients are wrapped at context creation with empty weight data, so the type is
+  // stable across the whole pipeline. SolventMatchRule populates the weights; later
+  // rules read and extend them.
+  ingredients: CombinationIngredient[];
   solvent: Solvent;
   outcome: Outcome;
 
@@ -23,6 +37,29 @@ export interface BrewingContext {
   // rule can pollute another's randomness.
   masterSeed: string;
   prngFor(ruleName: string): Prng;
+
+  // Set true by SolventMatchRule on a successful pass.
+  solventValidated: boolean;
+
+  // Scaled pairs AntagonismRule classified as complementary, consumed by SynergyRule.
+  deferredComplementaryPairs: DeferredComplementaryPair[];
+
+  // Cumulative compound-class load, keyed by compound class. Set by DoseCurveRule.
+  cumulativeLoads: Map<string, number>;
+
+  // Set by SynergyRule pass 2 (Lacuna); defaults until then. Read by StabilityRule and
+  // ToxicityRule.
+  permanenceScale: number | null;
+  sensoryErasureCount: number;
+  lacunaTransmuteMarkers: LacunaTransmuteMarker[];
+
+  // Set by StabilityRule.
+  stability: number | null;
+  stabilityState: StabilityState | null;
+
+  // Set by ToxicityRule.
+  toxicity: Toxicity | null;
+  toxicityState: ToxicityStateObject | null;
 
   // Accumulated across rules.
   warnings: string[];
@@ -32,6 +69,22 @@ export interface BrewingContext {
   failureReason: FailureReason | null;
 }
 
+function wrap(ingredient: Ingredient): CombinationIngredient {
+  return {
+    ingredient,
+    weightData: {
+      chemicalExtractionWeight: 0,
+      presenceWeight: 0,
+      extractionYieldModifier: 0,
+      potencyMultiplier: 1,
+      effectivePotency: null,
+      doseState: null,
+      warnings: [],
+    },
+    refractedResponse: null,
+  };
+}
+
 export function createContext(input: PipelineInput): BrewingContext {
   const masterSeed = combinationSeed(
     input.ingredients.map((i) => i.id),
@@ -39,11 +92,21 @@ export function createContext(input: PipelineInput): BrewingContext {
     input.outcome,
   );
   return {
-    ingredients: input.ingredients,
+    ingredients: input.ingredients.map(wrap),
     solvent: input.solvent,
     outcome: input.outcome,
     masterSeed,
     prngFor: (ruleName: string) => prngFor(masterSeed, ruleName),
+    solventValidated: false,
+    deferredComplementaryPairs: [],
+    cumulativeLoads: new Map(),
+    permanenceScale: null,
+    sensoryErasureCount: 0,
+    lacunaTransmuteMarkers: [],
+    stability: null,
+    stabilityState: null,
+    toxicity: null,
+    toxicityState: null,
     warnings: [],
     failed: false,
     failureReason: null,
