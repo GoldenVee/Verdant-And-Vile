@@ -8,8 +8,11 @@ import type {
   CombinationIngredient,
   DeferredComplementaryPair,
   Ingredient,
+  LacunaTransmuteMarker,
   PipelineData,
   Solvent,
+  Toxicity,
+  ToxicityStateObject,
 } from '../domain/types.js';
 
 export interface PipelineInput {
@@ -44,12 +47,19 @@ export interface BrewingContext {
   // Cumulative compound-class load, keyed by compound class. Set by DoseCurveRule.
   cumulativeLoads: Map<string, number>;
 
-  // Set by SynergyRule pass 2 (Lacuna); null until then. Read by StabilityRule Stage 7.
+  // Set by SynergyRule pass 2 (Lacuna); defaults until then. Read by StabilityRule and
+  // ToxicityRule.
   permanenceScale: number | null;
+  sensoryErasureCount: number;
+  lacunaTransmuteMarkers: LacunaTransmuteMarker[];
 
   // Set by StabilityRule.
   stability: number | null;
   stabilityState: StabilityState | null;
+
+  // Set by ToxicityRule.
+  toxicity: Toxicity | null;
+  toxicityState: ToxicityStateObject | null;
 
   // Accumulated across rules.
   warnings: string[];
@@ -91,8 +101,12 @@ export function createContext(input: PipelineInput): BrewingContext {
     deferredComplementaryPairs: [],
     cumulativeLoads: new Map(),
     permanenceScale: null,
+    sensoryErasureCount: 0,
+    lacunaTransmuteMarkers: [],
     stability: null,
     stabilityState: null,
+    toxicity: null,
+    toxicityState: null,
     warnings: [],
     failed: false,
     failureReason: null,

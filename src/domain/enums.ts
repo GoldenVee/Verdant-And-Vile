@@ -195,6 +195,20 @@ export type StabilityState = (typeof STABILITY_STATES)[number];
 export const TOXICITY_STATES = ['safe', 'mild', 'significant', 'dangerous', 'lethal'] as const;
 export type ToxicityState = (typeof TOXICITY_STATES)[number];
 
+// Effect domains, used to route Lacuna transmutation markers to psychic vs sensory toxicity.
+export const EFFECT_DOMAINS = [
+  'memory',
+  'emotion',
+  'identity',
+  'sight',
+  'sound',
+  'perception',
+  'sensation',
+  'time',
+  'other',
+] as const;
+export type EffectDomain = (typeof EFFECT_DOMAINS)[number];
+
 // Ingredient physical form. 62 values; kept as a validation list rather than a
 // Postgres enum (large and more likely to grow than the small fixed vocabularies).
 export const INGREDIENT_TYPES = [

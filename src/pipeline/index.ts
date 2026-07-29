@@ -16,6 +16,7 @@ import { doseCurveRule } from './rules/dose-curve.js';
 import { solventMatchRule } from './rules/solvent-match.js';
 import { stabilityRule } from './rules/stability.js';
 import { makeSynergyRule } from './rules/synergy.js';
+import { toxicityRule } from './rules/toxicity.js';
 
 // Assembles the ordered rule list, injecting static data into the rules that need it.
 export function buildRules(data: PipelineData): Rule[] {
@@ -25,6 +26,7 @@ export function buildRules(data: PipelineData): Rule[] {
     makeSynergyRule(data),
     doseCurveRule,
     stabilityRule,
+    toxicityRule,
   ];
 }
 

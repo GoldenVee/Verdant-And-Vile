@@ -7,6 +7,7 @@ import type {
   Category,
   DoseResponse,
   DoseState,
+  EffectDomain,
   HeatDefault,
   HeatResponse,
   IngredientType,
@@ -23,6 +24,7 @@ import type {
   TemperatureFeel,
   TextureType,
   ToxicityLevel,
+  ToxicityState,
   Trait,
 } from './enums.js';
 
@@ -187,6 +189,28 @@ export interface DeferredComplementaryPair {
   a: CombinationIngredient;
   b: CombinationIngredient;
   boost: number;
+}
+
+// A Lacuna subtractive transmutation record. Written by SynergyRule pass 2, read by
+// ToxicityRule to route psychic/sensory contributions by effect domain.
+export interface LacunaTransmuteMarker {
+  ingredientId: string;
+  originalEffect: string;
+  transmutedEffect: string;
+  effectDomain: EffectDomain;
+}
+
+// Three-dimensional toxicity, each 0-10.
+export interface Toxicity {
+  somatic: number;
+  psychic: number;
+  sensory: number;
+}
+
+export interface ToxicityStateObject {
+  somatic: ToxicityState;
+  psychic: ToxicityState;
+  sensory: ToxicityState;
 }
 
 // The assembled solvent record.
