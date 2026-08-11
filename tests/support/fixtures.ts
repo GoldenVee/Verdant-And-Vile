@@ -4,6 +4,7 @@
 import { OUTCOMES } from '../../src/domain/enums.js';
 import type { EffectDomain } from '../../src/domain/enums.js';
 import type {
+  Effect,
   EffectDefinition,
   Ingredient,
   PipelineData,
@@ -122,6 +123,22 @@ export function makeEffectDef(
   defaultDescriptor = `${type} descriptor`,
 ): EffectDefinition {
   return { type, domain, defaultDescriptor };
+}
+
+export function makeEffect(overrides: Partial<Effect> & { id: string }): Effect {
+  return {
+    sourceIngredientId: null,
+    type: 'memory_recall',
+    domain: 'memory',
+    descriptor: 'vivid recollection',
+    magnitude: 1,
+    emergent: false,
+    subtractive: false,
+    refracted: false,
+    duration: 'normal',
+    reversible: true,
+    ...overrides,
+  };
 }
 
 export function makeSynergyPair(p: {

@@ -253,6 +253,13 @@ export interface EmergentEffectIntent {
   magnitude: number;
 }
 
+// A visible/perceptual sign a fictional solvent leaves on the recipient. Single-preparation
+// intensity (1-5), not cumulative. Set by SignatureTransformRule.
+export interface Mark {
+  solvent: string;
+  markLevel: number;
+}
+
 // The assembled solvent record.
 export interface Solvent {
   id: string;

@@ -11,6 +11,7 @@ import type {
   EmergentEffectIntent,
   Ingredient,
   LacunaTransmuteMarker,
+  Mark,
   PipelineData,
   Solvent,
   Toxicity,
@@ -77,6 +78,10 @@ export interface BrewingContext {
   toxicity: Toxicity | null;
   toxicityState: ToxicityStateObject | null;
 
+  // Set by SignatureTransformRule (fictional solvents only).
+  marks: Mark[];
+  narrativeWrap: string | null;
+
   // Accumulated across rules.
   warnings: string[];
 
@@ -126,6 +131,8 @@ export function createContext(input: PipelineInput): BrewingContext {
     stabilityState: null,
     toxicity: null,
     toxicityState: null,
+    marks: [],
+    narrativeWrap: null,
     warnings: [],
     failed: false,
     failureReason: null,
