@@ -185,6 +185,8 @@ export interface SynergyPair {
   complementaryCeiling: number | null;
   balancedCeiling: number | null;
   strainingCeiling: number | null;
+  // Emergent effect a complementary pair unlocks (null for most pairs).
+  unlocksEffect: string | null;
   warningTemplate: string;
 }
 
@@ -193,6 +195,8 @@ export interface PipelineData {
   tagDefinitions: Map<string, TagDefinition>;
   synergyPairs: SynergyPair[];
   effectDefinitions: Map<string, EffectDefinition>;
+  // Base effect type to its Lacuna subtractive equivalent.
+  effectSubtractiveEquivalents: Map<string, string>;
 }
 
 // A scaled tag pair AntagonismRule classified as complementary, deferred to SynergyRule.

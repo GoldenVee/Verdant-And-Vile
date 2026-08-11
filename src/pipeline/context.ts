@@ -24,7 +24,12 @@ export interface PipelineInput {
 }
 
 export function emptyPipelineData(): PipelineData {
-  return { tagDefinitions: new Map(), synergyPairs: [], effectDefinitions: new Map() };
+  return {
+    tagDefinitions: new Map(),
+    synergyPairs: [],
+    effectDefinitions: new Map(),
+    effectSubtractiveEquivalents: new Map(),
+  };
 }
 
 export interface BrewingContext {
@@ -60,6 +65,9 @@ export interface BrewingContext {
   permanenceScale: number | null;
   sensoryErasureCount: number;
   lacunaTransmuteMarkers: LacunaTransmuteMarker[];
+
+  // Set by SynergyRule pass 2 (Prism); read by SignatureTransformRule.
+  synergyScopeMultiplier: number;
 
   // Set by StabilityRule.
   stability: number | null;
@@ -113,6 +121,7 @@ export function createContext(input: PipelineInput): BrewingContext {
     permanenceScale: null,
     sensoryErasureCount: 0,
     lacunaTransmuteMarkers: [],
+    synergyScopeMultiplier: 0,
     stability: null,
     stabilityState: null,
     toxicity: null,

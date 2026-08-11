@@ -2,12 +2,19 @@
 // ingredient. Runs after AntagonismRule (synergy amplifies what survived) and before
 // DoseCurveRule. Built as a factory over the static lookup tables.
 //
-// This is pass 1: the five grounded patterns plus the per-solvent cap. Fictional-solvent
-// signatures (Prism scope, Lacuna transmutation and permanence) land in pass 2. See
-// docs/rules/rules.md (SynergyRule).
+// Pass 1 is the five grounded patterns plus the per-solvent cap. Pass 2 is the fictional
+// post-processing: emergent effects (all solvents), Prism scope, and Lacuna sensory-erasure
+// count, permanence scale, and transmute markers. Effect transformation itself happens later
+// (EffectsRule materializes, SignatureTransformRule transforms). See docs/rules/rules.md
+// (SynergyRule) and docs/effects.md.
 
 import { ok } from '../../domain/result.js';
-import type { CombinationIngredient, PipelineData, SynergyPair } from '../../domain/types.js';
+import type {
+  CombinationIngredient,
+  LacunaTransmuteMarker,
+  PipelineData,
+  SynergyPair,
+} from '../../domain/types.js';
 import type { BrewingContext } from '../context.js';
 import type { Rule } from '../rule.js';
 
@@ -58,7 +65,8 @@ export function makeSynergyRule(data: PipelineData): Rule {
 
   // Boost accumulates on potencyMultiplier (separate from extraction weight). The booster's
   // effective weight uses extraction weight, which synergy never changes, so the order of
-  // application within the rule does not matter.
+  // application within the rule does not matter. Each pattern returns the number of
+  // synergies it applied, which drives the fictional scalars in pass 2.
   function boostOne(target: CombinationIngredient, boosterEffective: number, boost: number): void {
     target.weightData.potencyMultiplier *= 1 + boost * boosterEffective;
   }
@@ -79,7 +87,8 @@ export function makeSynergyRule(data: PipelineData): Rule {
   }
 
   // Pattern 1: shared related_family.
-  function relatedFamily(context: BrewingContext): void {
+  function relatedFamily(context: BrewingContext): number {
+    let count = 0;
     const items = context.ingredients;
     for (let i = 0; i < items.length; i++) {
       for (let j = i + 1; j < items.length; j++) {
@@ -91,13 +100,16 @@ export function makeSynergyRule(data: PipelineData): Rule {
           context.warnings.push(
             `${a.ingredient.name} and ${b.ingredient.name} share related family: ${fam}.`,
           );
+          count++;
         }
       }
     }
+    return count;
   }
 
   // Pattern 2: shared compound classes, diminishing.
-  function sharedCompoundClass(context: BrewingContext): void {
+  function sharedCompoundClass(context: BrewingContext): number {
+    let count = 0;
     const items = context.ingredients;
     for (let i = 0; i < items.length; i++) {
       for (let j = i + 1; j < items.length; j++) {
@@ -110,15 +122,16 @@ export function makeSynergyRule(data: PipelineData): Rule {
           context.warnings.push(
             `${a.ingredient.name} and ${b.ingredient.name} share compound classes: ${shared.join(', ')}.`,
           );
+          count++;
         }
       }
     }
+    return count;
   }
 
   // Pattern 3: a tag that targets compound classes boosts ingredients bearing them.
-  // Effect-target tags (stimulant-amplifier, etc.) have no compound targets and no backing
-  // ingredient effect data yet, so they naturally do not fire here.
-  function tagTargetsCompound(context: BrewingContext): void {
+  function tagTargetsCompound(context: BrewingContext): number {
+    let count = 0;
     for (const booster of context.ingredients) {
       for (const tag of tagsOf(booster)) {
         const def = data.tagDefinitions.get(tag);
@@ -137,14 +150,18 @@ export function makeSynergyRule(data: PipelineData): Rule {
           context.warnings.push(
             `${booster.ingredient.name} (${tag}) amplifies ${shared.join(', ')} in ${target.ingredient.name}.`,
           );
+          count++;
         }
       }
     }
+    return count;
   }
 
-  // Pattern 4: complementary tag pairs (curated always-complementary) plus scaled pairs
-  // that AntagonismRule deferred as complementary.
-  function complementaryTags(context: BrewingContext): void {
+  // Pattern 4: complementary tag pairs (curated always-complementary) plus scaled pairs that
+  // AntagonismRule deferred. A curated pair that names an unlocked effect adds an emergent
+  // effect intent for EffectsRule.
+  function complementaryTags(context: BrewingContext): number {
+    let count = 0;
     const items = context.ingredients;
     for (let i = 0; i < items.length; i++) {
       for (let j = i + 1; j < items.length; j++) {
@@ -158,6 +175,13 @@ export function makeSynergyRule(data: PipelineData): Rule {
             context.warnings.push(
               `${a.ingredient.name} and ${b.ingredient.name} complement (${pair.tagA} + ${pair.tagB}).`,
             );
+            count++;
+            if (pair.unlocksEffect) {
+              context.emergentEffects.push({
+                effectType: pair.unlocksEffect,
+                magnitude: effectiveWeight(a) + effectiveWeight(b),
+              });
+            }
           }
         }
       }
@@ -168,11 +192,14 @@ export function makeSynergyRule(data: PipelineData): Rule {
       context.warnings.push(
         `${deferred.a.ingredient.name} and ${deferred.b.ingredient.name} complement at balanced intensity.`,
       );
+      count++;
     }
+    return count;
   }
 
   // Pattern 5: trait-driven synergy.
-  function traitDriven(context: BrewingContext): void {
+  function traitDriven(context: BrewingContext): number {
+    let count = 0;
     for (const booster of context.ingredients) {
       for (const target of context.ingredients) {
         if (target === booster) continue;
@@ -180,17 +207,21 @@ export function makeSynergyRule(data: PipelineData): Rule {
         if (hasTrait(booster, 'catalyst') && tagsOf(target).some(isAmplifierTag)) {
           boostDirectional(booster, target, CATALYST_BOOST);
           context.warnings.push(`${booster.ingredient.name} catalyzes ${target.ingredient.name}.`);
+          count++;
         }
         if (hasTrait(booster, 'carrier')) {
           boostDirectional(booster, target, CARRIER_BOOST);
           context.warnings.push(`${booster.ingredient.name} carries ${target.ingredient.name}.`);
+          count++;
         }
         if (hasTrait(booster, 'quiescent') && hasTrait(target, 'volatile')) {
           boostDirectional(booster, target, QUIESCENT_BOOST);
           context.warnings.push(`${booster.ingredient.name} stabilizes ${target.ingredient.name}.`);
+          count++;
         }
       }
     }
+    return count;
   }
 
   function applyCap(context: BrewingContext): void {
@@ -200,16 +231,56 @@ export function makeSynergyRule(data: PipelineData): Rule {
     }
   }
 
+  // One Lacuna transmute marker per (ingredient, effect-producing tag) whose effect has a
+  // subtractive equivalent. Derived from tags, so it needs no materialized effects. Read by
+  // ToxicityRule and applied by SignatureTransformRule.
+  function buildTransmuteMarkers(context: BrewingContext): LacunaTransmuteMarker[] {
+    const markers: LacunaTransmuteMarker[] = [];
+    for (const ci of context.ingredients) {
+      for (const tag of tagsOf(ci)) {
+        const produces = data.tagDefinitions.get(tag)?.producesEffect;
+        if (!produces) continue;
+        const subtractive = data.effectSubtractiveEquivalents.get(produces);
+        if (!subtractive) continue;
+        markers.push({
+          ingredientId: ci.ingredient.id,
+          originalEffect: produces,
+          transmutedEffect: subtractive,
+          effectDomain: data.effectDefinitions.get(produces)?.domain ?? 'other',
+        });
+      }
+    }
+    return markers;
+  }
+
+  // Pass 2: fictional-solvent post-processing.
+  function applyFictionalSignatures(context: BrewingContext, synergyCount: number): void {
+    const slug = context.solvent.slug;
+    if (slug === 'prism') {
+      context.synergyScopeMultiplier = synergyCount;
+    } else if (slug === 'lacuna') {
+      context.sensoryErasureCount = synergyCount;
+      const maxMultiplier = context.ingredients.reduce(
+        (max, ci) => Math.max(max, ci.weightData.potencyMultiplier),
+        0,
+      );
+      context.permanenceScale = maxMultiplier;
+      context.lacunaTransmuteMarkers = buildTransmuteMarkers(context);
+    }
+  }
+
   return {
     name: 'synergy',
 
     apply(context: BrewingContext) {
-      relatedFamily(context);
-      sharedCompoundClass(context);
-      tagTargetsCompound(context);
-      complementaryTags(context);
-      traitDriven(context);
+      let synergies = 0;
+      synergies += relatedFamily(context);
+      synergies += sharedCompoundClass(context);
+      synergies += tagTargetsCompound(context);
+      synergies += complementaryTags(context);
+      synergies += traitDriven(context);
       applyCap(context);
+      applyFictionalSignatures(context, synergies);
       return ok(context);
     },
   };

@@ -133,6 +133,7 @@ export function makeSynergyPair(p: {
   complementaryCeiling?: number | null;
   balancedCeiling?: number | null;
   strainingCeiling?: number | null;
+  unlocksEffect?: string | null;
   warningTemplate?: string;
 }): SynergyPair {
   return {
@@ -144,18 +145,32 @@ export function makeSynergyPair(p: {
     complementaryCeiling: p.complementaryCeiling ?? null,
     balancedCeiling: p.balancedCeiling ?? null,
     strainingCeiling: p.strainingCeiling ?? null,
+    unlocksEffect: p.unlocksEffect ?? null,
     warningTemplate: p.warningTemplate ?? '{A} and {B} interact.',
   };
 }
 
 export function makePipelineData(
-  opts: { tags?: TagDefinition[]; pairs?: SynergyPair[]; effects?: EffectDefinition[] } = {},
+  opts: {
+    tags?: TagDefinition[];
+    pairs?: SynergyPair[];
+    effects?: EffectDefinition[];
+    subtractiveEquivalents?: Record<string, string>;
+  } = {},
 ): PipelineData {
   const tagDefinitions = new Map<string, TagDefinition>();
   for (const tag of opts.tags ?? []) tagDefinitions.set(tag.slug, tag);
   const effectDefinitions = new Map<string, EffectDefinition>();
   for (const effect of opts.effects ?? []) effectDefinitions.set(effect.type, effect);
-  return { tagDefinitions, synergyPairs: opts.pairs ?? [], effectDefinitions };
+  const effectSubtractiveEquivalents = new Map<string, string>(
+    Object.entries(opts.subtractiveEquivalents ?? {}),
+  );
+  return {
+    tagDefinitions,
+    synergyPairs: opts.pairs ?? [],
+    effectDefinitions,
+    effectSubtractiveEquivalents,
+  };
 }
 
 // A complementary pair of tag definitions that oppose each other (each names the other
