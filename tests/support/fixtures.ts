@@ -2,7 +2,9 @@
 // sensible defaults; pass overrides for the fields under test.
 
 import { OUTCOMES } from '../../src/domain/enums.js';
+import type { EffectDomain } from '../../src/domain/enums.js';
 import type {
+  EffectDefinition,
   Ingredient,
   PipelineData,
   Solvent,
@@ -106,11 +108,20 @@ export function makeTagDef(overrides: Partial<TagDefinition> & { slug: string })
     targets: null,
     targetsAnyCompound: false,
     effectTargets: null,
+    producesEffect: null,
     boost: null,
     severity: null,
     oppositeTag: null,
     ...overrides,
   };
+}
+
+export function makeEffectDef(
+  type: string,
+  domain: EffectDomain,
+  defaultDescriptor = `${type} descriptor`,
+): EffectDefinition {
+  return { type, domain, defaultDescriptor };
 }
 
 export function makeSynergyPair(p: {
@@ -138,11 +149,13 @@ export function makeSynergyPair(p: {
 }
 
 export function makePipelineData(
-  opts: { tags?: TagDefinition[]; pairs?: SynergyPair[] } = {},
+  opts: { tags?: TagDefinition[]; pairs?: SynergyPair[]; effects?: EffectDefinition[] } = {},
 ): PipelineData {
   const tagDefinitions = new Map<string, TagDefinition>();
   for (const tag of opts.tags ?? []) tagDefinitions.set(tag.slug, tag);
-  return { tagDefinitions, synergyPairs: opts.pairs ?? [] };
+  const effectDefinitions = new Map<string, EffectDefinition>();
+  for (const effect of opts.effects ?? []) effectDefinitions.set(effect.type, effect);
+  return { tagDefinitions, synergyPairs: opts.pairs ?? [], effectDefinitions };
 }
 
 // A complementary pair of tag definitions that oppose each other (each names the other

@@ -195,6 +195,10 @@ export type StabilityState = (typeof STABILITY_STATES)[number];
 export const TOXICITY_STATES = ['safe', 'mild', 'significant', 'dangerous', 'lethal'] as const;
 export type ToxicityState = (typeof TOXICITY_STATES)[number];
 
+// Effect duration, set by SignatureTransformRule (Lacuna) from the permanence scale.
+export const EFFECT_DURATIONS = ['normal', 'extended', 'permanent'] as const;
+export type EffectDuration = (typeof EFFECT_DURATIONS)[number];
+
 // Effect domains, used to route Lacuna transmutation markers to psychic vs sensory toxicity.
 export const EFFECT_DOMAINS = [
   'memory',
