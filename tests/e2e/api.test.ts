@@ -64,14 +64,43 @@ describe('GET /solvents', () => {
 });
 
 describe('POST /combinations', () => {
-  it('accepts a valid shape then returns 501 (pipeline stubbed)', async () => {
+  it('resolves a valid combination through the pipeline', async () => {
     const res = await app.inject({
       method: 'POST',
       url: '/combinations',
-      payload: { ingredients: ['foxglove', 'valerian'], solvent: 'water', outcome: 'potion' },
+      payload: { ingredients: ['rosemary', 'ginger'], solvent: 'water', outcome: 'potion' },
     });
-    expect(res.statusCode).toBe(501);
-    expect(res.json().error.code).toBe('NOT_IMPLEMENTED');
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.failed).toBe(false);
+    expect(body.stability).toBeGreaterThan(0);
+    expect(body.toxicity).not.toBeNull();
+    expect(Array.isArray(body.effects)).toBe(true);
+    // Rosemary's mnemonic tag produces a memory_recall effect.
+    expect(body.effects.some((e: { type: string }) => e.type === 'memory_recall')).toBe(true);
+  });
+
+  it('applies fictional-solvent transforms (Lacuna marks and subtractive effects)', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/combinations',
+      payload: { ingredients: ['rosemary', 'ginger'], solvent: 'lacuna', outcome: 'potion' },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.marks).toEqual([{ solvent: 'lacuna', markLevel: expect.any(Number) }]);
+    expect(body.narrativeWrap).toBeTypeOf('string');
+    expect(body.effects.some((e: { subtractive: boolean }) => e.subtractive)).toBe(true);
+  });
+
+  it('reports a missing ingredient slug as a validation error', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/combinations',
+      payload: { ingredients: ['rosemary', 'nonexistent'], solvent: 'water', outcome: 'potion' },
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error.code).toBe('VALIDATION_ERROR');
   });
 
   it('rejects fewer than two ingredients', async () => {

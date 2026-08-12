@@ -44,16 +44,27 @@ GET {{base}}/solvents/lacuna
 GET {{base}}/solvents/nonexistent
 
 
-### ---------- Combinations (pipeline stubbed) ----------
+### ---------- Combinations ----------
 
-### Valid request shape. Passes schema validation, then returns 501 NOT_IMPLEMENTED
-### until the rules pipeline is built.
+### Resolve a grounded combination through the pipeline. Rosemary's mnemonic tag produces a
+### memory_recall effect; both ingredients' warming tags produce warming_sensation.
 POST {{base}}/combinations
 Content-Type: application/json
 
 {
-  "ingredients": ["foxglove", "valerian"],
+  "ingredients": ["rosemary", "ginger"],
   "solvent": "water",
+  "outcome": "potion"
+}
+
+### Fictional solvent (Lacuna): effects transmute to subtractive forms; adds an absence mark
+### and a narrative wrap. (sensoryOutput, name, and lore are null pending Phases 9 and 10.)
+POST {{base}}/combinations
+Content-Type: application/json
+
+{
+  "ingredients": ["rosemary", "ginger"],
+  "solvent": "lacuna",
   "outcome": "potion"
 }
 

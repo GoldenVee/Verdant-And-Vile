@@ -12,6 +12,7 @@ import { db } from './client.js';
 import {
   aromaNotesVocab,
   compoundClasses,
+  effectDefinitions,
   effectSubtractiveEquivalents,
   ingredientAromaNotes,
   ingredientCompounds,
@@ -101,6 +102,7 @@ interface RawTag {
   targets: string[] | null;
   targets_any_compound: boolean;
   effect_targets: string[] | null;
+  produces_effect: string | null;
   boost: number | null;
   severity: number | null;
   opposite_tag: string | null;
@@ -115,7 +117,14 @@ interface RawPair {
   complementary_ceiling: number | null;
   balanced_ceiling: number | null;
   straining_ceiling: number | null;
+  unlocks_effect: string | null;
   warning_template: string;
+}
+
+interface RawEffectDef {
+  type: string;
+  domain: string;
+  default_descriptor: string;
 }
 
 function loadIngredients(): RawIngredient[] {
@@ -204,6 +213,10 @@ async function main(): Promise<void> {
   const equivalentRows = readJson<{
     effect_subtractive_equivalents: { standard_effect: string; subtractive_equivalent: string }[];
   }>('tables', 'effect_subtractive_equivalents.json').effect_subtractive_equivalents;
+  const effectDefRows = readJson<{ effect_definitions: RawEffectDef[] }>(
+    'tables',
+    'effect_definitions.json',
+  ).effect_definitions;
 
   const ingredientRows = loadIngredients();
   const solventRows = readJson<{ solvents: RawSolvent[] }>('solvents', 'solvents.json').solvents;
@@ -217,6 +230,7 @@ async function main(): Promise<void> {
   await db.delete(solvents);
   await db.delete(synergyPairs);
   await db.delete(effectSubtractiveEquivalents);
+  await db.delete(effectDefinitions);
   await db.delete(tagDefinitions);
   await db.delete(aromaNotesVocab);
   await db.delete(compoundClasses);
@@ -237,10 +251,18 @@ async function main(): Promise<void> {
       targets: t.targets,
       targetsAnyCompound: t.targets_any_compound,
       effectTargets: t.effect_targets,
+      producesEffect: t.produces_effect,
       boost: t.boost,
       severity: t.severity,
       oppositeTag: t.opposite_tag,
     })),
+  );
+  await db.insert(effectDefinitions).values(
+    effectDefRows.map((e) => ({
+      type: e.type,
+      domain: e.domain,
+      defaultDescriptor: e.default_descriptor,
+    })) as (typeof effectDefinitions.$inferInsert)[],
   );
 
   console.log('Inserting pipeline tables...');
@@ -254,6 +276,7 @@ async function main(): Promise<void> {
       complementaryCeiling: p.complementary_ceiling,
       balancedCeiling: p.balanced_ceiling,
       strainingCeiling: p.straining_ceiling,
+      unlocksEffect: p.unlocks_effect,
       warningTemplate: p.warning_template,
     })),
   );

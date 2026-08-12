@@ -8,7 +8,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "preservative"
+      "opposite_tag": "preservative",
+      "produces_effect": null
     },
     {
       "slug": "acid-releaser",
@@ -18,7 +19,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "alkalizer"
+      "opposite_tag": "alkalizer",
+      "produces_effect": null
     },
     {
       "slug": "alkalizer",
@@ -28,7 +30,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "acid-releaser"
+      "opposite_tag": "acid-releaser",
+      "produces_effect": null
     },
     {
       "slug": "alkaloid-carrier",
@@ -40,7 +43,8 @@
       "effect_targets": null,
       "boost": 0.5,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "amnesiac",
@@ -50,7 +54,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "mnemonic"
+      "opposite_tag": "mnemonic",
+      "produces_effect": "memory_erasure"
     },
     {
       "slug": "binder",
@@ -60,7 +65,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "loosener"
+      "opposite_tag": "loosener",
+      "produces_effect": null
     },
     {
       "slug": "bioavailability-booster",
@@ -70,7 +76,8 @@
       "effect_targets": null,
       "boost": 0.6,
       "severity": null,
-      "opposite_tag": "bioavailability-inhibitor"
+      "opposite_tag": "bioavailability-inhibitor",
+      "produces_effect": null
     },
     {
       "slug": "bioavailability-inhibitor",
@@ -80,7 +87,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": 0.5,
-      "opposite_tag": "bioavailability-booster"
+      "opposite_tag": "bioavailability-booster",
+      "produces_effect": null
     },
     {
       "slug": "boundary-sealer",
@@ -90,7 +98,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "boundary-thinner"
+      "opposite_tag": "boundary-thinner",
+      "produces_effect": null
     },
     {
       "slug": "boundary-thinner",
@@ -100,7 +109,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "boundary-sealer"
+      "opposite_tag": "boundary-sealer",
+      "produces_effect": "boundary_dissolution"
     },
     {
       "slug": "chelator",
@@ -113,7 +123,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": 0.7,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "coagulant",
@@ -123,7 +134,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "concentrator",
@@ -133,7 +145,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "diffuser"
+      "opposite_tag": "diffuser",
+      "produces_effect": null
     },
     {
       "slug": "cooling",
@@ -145,7 +158,8 @@
       ],
       "boost": 0.3,
       "severity": null,
-      "opposite_tag": "warming"
+      "opposite_tag": "warming",
+      "produces_effect": "cooling_sensation"
     },
     {
       "slug": "crystallizer",
@@ -155,7 +169,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "deliquescent",
@@ -165,7 +180,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "desiccant"
+      "opposite_tag": "desiccant",
+      "produces_effect": null
     },
     {
       "slug": "denaturant",
@@ -178,7 +194,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": 0.8,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "desiccant",
@@ -188,7 +205,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "deliquescent"
+      "opposite_tag": "deliquescent",
+      "produces_effect": null
     },
     {
       "slug": "diffuser",
@@ -198,7 +216,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "concentrator"
+      "opposite_tag": "concentrator",
+      "produces_effect": null
     },
     {
       "slug": "disinhibitor",
@@ -208,7 +227,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "will-fortifier"
+      "opposite_tag": "will-fortifier",
+      "produces_effect": "disinhibition"
     },
     {
       "slug": "dream-inducer",
@@ -218,7 +238,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "lucidity-guard"
+      "opposite_tag": "lucidity-guard",
+      "produces_effect": "dream_enhancement"
     },
     {
       "slug": "echo-binder",
@@ -228,7 +249,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "echo-dampener"
+      "opposite_tag": "echo-dampener",
+      "produces_effect": "echo_capture"
     },
     {
       "slug": "echo-dampener",
@@ -238,7 +260,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "echo-binder"
+      "opposite_tag": "echo-binder",
+      "produces_effect": null
     },
     {
       "slug": "emulsifier",
@@ -248,7 +271,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "separator"
+      "opposite_tag": "separator",
+      "produces_effect": null
     },
     {
       "slug": "foaming-agent",
@@ -258,7 +282,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "hallucinogenic-amplifier",
@@ -270,7 +295,8 @@
       ],
       "boost": 0.7,
       "severity": null,
-      "opposite_tag": "reality-anchor"
+      "opposite_tag": "reality-anchor",
+      "produces_effect": "perceptual_enhancement"
     },
     {
       "slug": "loosener",
@@ -280,7 +306,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "binder"
+      "opposite_tag": "binder",
+      "produces_effect": null
     },
     {
       "slug": "lucidity-guard",
@@ -290,7 +317,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "dream-inducer"
+      "opposite_tag": "dream-inducer",
+      "produces_effect": null
     },
     {
       "slug": "magnetizer",
@@ -300,7 +328,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "repeller"
+      "opposite_tag": "repeller",
+      "produces_effect": "attraction"
     },
     {
       "slug": "mnemonic",
@@ -312,7 +341,8 @@
       ],
       "boost": 0.5,
       "severity": null,
-      "opposite_tag": "amnesiac"
+      "opposite_tag": "amnesiac",
+      "produces_effect": "memory_recall"
     },
     {
       "slug": "moment-anchor",
@@ -322,7 +352,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "time-dilator"
+      "opposite_tag": "time-dilator",
+      "produces_effect": null
     },
     {
       "slug": "oxidizer",
@@ -335,7 +366,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": 0.6,
-      "opposite_tag": "reducer"
+      "opposite_tag": "reducer",
+      "produces_effect": null
     },
     {
       "slug": "perception-shifter",
@@ -345,7 +377,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": "perceptual_enhancement"
     },
     {
       "slug": "preservative",
@@ -355,7 +388,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "accelerant"
+      "opposite_tag": "accelerant",
+      "produces_effect": null
     },
     {
       "slug": "radical-scavenger",
@@ -365,7 +399,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "reality-anchor",
@@ -375,7 +410,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "hallucinogenic-amplifier"
+      "opposite_tag": "hallucinogenic-amplifier",
+      "produces_effect": null
     },
     {
       "slug": "reducer",
@@ -387,7 +423,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": 0.5,
-      "opposite_tag": "oxidizer"
+      "opposite_tag": "oxidizer",
+      "produces_effect": null
     },
     {
       "slug": "repeller",
@@ -397,7 +434,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "magnetizer"
+      "opposite_tag": "magnetizer",
+      "produces_effect": null
     },
     {
       "slug": "resonance-tuner",
@@ -407,7 +445,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": "emotional_amplification"
     },
     {
       "slug": "sedative-amplifier",
@@ -419,7 +458,8 @@
       ],
       "boost": 0.5,
       "severity": null,
-      "opposite_tag": "stimulant-amplifier"
+      "opposite_tag": "stimulant-amplifier",
+      "produces_effect": "sedation"
     },
     {
       "slug": "separator",
@@ -429,7 +469,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "emulsifier"
+      "opposite_tag": "emulsifier",
+      "produces_effect": null
     },
     {
       "slug": "silencer",
@@ -439,7 +480,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": "imposed_silence"
     },
     {
       "slug": "solvent-shifter",
@@ -449,7 +491,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "stabilizer",
@@ -459,7 +502,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": null
+      "opposite_tag": null,
+      "produces_effect": null
     },
     {
       "slug": "stimulant-amplifier",
@@ -471,7 +515,8 @@
       ],
       "boost": 0.5,
       "severity": null,
-      "opposite_tag": "sedative-amplifier"
+      "opposite_tag": "sedative-amplifier",
+      "produces_effect": "stimulation"
     },
     {
       "slug": "time-dilator",
@@ -481,7 +526,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "moment-anchor"
+      "opposite_tag": "moment-anchor",
+      "produces_effect": "time_dilation"
     },
     {
       "slug": "veil-drawer",
@@ -491,7 +537,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "veil-piercer"
+      "opposite_tag": "veil-piercer",
+      "produces_effect": "concealment"
     },
     {
       "slug": "veil-piercer",
@@ -501,7 +548,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "veil-drawer"
+      "opposite_tag": "veil-drawer",
+      "produces_effect": "revelation"
     },
     {
       "slug": "volatile-fixer",
@@ -513,7 +561,8 @@
       "effect_targets": null,
       "boost": 0.4,
       "severity": null,
-      "opposite_tag": "volatile-releaser"
+      "opposite_tag": "volatile-releaser",
+      "produces_effect": null
     },
     {
       "slug": "volatile-releaser",
@@ -523,7 +572,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "volatile-fixer"
+      "opposite_tag": "volatile-fixer",
+      "produces_effect": null
     },
     {
       "slug": "warming",
@@ -535,7 +585,8 @@
       ],
       "boost": 0.3,
       "severity": null,
-      "opposite_tag": "cooling"
+      "opposite_tag": "cooling",
+      "produces_effect": "warming_sensation"
     },
     {
       "slug": "will-fortifier",
@@ -545,7 +596,8 @@
       "effect_targets": null,
       "boost": null,
       "severity": null,
-      "opposite_tag": "disinhibitor"
+      "opposite_tag": "disinhibitor",
+      "produces_effect": null
     }
   ]
 }

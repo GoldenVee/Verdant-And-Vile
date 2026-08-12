@@ -21,6 +21,7 @@ import {
   CATEGORIES,
   COMPOUND_KINDS,
   DOSE_RESPONSES,
+  EFFECT_DOMAINS,
   HEAT_DEFAULTS,
   HEAT_RESPONSES,
   LUMINOSITIES,
@@ -63,6 +64,7 @@ export const aromaPositionEnum = pgEnum('aroma_position', AROMA_POSITIONS);
 export const tagRoleEnum = pgEnum('tag_role', TAG_ROLES);
 export const compoundKindEnum = pgEnum('compound_kind', COMPOUND_KINDS);
 export const synergyPairTypeEnum = pgEnum('synergy_pair_type', SYNERGY_PAIR_TYPES);
+export const effectDomainEnum = pgEnum('effect_domain', EFFECT_DOMAINS);
 
 // ---- Reference tables (static vocabulary) ----
 
@@ -83,6 +85,7 @@ export const tagDefinitions = pgTable('tag_definitions', {
   targets: text('targets').array(),
   targetsAnyCompound: boolean('targets_any_compound').notNull().default(false),
   effectTargets: text('effect_targets').array(),
+  producesEffect: text('produces_effect'),
   boost: real('boost'),
   severity: real('severity'),
   oppositeTag: text('opposite_tag'),
@@ -98,12 +101,19 @@ export const synergyPairs = pgTable('synergy_pairs', {
   complementaryCeiling: real('complementary_ceiling'),
   balancedCeiling: real('balanced_ceiling'),
   strainingCeiling: real('straining_ceiling'),
+  unlocksEffect: text('unlocks_effect'),
   warningTemplate: text('warning_template').notNull(),
 });
 
 export const effectSubtractiveEquivalents = pgTable('effect_subtractive_equivalents', {
   standardEffect: text('standard_effect').primaryKey(),
   subtractiveEquivalent: text('subtractive_equivalent').notNull(),
+});
+
+export const effectDefinitions = pgTable('effect_definitions', {
+  type: text('type').primaryKey(),
+  domain: effectDomainEnum('domain').notNull(),
+  defaultDescriptor: text('default_descriptor').notNull(),
 });
 
 // ---- Core tables ----
