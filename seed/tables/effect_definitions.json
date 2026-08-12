@@ -1,0 +1,89 @@
+{
+  "effect_definitions": [
+    {
+      "type": "memory_recall",
+      "domain": "memory",
+      "default_descriptor": "vivid recollection"
+    },
+    {
+      "type": "sedation",
+      "domain": "emotion",
+      "default_descriptor": "spreading calm"
+    },
+    {
+      "type": "stimulation",
+      "domain": "sensation",
+      "default_descriptor": "quickened energy"
+    },
+    {
+      "type": "perceptual_enhancement",
+      "domain": "perception",
+      "default_descriptor": "heightened perception"
+    },
+    {
+      "type": "dream_enhancement",
+      "domain": "perception",
+      "default_descriptor": "deepened dreaming"
+    },
+    {
+      "type": "time_dilation",
+      "domain": "time",
+      "default_descriptor": "stretched time"
+    },
+    {
+      "type": "warming_sensation",
+      "domain": "sensation",
+      "default_descriptor": "inner warmth"
+    },
+    {
+      "type": "cooling_sensation",
+      "domain": "sensation",
+      "default_descriptor": "cooling clarity"
+    },
+    {
+      "type": "emotional_amplification",
+      "domain": "emotion",
+      "default_descriptor": "amplified feeling"
+    },
+    {
+      "type": "concealment",
+      "domain": "other",
+      "default_descriptor": "drawn concealment"
+    },
+    {
+      "type": "boundary_dissolution",
+      "domain": "identity",
+      "default_descriptor": "loosened self-boundary"
+    },
+    {
+      "type": "echo_capture",
+      "domain": "identity",
+      "default_descriptor": "captured resonance"
+    },
+    {
+      "type": "revelation",
+      "domain": "perception",
+      "default_descriptor": "pierced concealment"
+    },
+    {
+      "type": "disinhibition",
+      "domain": "emotion",
+      "default_descriptor": "loosened restraint"
+    },
+    {
+      "type": "attraction",
+      "domain": "other",
+      "default_descriptor": "drawing pull"
+    },
+    {
+      "type": "memory_erasure",
+      "domain": "memory",
+      "default_descriptor": "clean forgetting"
+    },
+    {
+      "type": "imposed_silence",
+      "domain": "sound",
+      "default_descriptor": "removed hearing"
+    }
+  ]
+}

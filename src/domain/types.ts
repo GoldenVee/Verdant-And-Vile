@@ -8,6 +8,7 @@ import type {
   DoseResponse,
   DoseState,
   EffectDomain,
+  EffectDuration,
   HeatDefault,
   HeatResponse,
   IngredientType,
@@ -159,11 +160,20 @@ export interface TagDefinition {
   targetsAnyCompound: boolean;
   // Effect types this tag amplifies (parked gap; not yet backed by ingredient data).
   effectTargets: string[] | null;
+  // Base effect type this tag produces (null for non-producing tags). Drives EffectsRule.
+  producesEffect: string | null;
   // Synergy boost when the tag amplifies its targets.
   boost: number | null;
   // Antagonism severity when the tag neutralizes its targets.
   severity: number | null;
   oppositeTag: string | null;
+}
+
+// An entry in the effect vocabulary: an effect type with its domain and default descriptor.
+export interface EffectDefinition {
+  type: string;
+  domain: EffectDomain;
+  defaultDescriptor: string;
 }
 
 export interface SynergyPair {
@@ -175,6 +185,8 @@ export interface SynergyPair {
   complementaryCeiling: number | null;
   balancedCeiling: number | null;
   strainingCeiling: number | null;
+  // Emergent effect a complementary pair unlocks (null for most pairs).
+  unlocksEffect: string | null;
   warningTemplate: string;
 }
 
@@ -182,6 +194,9 @@ export interface SynergyPair {
 export interface PipelineData {
   tagDefinitions: Map<string, TagDefinition>;
   synergyPairs: SynergyPair[];
+  effectDefinitions: Map<string, EffectDefinition>;
+  // Base effect type to its Lacuna subtractive equivalent.
+  effectSubtractiveEquivalents: Map<string, string>;
 }
 
 // A scaled tag pair AntagonismRule classified as complementary, deferred to SynergyRule.
@@ -211,6 +226,38 @@ export interface ToxicityStateObject {
   somatic: ToxicityState;
   psychic: ToxicityState;
   sensory: ToxicityState;
+}
+
+// An experiential effect the preparation produces. Materialized by EffectsRule; the
+// transformation flags (subtractive/refracted/duration/reversible) are set later by
+// SignatureTransformRule for fictional solvents.
+export interface Effect {
+  id: string;
+  // The producing ingredient, or null for an emergent (synergy-unlocked) effect.
+  sourceIngredientId: string | null;
+  type: string;
+  domain: EffectDomain;
+  descriptor: string;
+  // The source ingredient's effective potency (or the pair's combined potency, emergent).
+  magnitude: number;
+  emergent: boolean;
+  subtractive: boolean;
+  refracted: boolean;
+  duration: EffectDuration;
+  reversible: boolean;
+}
+
+// A synergy-unlocked effect intent, produced by SynergyRule pass 2, consumed by EffectsRule.
+export interface EmergentEffectIntent {
+  effectType: string;
+  magnitude: number;
+}
+
+// A visible/perceptual sign a fictional solvent leaves on the recipient. Single-preparation
+// intensity (1-5), not cumulative. Set by SignatureTransformRule.
+export interface Mark {
+  solvent: string;
+  markLevel: number;
 }
 
 // The assembled solvent record.

@@ -13,6 +13,8 @@ import type { BrewingContext } from './context.js';
 import type { Failure, Rule } from './rule.js';
 import { makeAntagonismRule } from './rules/antagonism.js';
 import { doseCurveRule } from './rules/dose-curve.js';
+import { makeEffectsRule } from './rules/effects.js';
+import { signatureTransformRule } from './rules/signature-transform.js';
 import { solventMatchRule } from './rules/solvent-match.js';
 import { stabilityRule } from './rules/stability.js';
 import { makeSynergyRule } from './rules/synergy.js';
@@ -25,8 +27,10 @@ export function buildRules(data: PipelineData): Rule[] {
     makeAntagonismRule(data),
     makeSynergyRule(data),
     doseCurveRule,
+    makeEffectsRule(data),
     stabilityRule,
     toxicityRule,
+    signatureTransformRule,
   ];
 }
 

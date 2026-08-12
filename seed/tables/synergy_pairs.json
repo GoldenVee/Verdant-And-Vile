@@ -9,7 +9,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "desiccant",
@@ -20,7 +21,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "bioavailability-booster",
@@ -31,7 +33,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "emulsifier",
@@ -42,7 +45,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "binder",
@@ -53,7 +57,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "preservative",
@@ -64,7 +69,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "volatile-fixer",
@@ -75,7 +81,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "acid-releaser",
@@ -86,7 +93,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "hallucinogenic-amplifier",
@@ -97,7 +105,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "boundary-thinner",
@@ -108,7 +117,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "echo-binder",
@@ -119,7 +129,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "mnemonic",
@@ -130,7 +141,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "veil-piercer",
@@ -141,7 +153,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "magnetizer",
@@ -152,7 +165,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "concentrator",
@@ -163,7 +177,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} cancel each other out."
+      "warning_template": "{A} and {B} cancel each other out.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "emulsifier",
@@ -174,7 +189,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} reinforce each other. Enables stable emulsions."
+      "warning_template": "{A} and {B} reinforce each other. Enables stable emulsions.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "preservative",
@@ -185,7 +201,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} reinforce each other. Compounding stability."
+      "warning_template": "{A} and {B} reinforce each other. Compounding stability.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "boundary-thinner",
@@ -196,7 +213,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} reinforce each other. Unlocks lucid-dreaming effects."
+      "warning_template": "{A} and {B} reinforce each other. Unlocks lucid-dreaming effects.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "chelator",
@@ -207,7 +225,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} reinforce each other. Selectively boosts non-chelated compounds."
+      "warning_template": "{A} and {B} reinforce each other. Selectively boosts non-chelated compounds.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "resonance-tuner",
@@ -218,7 +237,8 @@
       "complementary_ceiling": null,
       "balanced_ceiling": null,
       "straining_ceiling": null,
-      "warning_template": "{A} and {B} reinforce each other. Unlocks captured-emotion preparations."
+      "warning_template": "{A} and {B} reinforce each other. Unlocks captured-emotion preparations.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "warming",
@@ -229,7 +249,8 @@
       "complementary_ceiling": 0.7,
       "balanced_ceiling": 1.4,
       "straining_ceiling": 2,
-      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "stimulant-amplifier",
@@ -240,7 +261,8 @@
       "complementary_ceiling": 0.7,
       "balanced_ceiling": 1.4,
       "straining_ceiling": 2,
-      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "dream-inducer",
@@ -251,7 +273,8 @@
       "complementary_ceiling": 0.7,
       "balanced_ceiling": 1.4,
       "straining_ceiling": 2,
-      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "time-dilator",
@@ -262,7 +285,8 @@
       "complementary_ceiling": 0.7,
       "balanced_ceiling": 1.4,
       "straining_ceiling": 2,
-      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity.",
+      "unlocks_effect": null
     },
     {
       "tag_a": "disinhibitor",
@@ -273,7 +297,8 @@
       "complementary_ceiling": 0.7,
       "balanced_ceiling": 1.4,
       "straining_ceiling": 2,
-      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity."
+      "warning_template": "{A} and {B} shift between reinforcing and canceling depending on their combined intensity.",
+      "unlocks_effect": null
     }
   ]
 }

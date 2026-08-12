@@ -7,8 +7,11 @@ import type { FailureReason, Outcome, StabilityState } from '../domain/enums.js'
 import type {
   CombinationIngredient,
   DeferredComplementaryPair,
+  Effect,
+  EmergentEffectIntent,
   Ingredient,
   LacunaTransmuteMarker,
+  Mark,
   PipelineData,
   Solvent,
   Toxicity,
@@ -22,7 +25,12 @@ export interface PipelineInput {
 }
 
 export function emptyPipelineData(): PipelineData {
-  return { tagDefinitions: new Map(), synergyPairs: [] };
+  return {
+    tagDefinitions: new Map(),
+    synergyPairs: [],
+    effectDefinitions: new Map(),
+    effectSubtractiveEquivalents: new Map(),
+  };
 }
 
 export interface BrewingContext {
@@ -44,6 +52,12 @@ export interface BrewingContext {
   // Scaled pairs AntagonismRule classified as complementary, consumed by SynergyRule.
   deferredComplementaryPairs: DeferredComplementaryPair[];
 
+  // Emergent effects unlocked by synergy (SynergyRule pass 2), materialized by EffectsRule.
+  emergentEffects: EmergentEffectIntent[];
+
+  // The preparation's effects. Materialized by EffectsRule.
+  effects: Effect[];
+
   // Cumulative compound-class load, keyed by compound class. Set by DoseCurveRule.
   cumulativeLoads: Map<string, number>;
 
@@ -53,6 +67,9 @@ export interface BrewingContext {
   sensoryErasureCount: number;
   lacunaTransmuteMarkers: LacunaTransmuteMarker[];
 
+  // Set by SynergyRule pass 2 (Prism); read by SignatureTransformRule.
+  synergyScopeMultiplier: number;
+
   // Set by StabilityRule.
   stability: number | null;
   stabilityState: StabilityState | null;
@@ -60,6 +77,10 @@ export interface BrewingContext {
   // Set by ToxicityRule.
   toxicity: Toxicity | null;
   toxicityState: ToxicityStateObject | null;
+
+  // Set by SignatureTransformRule (fictional solvents only).
+  marks: Mark[];
+  narrativeWrap: string | null;
 
   // Accumulated across rules.
   warnings: string[];
@@ -99,14 +120,19 @@ export function createContext(input: PipelineInput): BrewingContext {
     prngFor: (ruleName: string) => prngFor(masterSeed, ruleName),
     solventValidated: false,
     deferredComplementaryPairs: [],
+    emergentEffects: [],
+    effects: [],
     cumulativeLoads: new Map(),
     permanenceScale: null,
     sensoryErasureCount: 0,
     lacunaTransmuteMarkers: [],
+    synergyScopeMultiplier: 0,
     stability: null,
     stabilityState: null,
     toxicity: null,
     toxicityState: null,
+    marks: [],
+    narrativeWrap: null,
     warnings: [],
     failed: false,
     failureReason: null,

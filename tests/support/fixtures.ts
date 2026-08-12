@@ -2,7 +2,10 @@
 // sensible defaults; pass overrides for the fields under test.
 
 import { OUTCOMES } from '../../src/domain/enums.js';
+import type { EffectDomain } from '../../src/domain/enums.js';
 import type {
+  Effect,
+  EffectDefinition,
   Ingredient,
   PipelineData,
   Solvent,
@@ -106,9 +109,34 @@ export function makeTagDef(overrides: Partial<TagDefinition> & { slug: string })
     targets: null,
     targetsAnyCompound: false,
     effectTargets: null,
+    producesEffect: null,
     boost: null,
     severity: null,
     oppositeTag: null,
+    ...overrides,
+  };
+}
+
+export function makeEffectDef(
+  type: string,
+  domain: EffectDomain,
+  defaultDescriptor = `${type} descriptor`,
+): EffectDefinition {
+  return { type, domain, defaultDescriptor };
+}
+
+export function makeEffect(overrides: Partial<Effect> & { id: string }): Effect {
+  return {
+    sourceIngredientId: null,
+    type: 'memory_recall',
+    domain: 'memory',
+    descriptor: 'vivid recollection',
+    magnitude: 1,
+    emergent: false,
+    subtractive: false,
+    refracted: false,
+    duration: 'normal',
+    reversible: true,
     ...overrides,
   };
 }
@@ -122,6 +150,7 @@ export function makeSynergyPair(p: {
   complementaryCeiling?: number | null;
   balancedCeiling?: number | null;
   strainingCeiling?: number | null;
+  unlocksEffect?: string | null;
   warningTemplate?: string;
 }): SynergyPair {
   return {
@@ -133,16 +162,32 @@ export function makeSynergyPair(p: {
     complementaryCeiling: p.complementaryCeiling ?? null,
     balancedCeiling: p.balancedCeiling ?? null,
     strainingCeiling: p.strainingCeiling ?? null,
+    unlocksEffect: p.unlocksEffect ?? null,
     warningTemplate: p.warningTemplate ?? '{A} and {B} interact.',
   };
 }
 
 export function makePipelineData(
-  opts: { tags?: TagDefinition[]; pairs?: SynergyPair[] } = {},
+  opts: {
+    tags?: TagDefinition[];
+    pairs?: SynergyPair[];
+    effects?: EffectDefinition[];
+    subtractiveEquivalents?: Record<string, string>;
+  } = {},
 ): PipelineData {
   const tagDefinitions = new Map<string, TagDefinition>();
   for (const tag of opts.tags ?? []) tagDefinitions.set(tag.slug, tag);
-  return { tagDefinitions, synergyPairs: opts.pairs ?? [] };
+  const effectDefinitions = new Map<string, EffectDefinition>();
+  for (const effect of opts.effects ?? []) effectDefinitions.set(effect.type, effect);
+  const effectSubtractiveEquivalents = new Map<string, string>(
+    Object.entries(opts.subtractiveEquivalents ?? {}),
+  );
+  return {
+    tagDefinitions,
+    synergyPairs: opts.pairs ?? [],
+    effectDefinitions,
+    effectSubtractiveEquivalents,
+  };
 }
 
 // A complementary pair of tag definitions that oppose each other (each names the other
