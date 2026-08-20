@@ -169,6 +169,7 @@ export const solvents = pgTable('solvents', {
   stabilityModifier: real('stability_modifier').notNull(),
   heatDefault: heatDefaultEnum('heat_default').notNull(),
   aestheticBase: jsonb('aesthetic_base').$type<AestheticBase>().notNull(),
+  tasteProfile: jsonb('taste_profile').$type<TasteProfile>().notNull(),
   categoryAffinity: jsonb('category_affinity').$type<CategoryTiers>().notNull(),
   categoryResistance: jsonb('category_resistance').$type<CategoryTiers>().notNull(),
   signatureTransformation: jsonb('signature_transformation').$type<SignatureTransformation>(),

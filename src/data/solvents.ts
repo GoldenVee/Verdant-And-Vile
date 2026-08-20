@@ -21,6 +21,7 @@ function toDomain(row: SolventRow): Solvent {
     stabilityModifier: row.stabilityModifier,
     heatDefault: row.heatDefault,
     aestheticBase: row.aestheticBase,
+    tasteProfile: row.tasteProfile,
     categoryAffinity: row.categoryAffinity,
     categoryResistance: row.categoryResistance,
     signatureTransformation: row.signatureTransformation ?? null,

@@ -90,6 +90,7 @@ interface RawSolvent {
   stability_modifier: number;
   heat_default: string;
   aesthetic_base: { color: string; viscosity: string; luminosity: string };
+  taste_profile: Record<string, number>;
   category_affinity: { strong: string[]; weak: string[] };
   category_resistance: { strong: string[]; weak: string[] };
   signature_transformation: { type: string; summary: string } | null;
@@ -187,6 +188,7 @@ function toSolventRow(s: RawSolvent): SolventInsert {
     stabilityModifier: s.stability_modifier,
     heatDefault: s.heat_default,
     aestheticBase: s.aesthetic_base,
+    tasteProfile: s.taste_profile,
     categoryAffinity: s.category_affinity,
     categoryResistance: s.category_resistance,
     signatureTransformation: s.signature_transformation,
