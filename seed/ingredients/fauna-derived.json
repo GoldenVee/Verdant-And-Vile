@@ -367,7 +367,7 @@
       },
       "reactive": {
         "solubility": "acid-soluble",
-        "ph_contribution": 0,
+        "ph_contribution": 1,
         "toxicity_base": "none",
         "stability_base": 10,
         "extraction_yield": 0.55,
@@ -446,7 +446,7 @@
       },
       "reactive": {
         "solubility": "acid-soluble",
-        "ph_contribution": 1,
+        "ph_contribution": 2,
         "toxicity_base": "none",
         "stability_base": 10,
         "extraction_yield": 0.55,
@@ -689,7 +689,7 @@
       },
       "reactive": {
         "solubility": "acid-soluble",
-        "ph_contribution": 1,
+        "ph_contribution": 2,
         "toxicity_base": "none",
         "stability_base": 10,
         "extraction_yield": 0.5,

@@ -112,7 +112,7 @@
       },
       "reactive": {
         "solubility": "polar",
-        "ph_contribution": -1,
+        "ph_contribution": -2,
         "toxicity_base": "high",
         "stability_base": 1,
         "extraction_yield": 0.65,
@@ -192,7 +192,7 @@
       },
       "reactive": {
         "solubility": "polar",
-        "ph_contribution": 0,
+        "ph_contribution": -1,
         "toxicity_base": "lethal",
         "stability_base": 3,
         "extraction_yield": 0.7,
