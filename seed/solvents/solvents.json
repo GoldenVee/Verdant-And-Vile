@@ -183,7 +183,7 @@
       "name": "Ichor",
       "lore": null,
       "polarity": "polar",
-      "base_ph": null,
+      "base_ph": 7.4,
       "compatible_outcomes": [
         "potion",
         "concentrate",
@@ -226,7 +226,7 @@
       "name": "Prism",
       "lore": null,
       "polarity": "universal",
-      "base_ph": null,
+      "base_ph": 9.5,
       "compatible_outcomes": [
         "potion",
         "concentrate",
@@ -269,7 +269,7 @@
       "name": "Lacuna",
       "lore": null,
       "polarity": "anti-solvent",
-      "base_ph": null,
+      "base_ph": 7.0,
       "compatible_outcomes": [
         "potion",
         "concentrate",

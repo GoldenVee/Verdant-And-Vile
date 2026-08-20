@@ -31,8 +31,9 @@ const bodySchema = {
   },
 } as const;
 
-// Serializes the resolved (or failed) combination. sensoryOutput, name, and lore are null
-// pending the sensory (Phase 9) and description (Phase 10) algorithms.
+// Serializes the resolved (or failed) combination. sensoryOutput carries colour and
+// luminosity; its remaining fields are null pending the rest of Phase 9. name and lore are
+// null pending the description algorithm (Phase 10).
 function serialize(
   context: BrewingContext,
   request: CombinationBody,
@@ -52,7 +53,7 @@ function serialize(
     marks: context.marks,
     narrativeWrap: context.narrativeWrap,
     warnings: context.warnings,
-    sensoryOutput: null,
+    sensoryOutput: context.sensoryOutput,
     name: null,
     lore: null,
   };

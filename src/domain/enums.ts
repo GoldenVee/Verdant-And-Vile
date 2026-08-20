@@ -59,6 +59,11 @@ export type TemperatureFeel = (typeof TEMPERATURE_FEELS)[number];
 export const LUMINOSITIES = ['dull', 'glossy', 'phosphorescent', 'light-swallowing'] as const;
 export type Luminosity = (typeof LUMINOSITIES)[number];
 
+// How well the preparation homogenized. Driven by the spread in chemical extraction
+// weight across ingredients, plus mean extraction for the uniform-suspension case.
+export const BLEND_STATES = ['homogeneous', 'suspension', 'gradient', 'separated'] as const;
+export type BlendState = (typeof BLEND_STATES)[number];
+
 export const MOTION_TENDENCIES = [
   'still',
   'settling',

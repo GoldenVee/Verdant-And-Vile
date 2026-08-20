@@ -762,6 +762,7 @@ Features deliberately deferred from v1:
 - **Ichor sub-sources** — ichor properties determined by source (dragon, spider, etc.)
 - **Art assets** — SVG/PNG rendering of finished preparations in vessels
 - **Trait expansion** — sympathetic, latent (and sub-family), sentient, unwilling, sealed
+- **Mineral acid ingredient**: the pH contribution scale runs -3 to +3, but nothing occupies -3. No oil of vitriol, no aqua fortis. A caustic acid ingredient would fill the acid end the way Wood Ash fills the alkaline end. See `sensory.md`.
 - **User accounts, saving, journal, glossary** — frontend features
 - **Cumulative recipient marks** — modeling recipients as first-class entities so marks accumulate across preparations
 

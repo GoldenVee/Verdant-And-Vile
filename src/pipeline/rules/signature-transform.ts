@@ -2,13 +2,22 @@
 // transformations to the resolved result. Grounded solvents skip it entirely. See
 // docs/rules/rules.md (SignatureTransformRule).
 //
-// Partial implementation: the effect transformations, marks, narrative wrap, and warnings
-// are implemented. The sensory_output overlays (color/luminosity/aroma/progressive erasure)
-// are deferred until the sensory algorithm (Phase 9) exists, since there is no sensory_output
-// to modify yet. Those sites are marked below.
+// The effect transformations, marks, narrative wrap, warnings, and the colour and luminosity
+// overlays are implemented. The aroma, texture, motion, and taste overlays are still deferred,
+// since those sub-algorithms are not yet designed. Those sites are marked below.
 
+import type { Luminosity } from '../../domain/enums.js';
+import type { Prng } from '../../domain/prng.js';
 import { ok } from '../../domain/result.js';
 import type { Effect } from '../../domain/types.js';
+import {
+  blend,
+  darken,
+  desaturate,
+  parseHex,
+  rotateHue,
+  stripYellow,
+} from '../../sensory/color.js';
 import type { BrewingContext } from '../context.js';
 import type { Rule } from '../rule.js';
 
@@ -38,8 +47,87 @@ const LACUNA_NARRATIVE =
   'hard to describe. Its effects are absences rather than additions. The recipient loses what ' +
   'they consumed rather than gaining anything. Some of what is lost may never return.';
 
+const ICHOR_GOLD = '#FFD700';
+// Ichor floods rather than replaces: it enters the blend at overwhelming weight, so the
+// result is always plainly gold while still carrying what was brewed.
+const ICHOR_FLOOD = 0.75;
+
+// Prism keeps a saturation floor so the spectrum reads as iridescent even when the
+// underlying blend was muddy.
+const PRISM_SATURATION_FLOOR = 0.65;
+const PRISM_SECONDARY_TURN = 1 / 3;
+
+// Lacuna dulls toward 'dull'. LUMINOSITIES is not a brightness ordering, so stepping down the
+// enum would be wrong: light-swallowing is already maximal absence and stays put.
+const DULLED: Record<Luminosity, Luminosity> = {
+  phosphorescent: 'glossy',
+  glossy: 'dull',
+  dull: 'dull',
+  'light-swallowing': 'light-swallowing',
+};
+
+function applyIchorSensory(context: BrewingContext): void {
+  const sensory = context.sensoryOutput;
+  if (sensory === null) return;
+
+  sensory.colorBase = blend([sensory.colorBase, ICHOR_GOLD], [1 - ICHOR_FLOOD, ICHOR_FLOOD]);
+  sensory.colorSecondary ??= ICHOR_GOLD;
+  if (sensory.luminosity === 'dull' || sensory.luminosity === 'glossy') {
+    sensory.luminosity = 'phosphorescent';
+  }
+}
+
+// Takes the PRNG rather than deriving its own, and must be called after the effect
+// duplication loop. Inserting a draw earlier shifts every downstream value and changes which
+// effects are refracted, so the ordering is load-bearing, not stylistic.
+function applyPrismSensory(context: BrewingContext, prng: Prng): void {
+  const sensory = context.sensoryOutput;
+  if (sensory === null) return;
+
+  // A prism splits one input into a spectrum, so the rotation starts from the blended
+  // ingredient colour: always a full spectrum, but where it starts is what was brewed.
+  sensory.colorBase = rotateHue(sensory.colorBase, prng.next(), PRISM_SATURATION_FLOOR);
+  sensory.colorSecondary = rotateHue(
+    sensory.colorBase,
+    PRISM_SECONDARY_TURN,
+    PRISM_SATURATION_FLOOR,
+  );
+  sensory.luminosity = 'phosphorescent';
+}
+
+// Progressive erasure. Step 1 dulls luminosity, step 2 onward strips the yellow channel over
+// a darkening, desaturating ground. Y = 1 - B in subtractive space, so removing yellow is
+// what leaves cyan and magenta behind: the mechanic and the look are the same operation.
+function applyLacunaSensory(context: BrewingContext): void {
+  const sensory = context.sensoryOutput;
+  if (sensory === null) return;
+
+  const count = context.sensoryErasureCount;
+  if (count < 1) return;
+
+  sensory.luminosity = DULLED[sensory.luminosity];
+  if (count < 2) return;
+
+  const t = Math.min((count - 1) / 5, 1);
+  const erase = (hex: string) => darken(stripYellow(desaturate(hex, t), t * 0.6), t * 0.7);
+
+  const [r, g] = parseHex(sensory.colorBase);
+  sensory.colorBase = erase(sensory.colorBase);
+  // What survives the erasure fringes toward whichever of the two remaining subtractive
+  // primaries the original colour leaned into.
+  sensory.colorSecondary =
+    sensory.colorSecondary === null
+      ? r >= g
+        ? '#FF00FF'
+        : '#00FFFF'
+      : erase(sensory.colorSecondary);
+
+  // Remaining erasure steps (3 aroma, 4 texture, 5 motion, 6+ taste) act on sub-algorithms
+  // that are not yet designed.
+}
+
 function applyIchor(context: BrewingContext): void {
-  // Sensory (deferred): color shift toward gold and luminosity boost.
+  applyIchorSensory(context);
 
   for (const effect of context.effects) {
     effect.descriptor = elevate(effect.descriptor);
@@ -72,8 +160,6 @@ function applyIchor(context: BrewingContext): void {
 function applyPrism(context: BrewingContext): void {
   const prng = context.prngFor('signature-transform');
 
-  // Sensory (deferred): iridescent quality and aroma expansion by synergy scope.
-
   // Effect duplication: each effect has a 40% chance of a refracted copy.
   const duplicates: Effect[] = [];
   for (const effect of context.effects) {
@@ -87,6 +173,10 @@ function applyPrism(context: BrewingContext): void {
     }
   }
   context.effects.push(...duplicates);
+
+  // Drawn after the duplication loop on purpose: see applyPrismSensory.
+  applyPrismSensory(context, prng);
+  // Aroma expansion by synergy scope is still deferred; aroma is not yet designed.
 
   const count = context.ingredients.length;
   const intensity = context.synergyScopeMultiplier * 1.2 + count * 0.4;
@@ -117,7 +207,7 @@ function applyLacuna(context: BrewingContext): void {
     }
   }
 
-  // Sensory (deferred): progressive erasure by sensory_erasure_count.
+  applyLacunaSensory(context);
 
   // Permanence tagging from the permanence scale.
   const permanence = context.permanenceScale ?? 0;
