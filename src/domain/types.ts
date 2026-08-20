@@ -4,6 +4,7 @@
 
 import type {
   AromaPosition,
+  BlendState,
   Category,
   DoseResponse,
   DoseState,
@@ -140,6 +141,31 @@ export interface AestheticBase {
   color: string;
   viscosity: string;
   luminosity: Luminosity;
+}
+
+// Perfumery-style aroma layering. Not yet computed; the field exists so the sensory output
+// shape is stable across the remaining Phase 9 work.
+export interface AromaProfile {
+  top: string[];
+  heart: string[];
+  base: string[];
+}
+
+// The preparation's perceived qualities, set by SensoryRule. Colour and luminosity are
+// computed; the remaining fields are null until their sub-algorithms are designed. They are
+// typed to their eventual shape rather than to null so consumers do not churn when the rest
+// of Phase 9 lands.
+export interface SensoryOutput {
+  colorBase: string;
+  colorSecondary: string | null;
+  blendState: BlendState;
+  luminosity: Luminosity;
+  aromaProfile: AromaProfile | null;
+  tasteProfile: TasteProfile | null;
+  texture: Texture | null;
+  motionTendency: MotionTendency | null;
+  temperatureFeel: TemperatureFeel | null;
+  sound: string | null;
 }
 
 export interface SignatureTransformation {

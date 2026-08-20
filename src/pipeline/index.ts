@@ -4,8 +4,8 @@
 // dependencies and simply runs rules in order, short-circuiting on the first Err.
 //
 // Rule order:
-//   SolventMatchRule -> AntagonismRule -> SynergyRule -> DoseCurveRule
-//     -> StabilityRule -> ToxicityRule -> SignatureTransformRule
+//   SolventMatchRule -> AntagonismRule -> SynergyRule -> DoseCurveRule -> EffectsRule
+//     -> StabilityRule -> ToxicityRule -> SensoryRule -> SignatureTransformRule
 
 import { ok, type Result } from '../domain/result.js';
 import type { PipelineData } from '../domain/types.js';
@@ -17,6 +17,7 @@ import { makeEffectsRule } from './rules/effects.js';
 import { signatureTransformRule } from './rules/signature-transform.js';
 import { solventMatchRule } from './rules/solvent-match.js';
 import { stabilityRule } from './rules/stability.js';
+import { sensoryRule } from './rules/sensory.js';
 import { makeSynergyRule } from './rules/synergy.js';
 import { toxicityRule } from './rules/toxicity.js';
 
@@ -30,6 +31,7 @@ export function buildRules(data: PipelineData): Rule[] {
     makeEffectsRule(data),
     stabilityRule,
     toxicityRule,
+    sensoryRule,
     signatureTransformRule,
   ];
 }

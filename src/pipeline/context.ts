@@ -13,6 +13,7 @@ import type {
   LacunaTransmuteMarker,
   Mark,
   PipelineData,
+  SensoryOutput,
   Solvent,
   Toxicity,
   ToxicityStateObject,
@@ -78,6 +79,10 @@ export interface BrewingContext {
   toxicity: Toxicity | null;
   toxicityState: ToxicityStateObject | null;
 
+  // The preparation's perceived qualities. Set by SensoryRule, then overlaid by
+  // SignatureTransformRule for fictional solvents.
+  sensoryOutput: SensoryOutput | null;
+
   // Set by SignatureTransformRule (fictional solvents only).
   marks: Mark[];
   narrativeWrap: string | null;
@@ -131,6 +136,7 @@ export function createContext(input: PipelineInput): BrewingContext {
     stabilityState: null,
     toxicity: null,
     toxicityState: null,
+    sensoryOutput: null,
     marks: [],
     narrativeWrap: null,
     warnings: [],
