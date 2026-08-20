@@ -299,3 +299,162 @@ describe('fictional overlays', () => {
     expect(context.sensoryOutput!.luminosity).toBe('glossy');
   });
 });
+
+describe('taste', () => {
+  const tasty = (id: string, profile: Partial<Record<string, number>>, overrides = {}) =>
+    plain(id, '#CCCCCC', {
+      tasteProfile: {
+        sweet: 0,
+        bitter: 0,
+        sour: 0,
+        salty: 0,
+        umami: 0,
+        astringent: 0,
+        metallic: 0,
+        bright: 0,
+        ...profile,
+      },
+      ...overrides,
+    });
+
+  it('averages each dimension across participants', () => {
+    const context = run([tasty('a', { bitter: 1 }), tasty('b', { sweet: 1 })]);
+    const taste = context.sensoryOutput!.tasteProfile!;
+    // Equal weights, plus a flat solvent, so both land at the same reduced value.
+    expect(taste.bitter).toBeCloseTo(taste.sweet);
+    expect(taste.bitter).toBeGreaterThan(0);
+    expect(taste.bitter).toBeLessThan(1);
+  });
+
+  it('carries the solvent through, so a sweet solvent makes a sweet preparation', () => {
+    const honey = makeOpenSolvent({
+      basePh: 4,
+      tasteProfile: {
+        sweet: 0.9,
+        bitter: 0,
+        sour: 0.2,
+        salty: 0,
+        umami: 0.1,
+        astringent: 0,
+        metallic: 0,
+        bright: 0.3,
+      },
+    });
+    const inWater = run([tasty('a', { bitter: 0.5 })]);
+    const inHoney = run([tasty('a', { bitter: 0.5 })], honey);
+    expect(inHoney.sensoryOutput!.tasteProfile!.sweet).toBeGreaterThan(
+      inWater.sensoryOutput!.tasteProfile!.sweet,
+    );
+  });
+
+  it('is not diluted by an insoluble ingredient that has no taste', () => {
+    // The three quartzes are insoluble with all-zero taste profiles. Under presence
+    // weighting a stone in the jar would weaken the liquor, which is wrong. Extraction
+    // weighting zeroes it out with no special case.
+    const alone = run([tasty('a', { bitter: 0.8 })]);
+    const withStone = run([
+      tasty('a', { bitter: 0.8 }),
+      tasty('stone', {}, { solubility: 'insoluble' }),
+    ]);
+    expect(withStone.sensoryOutput!.tasteProfile!.bitter).toBeCloseTo(
+      alone.sensoryOutput!.tasteProfile!.bitter,
+    );
+  });
+
+  it('reports every dimension within range', () => {
+    const context = run([tasty('a', { bitter: 1, astringent: 1 }), tasty('b', { salty: 1 })]);
+    for (const value of Object.values(context.sensoryOutput!.tasteProfile!)) {
+      expect(value).toBeGreaterThanOrEqual(0);
+      expect(value).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+describe('temperature', () => {
+  it('takes the weighted-dominant authored value', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'warming', aestheticWeight: 0.9 }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'cold', aestheticWeight: 0.3 }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('warming');
+  });
+
+  it('shifts one step up when warming tag load clears the threshold', () => {
+    const untagged = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'neutral' }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'neutral' }),
+    ]);
+    const tagged = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'neutral', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'neutral' }),
+    ]);
+    expect(untagged.sensoryOutput!.temperatureFeel).toBe('neutral');
+    expect(tagged.sensoryOutput!.temperatureFeel).toBe('warming');
+  });
+
+  it('shifts one step down on cooling tag load', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'warming', synergyTags: ['cooling'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'warming', synergyTags: ['cooling'] }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('neutral');
+  });
+
+  it('keeps the field primary when a tag contradicts it', () => {
+    // Wormwood is tagged warming but reads cold. It should come out cold that warms
+    // slightly, one step, not flipped to warming outright.
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'cold', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'cold', synergyTags: ['warming'] }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('neutral');
+  });
+
+  it('does not shift on tag load below the threshold', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'cold', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'cold' }),
+      plain('c', '#CCCCCC', { temperatureFeel: 'cold' }),
+      plain('d', '#CCCCCC', { temperatureFeel: 'cold' }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('cold');
+  });
+
+  it('clamps at the ends of the scale', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'burning', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'burning', synergyTags: ['warming'] }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('burning');
+  });
+});
+
+describe('sound', () => {
+  it('is null when nothing carries one', () => {
+    expect(run([plain('a', '#CCCCCC'), plain('b', '#CCCCCC')]).sensoryOutput!.sound).toBeNull();
+  });
+
+  it('takes the dominant bearer rather than merging', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { sound: 'faint metallic ring', aestheticWeight: 0.9 }),
+      plain('b', '#CCCCCC', { sound: 'distant surf', aestheticWeight: 0.2 }),
+    ]);
+    expect(context.sensoryOutput!.sound).toBe('faint metallic ring');
+  });
+
+  it('stays silent when the only bearer is a trace presence', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { sound: 'faint high tone', aestheticWeight: 0.1 }),
+      plain('b', '#CCCCCC', { aestheticWeight: 1 }),
+      plain('c', '#CCCCCC', { aestheticWeight: 1 }),
+      plain('d', '#CCCCCC', { aestheticWeight: 1 }),
+    ]);
+    expect(context.sensoryOutput!.sound).toBeNull();
+  });
+
+  it('does not depend on ingredient order', () => {
+    const a = plain('a', '#CCCCCC', { sound: 'first', aestheticWeight: 0.6 });
+    const b = plain('b', '#CCCCCC', { sound: 'second', aestheticWeight: 0.6 });
+    expect(run([a, b]).sensoryOutput!.sound).toBe(run([b, a]).sensoryOutput!.sound);
+  });
+});

@@ -3,8 +3,14 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 
-import { BLEND_STATES, LUMINOSITIES, SOLUBILITIES } from '../../src/domain/enums.js';
-import type { Luminosity, Solubility } from '../../src/domain/enums.js';
+import {
+  BLEND_STATES,
+  LUMINOSITIES,
+  SOLUBILITIES,
+  TASTE_KEYS,
+  TEMPERATURE_FEELS,
+} from '../../src/domain/enums.js';
+import type { Luminosity, Solubility, TemperatureFeel } from '../../src/domain/enums.js';
 import type { Ingredient, Solvent } from '../../src/domain/types.js';
 import { createContext } from '../../src/pipeline/context.js';
 import { sensoryRule } from '../../src/pipeline/rules/sensory.js';
@@ -22,6 +28,9 @@ const solubility = () => fc.constantFrom<Solubility>(...SOLUBILITIES);
 const luminosity = () => fc.constantFrom<Luminosity>(...LUMINOSITIES);
 const weight = () => fc.double({ min: 0.1, max: 1, noNaN: true });
 const concentration = () => fc.double({ min: 0, max: 1, noNaN: true });
+const temperature = () => fc.constantFrom<TemperatureFeel>(...TEMPERATURE_FEELS);
+const tags = () => fc.subarray(['warming', 'cooling', 'stabilizer'], { maxLength: 2 });
+const tasteValue = () => fc.double({ min: 0, max: 1, noNaN: true });
 
 const ingredient = () =>
   fc
@@ -34,6 +43,10 @@ const ingredient = () =>
       tannin: concentration(),
       oxide: concentration(),
       flavonoid: concentration(),
+      temp: temperature(),
+      tagList: tags(),
+      sound: fc.option(fc.string({ minLength: 1, maxLength: 20 }), { nil: null }),
+      taste: fc.record(Object.fromEntries(TASTE_KEYS.map((k) => [k, tasteValue()]))),
     })
     .map((r) =>
       makeIngredient({
@@ -42,6 +55,10 @@ const ingredient = () =>
         luminosity: r.lum,
         aestheticWeight: r.aw,
         phContribution: r.ph,
+        temperatureFeel: r.temp,
+        synergyTags: r.tagList,
+        sound: r.sound,
+        tasteProfile: r.taste as Ingredient['tasteProfile'],
         compoundClasses: [
           { class: 'tannin', concentration: r.tannin },
           { class: 'oxide', concentration: r.oxide },
@@ -178,5 +195,145 @@ describe('fictional solvents', () => {
         expect(context.sensoryOutput!.blendState).toBe('homogeneous');
       }),
     );
+  });
+});
+
+describe('taste', () => {
+  it('reports all eight dimensions, every one within range', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const context = run(ingredients, makeOpenSolvent());
+        if (context === null) return;
+        const taste = context.sensoryOutput!.tasteProfile!;
+        for (const key of TASTE_KEYS) {
+          expect(taste[key]).toBeGreaterThanOrEqual(0);
+          expect(taste[key]).toBeLessThanOrEqual(1);
+        }
+      }),
+    );
+  });
+
+  it('does not depend on ingredient order', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const forward = run(ingredients, makeOpenSolvent());
+        const reversed = run([...ingredients].reverse(), makeOpenSolvent());
+        if (forward === null || reversed === null) return;
+        for (const key of TASTE_KEYS) {
+          expect(reversed.sensoryOutput!.tasteProfile![key]).toBeCloseTo(
+            forward.sensoryOutput!.tasteProfile![key],
+          );
+        }
+      }),
+    );
+  });
+});
+
+describe('temperature and sound', () => {
+  it('always reports a known temperature', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const context = run(ingredients, makeOpenSolvent());
+        if (context === null) return;
+        expect(TEMPERATURE_FEELS).toContain(context.sensoryOutput!.temperatureFeel);
+      }),
+    );
+  });
+
+  it('only ever reports a sound some ingredient actually carries', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const context = run(ingredients, makeOpenSolvent());
+        if (context === null) return;
+        const sound = context.sensoryOutput!.sound;
+        if (sound === null) return;
+        expect(ingredients.map((i) => i.sound)).toContain(sound);
+      }),
+    );
+  });
+
+  it('resolves temperature and sound independently of ingredient order', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const forward = run(ingredients, makeOpenSolvent());
+        const reversed = run([...ingredients].reverse(), makeOpenSolvent());
+        if (forward === null || reversed === null) return;
+        expect(reversed.sensoryOutput!.temperatureFeel).toBe(
+          forward.sensoryOutput!.temperatureFeel,
+        );
+        expect(reversed.sensoryOutput!.sound).toBe(forward.sensoryOutput!.sound);
+      }),
+    );
+  });
+});
+
+describe('insoluble ingredients cannot weaken a preparation', () => {
+  // Extraction weighting means an insoluble ingredient contributes 0 to both the numerator
+  // and the denominator of the taste average, so it claims no share of the character. This
+  // is structural rather than a special case: nothing in the code checks for stones.
+  const inert = (id: string) =>
+    makeIngredient({
+      id,
+      slug: id,
+      solubility: 'insoluble',
+      tasteProfile: {
+        sweet: 0,
+        bitter: 0,
+        sour: 0,
+        salty: 0,
+        umami: 0,
+        astringent: 0,
+        metallic: 0,
+        bright: 0,
+      },
+    });
+
+  it('adding a tasteless insoluble never changes the taste profile', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const solvent = makeOpenSolvent();
+        const without = run(ingredients, solvent);
+        const with_ = run([...ingredients, inert('quartz')], solvent);
+        if (without === null || with_ === null) return;
+        for (const key of TASTE_KEYS) {
+          expect(with_.sensoryOutput!.tasteProfile![key]).toBeCloseTo(
+            without.sensoryOutput!.tasteProfile![key],
+          );
+        }
+      }),
+    );
+  });
+
+  it('holds no matter how many are added', () => {
+    fc.assert(
+      fc.property(combination(), fc.integer({ min: 1, max: 3 }), (ingredients, count) => {
+        const solvent = makeOpenSolvent();
+        const stones = Array.from({ length: count }, (_, i) => inert(`quartz-${i}`));
+        const without = run(ingredients, solvent);
+        const with_ = run([...ingredients, ...stones], solvent);
+        if (without === null || with_ === null) return;
+        for (const key of TASTE_KEYS) {
+          expect(with_.sensoryOutput!.tasteProfile![key]).toBeCloseTo(
+            without.sensoryOutput!.tasteProfile![key],
+          );
+        }
+      }),
+    );
+  });
+
+  it('still lets them colour the mix, since presence and extraction differ', () => {
+    // The same ingredient that cannot touch taste must still be visible: you see what is
+    // present, you taste what dissolved. An insoluble ingredient pushes extraction spread to
+    // its maximum, so it surfaces as a separated second phase rather than tinting the first.
+    const solvent = makeOpenSolvent();
+    const soluble = () => makeIngredient({ id: 'a', slug: 'a', colorBase: '#FFE066' });
+    const without = run([soluble()], solvent);
+    const with_ = run([soluble(), { ...inert('charcoal'), colorBase: '#1A1A1A' }], solvent);
+
+    expect(without!.sensoryOutput!.blendState).toBe('homogeneous');
+    expect(without!.sensoryOutput!.colorSecondary).toBeNull();
+
+    expect(with_!.sensoryOutput!.blendState).toBe('separated');
+    expect(with_!.sensoryOutput!.colorSecondary).not.toBeNull();
   });
 });

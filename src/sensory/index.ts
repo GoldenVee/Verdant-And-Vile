@@ -1,11 +1,23 @@
 // The sensory algorithm. Computes the preparation's perceived qualities from final weights
 // and ingredient data. See docs/sensory.md.
 //
-// Colour and luminosity are implemented. Aroma, taste, texture, motion, temperature, and
-// sound are not yet designed and are returned as null.
+// Colour, luminosity, taste, temperature, and sound are implemented. Aroma and texture are not
+// yet designed and return null; motion is deferred to its own session.
 
-import { LUMINOSITIES, type BlendState, type Luminosity } from '../domain/enums.js';
-import type { CombinationIngredient, SensoryOutput, Solvent } from '../domain/types.js';
+import {
+  LUMINOSITIES,
+  TASTE_KEYS,
+  TEMPERATURE_FEELS,
+  type BlendState,
+  type Luminosity,
+  type TemperatureFeel,
+} from '../domain/enums.js';
+import type {
+  CombinationIngredient,
+  SensoryOutput,
+  Solvent,
+  TasteProfile,
+} from '../domain/types.js';
 import { blend, luminance, shiftToward } from './color.js';
 
 // Reactive shift targets. Amber is fixed rather than derived because tannin browning
@@ -26,6 +38,14 @@ const SEPARATED_SPREAD = 0.7;
 const GRADIENT_SPREAD = 0.4;
 const SUSPENSION_MEAN = 0.5;
 
+// Net warming or cooling tag load, as a fraction of total weight, needed to move the
+// perceived temperature one step.
+const TEMPERATURE_TAG_THRESHOLD = 0.3;
+
+// A sound-bearing ingredient below this share of total weight is not audible. Every authored
+// sound is already written as faint, so a trace ingredient should not be heard at all.
+const SOUND_FLOOR = 0.15;
+
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
@@ -35,6 +55,13 @@ function clamp(value: number, min: number, max: number): number {
 // "how much does it carry the character".
 function contributionWeight(ci: CombinationIngredient): number {
   return ci.weightData.presenceWeight * ci.ingredient.aestheticWeight;
+}
+
+// Taste and pH are properties of the solution, so they follow what dissolved rather than what
+// is present. You see what is present, you taste what dissolved. This also means the three
+// insoluble quartzes, which have all-zero taste profiles, cannot dilute a preparation's taste.
+function extractionContribution(ci: CombinationIngredient): number {
+  return ci.weightData.chemicalExtractionWeight * ci.ingredient.aestheticWeight;
 }
 
 function concentrationOf(ci: CombinationIngredient, compoundClass: string): number {
@@ -198,6 +225,97 @@ export function resolveLuminosity(
   return best;
 }
 
+// Weighted average per dimension, with the solvent participating at the same inverse-load
+// weight it takes in the colour blend. Averaged rather than summed: a taste profile describes
+// what share of the character each participant carries, so summing would make every
+// four-ingredient preparation more intense than every two-ingredient one.
+export function resolveTaste(ingredients: CombinationIngredient[], solvent: Solvent): TasteProfile {
+  const weights = ingredients.map(extractionContribution);
+  const total = weights.reduce((sum, w) => sum + w, 0);
+  const sw = solventWeight(total);
+  const divisor = total + sw;
+
+  const profile = {} as TasteProfile;
+  for (const key of TASTE_KEYS) {
+    let sum = solvent.tasteProfile[key] * sw;
+    for (let i = 0; i < ingredients.length; i++) {
+      const ci = ingredients[i];
+      const w = weights[i];
+      if (ci === undefined || w === undefined) continue;
+      sum += ci.ingredient.tasteProfile[key] * w;
+    }
+    profile[key] = clamp(divisor > 0 ? sum / divisor : 0, 0, 1);
+  }
+  return profile;
+}
+
+// Weighted dominance on the authored field, then a one-step shift from tag load. The field
+// stays primary because this is a sensory output; the tags modulate it. They disagree on
+// three ingredients (Wormwood and Red Coral read cold but are tagged warming, Chamomile reads
+// warming but is tagged cooling), which is not bad data: the tag is what an ingredient does
+// pharmacologically, the field is how it feels. Wormwood should read as cold that warms
+// slightly, not as a contradiction.
+export function resolveTemperature(ingredients: CombinationIngredient[]): TemperatureFeel {
+  const tally = new Map<TemperatureFeel, number>();
+  let total = 0;
+  let net = 0;
+
+  for (const ci of ingredients) {
+    const w = contributionWeight(ci);
+    total += w;
+    const feel = ci.ingredient.temperatureFeel;
+    tally.set(feel, (tally.get(feel) ?? 0) + w);
+
+    const tags = [...ci.ingredient.synergyTags, ...ci.ingredient.antagonistTags];
+    if (tags.includes('warming')) net += w;
+    if (tags.includes('cooling')) net -= w;
+  }
+
+  // Ties resolve by TEMPERATURE_FEELS order so the result is stable regardless of input order.
+  let index = 0;
+  let bestScore = -1;
+  for (let i = 0; i < TEMPERATURE_FEELS.length; i++) {
+    const feel = TEMPERATURE_FEELS[i];
+    if (feel === undefined) continue;
+    const score = tally.get(feel) ?? 0;
+    if (score > bestScore) {
+      index = i;
+      bestScore = score;
+    }
+  }
+
+  const pressure = total > 0 ? net / total : 0;
+  if (pressure >= TEMPERATURE_TAG_THRESHOLD) index += 1;
+  else if (pressure <= -TEMPERATURE_TAG_THRESHOLD) index -= 1;
+
+  return TEMPERATURE_FEELS[clamp(index, 0, TEMPERATURE_FEELS.length - 1)] ?? 'neutral';
+}
+
+// Dominance, not merging. Sounds are authored prose, so averaging them is meaningless, and a
+// trace ingredient's faint sound should not be audible at all. Solvents carry no sound.
+export function resolveSound(ingredients: CombinationIngredient[]): string | null {
+  const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
+  if (total <= 0) return null;
+
+  let best: CombinationIngredient | null = null;
+  let bestWeight = 0;
+  for (const ci of ingredients) {
+    if (ci.ingredient.sound === null) continue;
+    const w = contributionWeight(ci);
+    // Ties break on id so ingredient order cannot change the result.
+    if (
+      w > bestWeight ||
+      (w === bestWeight && best !== null && ci.ingredient.id < best.ingredient.id)
+    ) {
+      best = ci;
+      bestWeight = w;
+    }
+  }
+
+  if (best === null || bestWeight / total < SOUND_FLOOR) return null;
+  return best.ingredient.sound;
+}
+
 export function computeSensory(
   ingredients: CombinationIngredient[],
   solvent: Solvent,
@@ -222,11 +340,11 @@ export function computeSensory(
     colorSecondary,
     blendState,
     luminosity: resolveLuminosity(ingredients, solvent),
+    tasteProfile: resolveTaste(ingredients, solvent),
+    temperatureFeel: resolveTemperature(ingredients),
+    sound: resolveSound(ingredients),
     aromaProfile: null,
-    tasteProfile: null,
     texture: null,
     motionTendency: null,
-    temperatureFeel: null,
-    sound: null,
   };
 }
