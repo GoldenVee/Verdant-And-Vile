@@ -35,15 +35,29 @@ compound classes, the solvent, and the fictional scalars. It writes nothing else
 
 ### Contribution weighting
 
-Each ingredient's sensory contribution is scaled by `presence_weight * aesthetic_weight`.
-Presence answers "is it physically there", so an insoluble ingredient still colours and
-scents the mix. Aesthetic answers "how much does it dominate the character".
+Two weightings are used, and which one applies is not arbitrary:
 
-For the averaging sub-algorithms (colour, taste) these weights are normalized to sum to 1,
-so a four-ingredient blend and a two-ingredient blend are not systematically different in
-saturation. Ingredient count must not leak into the output as an artifact.
+**You see what is present, you taste what dissolved.**
 
-**Combination pH is the exception.** It is not weighted this way. See below.
+- **Presence weighting** (`presence_weight * aesthetic_weight`) governs colour, luminosity,
+  temperature, texture, motion, and sound. These are properties of the preparation as you
+  encounter it, so an insoluble ingredient still colours the mix and still sits in the vessel.
+- **Extraction weighting** (`chemical_extraction_weight * aesthetic_weight`) governs taste,
+  and extraction weight alone governs pH. These are properties of the solution.
+
+In both cases `aesthetic_weight` answers "how much does it dominate the character".
+
+The distinction earns its keep. Amethyst, Bloodstone, and Tiger's Eye are insoluble quartzes
+with an all-zero taste profile, the same three that carry `null` pH. Under presence weighting
+a stone dropped into a tincture would dilute its taste by a third, which is wrong: the stone
+contributes nothing but also displaces nothing. Extraction weighting zeroes them out with no
+special case.
+
+For the averaging sub-algorithms (colour, taste) weights are normalized to sum to 1, so a
+four-ingredient blend and a two-ingredient blend are not systematically different in
+intensity. Ingredient count must not leak into the output as an artifact.
+
+**Combination pH is the exception to normalization.** It sums. See below.
 
 ### Determinism
 
@@ -399,6 +413,127 @@ paths are reachable but none is common.
 
 ---
 
+## Taste
+
+**Status: settled.**
+
+A weighted average per dimension across all eight taste keys, using extraction weighting,
+with the solvent participating at the same inverse-load weight it takes in the colour blend.
+Results are clamped to 0.0 to 1.0.
+
+Averaged rather than summed, unlike pH. pH is a bulk chemical property that genuinely
+accumulates, whereas a taste profile describes what fraction of the character each
+participant carries. Summing would make every four-ingredient preparation more intense than
+every two-ingredient one, which is the ingredient-count artifact the weighting rule exists to
+prevent.
+
+### Solvents carry taste
+
+Solvents originally had no taste data at all: the `Solvent` record held `aesthetic_base` with
+colour, viscosity, and luminosity, and nothing else sensory. A Honey preparation would not
+have tasted sweet and a Vinegar one would not have tasted sour. Unlike the
+`light-swallowing` gap, no overlay would have backfilled it.
+
+`taste_profile` is now authored per solvent, as a single `jsonb` column mirroring how
+ingredients already store it. Sums are calibrated against the authored ingredient range,
+which runs 0 to 2.60 with a mean of 1.43.
+
+| Solvent | sweet | bitter | sour | salty | umami | astring. | metallic | bright |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Water | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Spirits | 0.1 | 0.4 | 0.1 | 0 | 0 | 0.5 | 0 | 0.7 |
+| Oil | 0.1 | 0.1 | 0 | 0 | 0.3 | 0 | 0 | 0 |
+| Vinegar | 0 | 0.1 | 0.9 | 0.1 | 0.1 | 0.3 | 0.1 | 0.6 |
+| Honey | 0.9 | 0 | 0.2 | 0 | 0.1 | 0 | 0 | 0.3 |
+| Ichor | 0.5 | 0 | 0 | 0.4 | 0.6 | 0 | 0.8 | 0.6 |
+| Prism | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 |
+| Lacuna | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+**Water is the neutral ground**, all zeros, the baseline every other solvent deviates from.
+
+**Spirits** is ethanol: bitter, drying, sharp. Astringent 0.5 is the burn.
+
+**Oil** coats rather than flavours, so it stays low, with a little umami because fats carry
+savour.
+
+**Ichor reads as blood**: metallic and faintly sweet over salt and umami, lifted by bright for
+the divinity. It is the only profile that exceeds the ingredient ceiling, at 2.9, which suits
+a solvent whose signature is additive elevation.
+
+**Prism is flat 0.3 across all eight.** A preparation that tastes of everything at once,
+equally, is the taste equivalent of "you become other". No dimension dominates because every
+dimension is present.
+
+**Lacuna is all zeros, absent rather than neutral.** Mechanically identical to Water, but the
+reasoning matches the distinction already drawn on pH, where Lacuna is 7.0 because everything
+that would push it either way has been taken out. Its erasure overlay mutes taste further at
+step 6.
+
+### Deferred to v2
+
+Antagonistic masking, where high bitter suppresses perceived sweet, is not modelled. It
+belongs to a FlavorBalanceRule and is listed in the v2 roadmap.
+
+---
+
+## Temperature
+
+**Status: settled.**
+
+Weighted dominance on `temperature_feel` using presence weighting, then a tag adjustment that
+can shift the result one step along the ordered scale:
+
+```
+cold  <->  neutral  <->  warming  <->  burning
+```
+
+Net tag load is the presence-weighted `warming` load minus the `cooling` load, normalized
+against total weight. When it clears a threshold in either direction the result moves one
+step, and only one.
+
+### Why the tags cannot simply be summed
+
+The `warming` and `cooling` tags contradict `temperature_feel` on three ingredients. Wormwood
+is tagged `warming` but reads cold; Red Coral the same; Chamomile is tagged `cooling` but
+reads warming.
+
+That is not bad data. The tag is what the ingredient does pharmacologically, the field is how
+it feels in the mouth, and those genuinely differ: wormwood tastes cold and bitter while
+warming you. So the field stays primary, because this is a sensory output, and the tag load
+modulates it rather than overriding it. Wormwood resolves as cold that warms slightly, not as
+a contradiction.
+
+The alternative, letting tags drive the result, was rejected: it would invert hand-authored
+sensory data, turning Chamomile cold on the strength of a pharmacological tag.
+
+Reading reactive tags here is on-principle. Design principle 5 is that sensory reads from
+reactive, one-directionally.
+
+### `heat_default` is not an input
+
+Every solvent carries `heat_default: warm`, so the field has zero discriminating power. It is
+a v2 heat-mechanic hook, not a temperature signal.
+
+---
+
+## Sound
+
+**Status: settled.**
+
+Dominance, not merging. Among the ingredients carrying a non-null `sound`, the one with the
+greatest presence weight wins; ties resolve by ingredient id so the result is stable
+regardless of input order. Below a contribution floor the result is `null`.
+
+Only 12 of 57 ingredients carry a sound, and the values are authored prose rather than
+scalars: "a held breath that never quite reaches speech", "faint metallic ring when tapped
+against glass". Averaging or concatenating them is meaningless, and every one of them is
+already written as faint, so a trace ingredient should not be audible at all. Hence the floor
+rather than an unconditional pick.
+
+Solvents carry no `sound` field and do not participate.
+
+---
+
 ## Deferred
 
 **Motion.** Ingredient `motion_tendency` only ever takes 4 of its 10 enum values in the seed
@@ -424,12 +559,8 @@ dioxide is the natural source of `effervescent`.
   class would carry the same ripple costs that ruled out splitting `oxide`.
 - **Nonpolar ingredients and pH.** Held at 0 rather than `null`. Revisit if the 0.3
   partial-extraction reasoning proves unconvincing in play.
-- **Sound.** Only 12 of 57 ingredients carry one, and they are authored prose rather than
-  values. No averaging or merging is meaningful. It needs a dominance rule with a
-  contribution floor, or null. Not yet designed.
-- **Luminosity `light-swallowing`.** No ingredient carries it; only Lacuna's
-  `aesthetic_base` does. Either luminosity selection reads the solvent, or the value is
-  reachable only through the Lacuna overlay.
+- **Antagonistic taste masking.** High bitter suppressing perceived sweet is not modelled.
+  Deferred to a FlavorBalanceRule in v2.
 
 ---
 
