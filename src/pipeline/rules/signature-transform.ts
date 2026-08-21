@@ -65,6 +65,7 @@ const PRISM_MAX_ADDED_NOTES = 6;
 // Erasure step at which aroma flattens. Top notes are the volatile ones that lift off a
 // preparation, so they go first; at the far end only the base remains.
 const LACUNA_AROMA_STEP = 3;
+const LACUNA_MOTION_STEP = 5;
 const LACUNA_HEART_STEP = 6;
 
 // Lacuna dulls toward 'dull'. LUMINOSITIES is not a brightness ordering, so stepping down the
@@ -186,8 +187,11 @@ function applyLacunaSensory(context: BrewingContext): void {
     if (count >= LACUNA_HEART_STEP) sensory.aromaProfile.heart = [];
   }
 
-  // Texture is deferred to v2 apart from the separation blend_state already carries, and
-  // motion to its own session, so erasure steps 4 and 5 have nothing to act on yet.
+  // Whatever the preparation was doing, it stops.
+  if (count >= LACUNA_MOTION_STEP) sensory.motionTendency = 'still';
+
+  // Texture is deferred to v2 apart from the separation blend_state already carries, so
+  // erasure step 4 has nothing to act on yet.
 }
 
 function applyIchor(context: BrewingContext): void {

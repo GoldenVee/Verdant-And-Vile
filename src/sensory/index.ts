@@ -1,17 +1,19 @@
 // The sensory algorithm. Computes the preparation's perceived qualities from final weights
 // and ingredient data. See docs/sensory.md.
 //
-// Colour, luminosity, aroma, taste, temperature, and sound are implemented. Texture is deferred
-// to v2 apart from the separation that blend_state already carries; motion is deferred to its
-// own session.
+// Every channel except texture is implemented. Texture is deferred to v2 apart from the
+// separation that blend_state already carries.
 
 import {
   AROMA_POSITIONS,
   LUMINOSITIES,
+  MOTION_TENDENCIES,
   TASTE_KEYS,
   TEMPERATURE_FEELS,
   type BlendState,
   type Luminosity,
+  type MotionTendency,
+  type StabilityState,
   type TemperatureFeel,
 } from '../domain/enums.js';
 import type {
@@ -56,6 +58,31 @@ const AROMA_NOTES_PER_POSITION = 4;
 // Solvent notes enter muted, on top of the usual inverse-load solvent weight, so they
 // colour a profile without ever leading it.
 const AROMA_SOLVENT_MUTE = 0.5;
+
+// Motion scoring weights. Ingredient tendency supplies a floor of at most 1.0, reached when
+// every ingredient agrees on one value. Any mechanism meant to fire against that agreement
+// must therefore weigh MORE than 1.0: at exactly 1.0 it ties and loses the enum-order
+// tiebreak. Without these weights still and settling would win almost everything, since they
+// account for 49 of the 57 authored tendencies.
+//
+// The two below 1.0 are deliberate. A gradient is a weaker claim than full separation. Settling
+// is held lowest of all because it double-counts otherwise: it is the second-most-common
+// authored tendency AND its predicate matches 29 of 57 ingredients on texture alone, so a
+// higher weight let a jar of powder outrank an active reaction like effervescence.
+const MOTION_WEIGHTS = {
+  layeredSeparated: 1.5,
+  layeredGradient: 0.7,
+  churningCritical: 1.5,
+  churningUnstable: 1.15,
+  effervescent: 0.9,
+  rising: 1.3,
+  pulsing: 1.3,
+  restless: 1.2,
+  seeking: 1.2,
+  still: 1.2,
+  swirling: 1.15,
+  settling: 0.5,
+} as const;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -365,9 +392,145 @@ export function resolveAroma(ingredients: CombinationIngredient[], solvent: Solv
   return profile;
 }
 
+// Weighted share of total presence held by ingredients matching a predicate.
+function presenceShare(
+  ingredients: CombinationIngredient[],
+  predicate: (ci: CombinationIngredient) => boolean,
+): number {
+  let total = 0;
+  let matching = 0;
+  for (const ci of ingredients) {
+    const w = contributionWeight(ci);
+    total += w;
+    if (predicate(ci)) matching += w;
+  }
+  return total > 0 ? matching / total : 0;
+}
+
+function hasCompound(ci: CombinationIngredient, classes: string[]): boolean {
+  return ci.ingredient.compoundClasses.some((c) => classes.includes(c.class));
+}
+
+// Carbonate meeting acid evolves carbon dioxide. Alkaline load is what dissolved, scaled by
+// how acidic the medium is, so this is zero in water and strong in vinegar without needing
+// to know which ingredients are carbonates. Null pH means no aqueous phase and no fizz.
+export function effervescence(ingredients: CombinationIngredient[], solvent: Solvent): number {
+  if (solvent.basePh === null) return 0;
+  const acidity = clamp((NEUTRAL_PH - solvent.basePh) / NEUTRAL_PH, 0, 1);
+  if (acidity <= 0) return 0;
+
+  let alkaline = 0;
+  for (const ci of ingredients) {
+    const ph = ci.ingredient.phContribution ?? 0;
+    if (ph > 0) alkaline += ph * ci.weightData.chemicalExtractionWeight;
+  }
+  return alkaline * acidity;
+}
+
+// Motion is derived, with authored tendency as a floor rather than the driver. Ingredient
+// motion_tendency only ever takes 4 of its 10 values in the seed data, so dominance
+// selection would leave six structurally unreachable. Each mechanism below scores its own
+// motion; the highest total wins, ties resolving by enum order.
+export function resolveMotion(
+  ingredients: CombinationIngredient[],
+  solvent: Solvent,
+  blendState: BlendState,
+  stabilityState: StabilityState | null,
+): MotionTendency {
+  const scores = new Map<MotionTendency, number>();
+  const add = (motion: MotionTendency, amount: number) => {
+    if (amount > 0) scores.set(motion, (scores.get(motion) ?? 0) + amount);
+  };
+
+  // Floor: what the ingredients themselves tend toward.
+  const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
+  if (total > 0) {
+    for (const ci of ingredients) {
+      add(ci.ingredient.motionTendency, contributionWeight(ci) / total);
+    }
+  }
+
+  // Structural: the preparation did not homogenize, so it sits in strata.
+  if (blendState === 'separated') add('layered', MOTION_WEIGHTS.layeredSeparated);
+  else if (blendState === 'gradient') add('layered', MOTION_WEIGHTS.layeredGradient);
+
+  // Agitation from instability. No ingredient carries the explosive trait, so this is the
+  // only route to churning.
+  if (stabilityState === 'critically_unstable') add('churning', MOTION_WEIGHTS.churningCritical);
+  else if (stabilityState === 'unstable') add('churning', MOTION_WEIGHTS.churningUnstable);
+
+  add(
+    'effervescent',
+    Math.min(effervescence(ingredients, solvent), 2) * MOTION_WEIGHTS.effervescent,
+  );
+
+  // Vapours ascend. Kept separate from the volatile trait: vapour is literal ascent,
+  // volatile is passive instability.
+  add(
+    'rising',
+    presenceShare(ingredients, (ci) => hasCompound(ci, ['essence-vapor', 'noxious-vapor'])) *
+      MOTION_WEIGHTS.rising,
+  );
+  add(
+    'restless',
+    presenceShare(ingredients, (ci) => ci.ingredient.traits.includes('volatile')) *
+      MOTION_WEIGHTS.restless,
+  );
+  // Echoic ingredients carry a captured quality that repeats, and five of the seven are the
+  // breath-bearing ones. A preparation of those pulses like respiration.
+  add(
+    'pulsing',
+    presenceShare(ingredients, (ci) => ci.ingredient.traits.includes('echoic')) *
+      MOTION_WEIGHTS.pulsing,
+  );
+  add(
+    'still',
+    presenceShare(ingredients, (ci) => ci.ingredient.traits.includes('quiescent')) *
+      MOTION_WEIGHTS.still,
+  );
+  add(
+    'seeking',
+    presenceShare(
+      ingredients,
+      (ci) => ci.ingredient.category === 'aberrant' || ci.ingredient.category === 'pneuma',
+    ) * MOTION_WEIGHTS.seeking,
+  );
+  // Heat drives convection.
+  add(
+    'swirling',
+    presenceShare(
+      ingredients,
+      (ci) =>
+        ci.ingredient.temperatureFeel === 'warming' || ci.ingredient.temperatureFeel === 'burning',
+    ) * MOTION_WEIGHTS.swirling,
+  );
+  // Dense matter falls out of suspension.
+  add(
+    'settling',
+    presenceShare(
+      ingredients,
+      (ci) =>
+        hasCompound(ci, ['mineral-salt']) ||
+        ['crystalline', 'powdery', 'gritty'].includes(ci.ingredient.texture.type),
+    ) * MOTION_WEIGHTS.settling,
+  );
+
+  let best: MotionTendency = 'still';
+  let bestScore = -1;
+  for (const motion of MOTION_TENDENCIES) {
+    const score = scores.get(motion) ?? 0;
+    if (score > bestScore) {
+      best = motion;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
 export function computeSensory(
   ingredients: CombinationIngredient[],
   solvent: Solvent,
+  stabilityState: StabilityState | null,
 ): SensoryOutput {
   const blendState = resolveBlendState(ingredients);
   const ph = combinationPh(ingredients, solvent);
@@ -393,7 +556,7 @@ export function computeSensory(
     tasteProfile: resolveTaste(ingredients, solvent),
     temperatureFeel: resolveTemperature(ingredients),
     sound: resolveSound(ingredients),
+    motionTendency: resolveMotion(ingredients, solvent, blendState, stabilityState),
     texture: null,
-    motionTendency: null,
   };
 }

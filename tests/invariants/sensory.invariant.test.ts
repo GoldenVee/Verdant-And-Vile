@@ -8,6 +8,7 @@ import {
   BLEND_STATES,
   LUMINOSITIES,
   SOLUBILITIES,
+  MOTION_TENDENCIES,
   TASTE_KEYS,
   TEMPERATURE_FEELS,
 } from '../../src/domain/enums.js';
@@ -388,6 +389,29 @@ describe('aroma', () => {
         const reversed = run([...ingredients].reverse(), makeOpenSolvent());
         if (forward === null || reversed === null) return;
         expect(reversed.sensoryOutput!.aromaProfile).toEqual(forward.sensoryOutput!.aromaProfile);
+      }),
+    );
+  });
+});
+
+describe('motion', () => {
+  it('always reports a known tendency', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const context = run(ingredients, makeOpenSolvent());
+        if (context === null) return;
+        expect(MOTION_TENDENCIES).toContain(context.sensoryOutput!.motionTendency);
+      }),
+    );
+  });
+
+  it('does not depend on ingredient order', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const forward = run(ingredients, makeOpenSolvent());
+        const reversed = run([...ingredients].reverse(), makeOpenSolvent());
+        if (forward === null || reversed === null) return;
+        expect(reversed.sensoryOutput!.motionTendency).toBe(forward.sensoryOutput!.motionTendency);
       }),
     );
   });

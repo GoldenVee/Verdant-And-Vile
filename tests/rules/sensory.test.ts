@@ -616,3 +616,115 @@ describe('fictional aroma overlays', () => {
     expect(gone.sensoryOutput!.aromaProfile!.base).toEqual(['earth']);
   });
 });
+
+describe('motion', () => {
+  const moving = (id: string, overrides = {}) => plain(id, '#CCCCCC', overrides);
+
+  it('falls back to weighted ingredient tendency when nothing else fires', () => {
+    const context = run([
+      moving('a', { motionTendency: 'rising', aestheticWeight: 0.9 }),
+      moving('b', { motionTendency: 'still', aestheticWeight: 0.2 }),
+    ]);
+    expect(context.sensoryOutput!.motionTendency).toBe('rising');
+  });
+
+  it('reads layered when the preparation separates', () => {
+    const context = run([
+      moving('a', { solubility: 'polar', motionTendency: 'still' }),
+      moving('b', { solubility: 'insoluble', motionTendency: 'still' }),
+    ]);
+    expect(context.sensoryOutput!.blendState).toBe('separated');
+    expect(context.sensoryOutput!.motionTendency).toBe('layered');
+  });
+
+  it('fizzes when an alkaline ingredient dissolves in acid, and not otherwise', () => {
+    // Carbonate meeting acid evolves carbon dioxide. The same ingredient in water does
+    // nothing, because the acidity factor is zero there.
+    const carbonate = () =>
+      moving('coral', { phContribution: 3, solubility: 'acid-soluble', motionTendency: 'still' });
+    const inAcid = run([carbonate(), moving('b')], makeOpenSolvent({ basePh: 2.5 }));
+    const inWater = run([carbonate(), moving('b')], makeOpenSolvent({ basePh: 7 }));
+
+    expect(inAcid.sensoryOutput!.motionTendency).toBe('effervescent');
+    expect(inWater.sensoryOutput!.motionTendency).not.toBe('effervescent');
+  });
+
+  it('churns when the preparation is unstable', () => {
+    const context = createContext({
+      ingredients: [
+        moving('a', { motionTendency: 'still' }),
+        moving('b', { motionTendency: 'still' }),
+      ],
+      solvent: makeOpenSolvent(),
+      outcome: 'concentrate',
+    });
+    solventMatchRule.apply(context);
+    context.stabilityState = 'critically_unstable';
+    sensoryRule.apply(context);
+    expect(context.sensoryOutput!.motionTendency).toBe('churning');
+  });
+
+  it('rises on vapour content and goes restless on volatile content', () => {
+    const vapour = run([
+      moving('a', {
+        compoundClasses: [{ class: 'essence-vapor', concentration: 0.8 }],
+        motionTendency: 'still',
+      }),
+      moving('b', {
+        compoundClasses: [{ class: 'essence-vapor', concentration: 0.8 }],
+        motionTendency: 'still',
+      }),
+    ]);
+    const volatile = run([
+      moving('a', { traits: ['volatile'], motionTendency: 'still' }),
+      moving('b', { traits: ['volatile'], motionTendency: 'still' }),
+    ]);
+    expect(vapour.sensoryOutput!.motionTendency).toBe('rising');
+    expect(volatile.sensoryOutput!.motionTendency).toBe('restless');
+  });
+
+  it('pulses on echoic content and seeks on aberrant or pneuma content', () => {
+    const echoic = run([
+      moving('a', { traits: ['echoic'], motionTendency: 'still' }),
+      moving('b', { traits: ['echoic'], motionTendency: 'still' }),
+    ]);
+    const fictional = run([
+      moving('a', { category: 'pneuma', motionTendency: 'still' }),
+      moving('b', { category: 'aberrant', motionTendency: 'still' }),
+    ]);
+    expect(echoic.sensoryOutput!.motionTendency).toBe('pulsing');
+    expect(fictional.sensoryOutput!.motionTendency).toBe('seeking');
+  });
+
+  it('swirls on heat, convection being the mechanism', () => {
+    const context = run([
+      moving('a', { temperatureFeel: 'burning', motionTendency: 'still' }),
+      moving('b', { temperatureFeel: 'warming', motionTendency: 'still' }),
+    ]);
+    expect(context.sensoryOutput!.motionTendency).toBe('swirling');
+  });
+
+  it('does not depend on ingredient order', () => {
+    const a = moving('a', { traits: ['volatile'], motionTendency: 'rising' });
+    const b = moving('b', { traits: ['echoic'], motionTendency: 'settling' });
+    expect(run([a, b]).sensoryOutput!.motionTendency).toBe(
+      run([b, a]).sensoryOutput!.motionTendency,
+    );
+  });
+
+  it('stops entirely under deep Lacuna erasure', () => {
+    const context = createContext({
+      ingredients: [
+        plain('a', '#CCCCCC', { traits: ['volatile'], motionTendency: 'rising' }),
+        plain('b', '#CCCCCC', { traits: ['volatile'], motionTendency: 'rising' }),
+      ],
+      solvent: makeFictionalSolvent(),
+      outcome: 'concentrate',
+    });
+    solventMatchRule.apply(context);
+    context.sensoryErasureCount = 5;
+    sensoryRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
+    expect(context.sensoryOutput!.motionTendency).toBe('still');
+  });
+});
