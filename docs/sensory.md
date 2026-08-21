@@ -40,7 +40,7 @@ Two weightings are used, and which one applies is not arbitrary:
 **You see what is present, you taste what dissolved.**
 
 - **Presence weighting** (`presence_weight * aesthetic_weight`) governs colour, luminosity,
-  temperature, texture, motion, and sound. These are properties of the preparation as you
+  aroma, temperature, texture, motion, and sound. These are properties of the preparation as you
   encounter it, so an insoluble ingredient still colours the mix and still sits in the vessel.
 - **Extraction weighting** (`chemical_extraction_weight * aesthetic_weight`) governs taste,
   and extraction weight alone governs pH. These are properties of the solution.
@@ -469,7 +469,95 @@ reasoning matches the distinction already drawn on pH, where Lacuna is 7.0 becau
 that would push it either way has been taken out. Its erasure overlay mutes taste further at
 step 6.
 
-### Deferred to v2
+### Aroma
+
+**Status: settled.**
+
+Each position merges independently. For `top`, `heart`, and `base` in turn, every note any
+participant assigns to that position is collected and weighted by presence, summed per note,
+sorted heaviest first with ties broken on slug, and capped at four.
+
+### A note may occupy several positions at once
+
+22 of the 38 notes in use sit at **different positions on different ingredients**. `mineral`
+appears as top, heart, and base depending on which ingredient carries it; `bitter-scent`
+likewise.
+
+This is deliberately not treated as a conflict to arbitrate. A note that one ingredient places
+at top and another places at heart appears at **both** positions in the result. Combine several
+ingredients carrying `earth` at different levels and the preparation reads earthy the whole way
+down, which is what a real composition does: persistence across all three positions is the
+signature of a blend, not a collision.
+
+The alternative, a weighted vote assigning each note to one winning position, was rejected. It
+would discard exactly the information that makes a profile feel layered, and it would mean the
+same note behaving differently depending on which ingredients happened to outweigh which.
+
+### Solvents carry aroma, muted
+
+Solvents originally had no aroma data, the same gap taste had. Notes are now authored per
+solvent in a `solvent_aroma_notes` join table, mirroring `ingredient_aroma_notes` rather than
+using a jsonb column, so the same field is stored the same way for both and the foreign key to
+the vocabulary still applies.
+
+Solvent notes enter at the usual inverse-load solvent weight, halved again. They colour a
+profile without ever leading it: an ingredient carrying its own note always outranks the
+solvent's.
+
+| Solvent | top | heart | base |
+|---|---|---|---|
+| Water | none | none | none |
+| Spirits | `acrid` | `bread` | none |
+| Oil | none | `nutty` | `wax` |
+| Vinegar | `sour` | `acrid` | none |
+| Honey | `honied` | `floral` | `sweet` |
+| Ichor | `caramelized` | `amber` | `metallic` |
+| Prism | `ozone` | none | none |
+| Lacuna | none | none | `void` |
+
+**Water carries nothing**, consistent with its zero taste profile.
+
+**Ichor is ambrosia over blood**: burnt sugar, then amber resin, then metal underneath. It
+matches the sweet 0.5 over metallic 0.8 in its taste profile. `caramelized` rather than
+`honied` keeps it distinct from Honey's top note while staying in the same `floral-sweet`
+family.
+
+**Prism gets a single note on purpose.** It is the solvent that expands aroma, so a sparse
+profile leaves room for the expansion rather than competing with it.
+
+**Lacuna carries `void` at base**, a note authored in the vocabulary and used by nothing else.
+Smelling of absence rather than smelling of nothing, which is a slightly different claim from
+its all-zero taste.
+
+`honied`, `caramelized`, and `void` were all authored in the vocabulary and unused by any
+ingredient before this.
+
+### Prism expansion
+
+Prism adds one note per point of `synergy_scope_multiplier`, capped at six so a high-scope
+combination cannot bury the original profile. Each added note is a **sibling from the same
+family** as a note already present, drawn with the seeded PRNG from the `family` column on the
+aroma vocabulary.
+
+A prism splits one thing into adjacent versions of itself, so the aroma turning into its own
+relatives is the mechanism rather than a decoration. It also puts the vocabulary to work: 17 of
+its 55 notes are authored and used by no ingredient, and those are exactly the ones expansion
+reaches for.
+
+This is why SignatureTransformRule is now a factory. It needs `aroma_families` from
+PipelineData, so it takes the same shape as the other data-dependent rules. The expansion draws
+from the `signature-transform` stream and must stay after the existing consumption sites, for
+the same reason the colour overlay does.
+
+### Lacuna erasure
+
+Step 3 clears `top`; step 6 clears `heart` as well, leaving only `base`. Top notes are the
+volatile ones that lift off a preparation, so losing them first is physically right and reads
+as the thing going quiet.
+
+---
+
+## Deferred to v2
 
 Antagonistic masking, where high bitter suppresses perceived sweet, is not modelled. It
 belongs to a FlavorBalanceRule and is listed in the v2 roadmap.
@@ -535,6 +623,22 @@ Solvents carry no `sound` field and do not participate.
 ---
 
 ## Deferred
+
+**Texture, to v2 apart from separation.** `blend_state` already carries whether a preparation
+separates or blends, which is the part that matters, so `sensory_output.texture` stays null and
+texture clash does not become a second driver of `blend_state`. Two findings are logged for
+whenever it is taken up:
+
+- 41 of 57 ingredients are dry solids (crystalline 15, fibrous 12, powdery 11, gritty 3) against
+  only 12 liquid-ish. Weighted-dominant ingredient texture would make a tincture of powdered
+  root report as `powdery`, the same dead end that made motion unworkable. Texture is also the
+  only sub-algorithm for which `outcome` matters, since a potion is liquid and a sachet is the
+  dry ingredients themselves.
+- `oily` is unreachable: no ingredient carries it and Oil's solvent viscosity is authored as
+  `viscous`. A one-word change would fix it. Relatedly `aesthetic_base.viscosity` is typed as a
+  bare `string` while its values come from the `TextureType` vocabulary.
+
+Lacuna's erasure step 4 stays deferred alongside it.
 
 **Motion.** Ingredient `motion_tendency` only ever takes 4 of its 10 enum values in the seed
 data: `still` (27), `settling` (22), `seeking` (6), `rising` (2). Nothing is `swirling`,
