@@ -35,15 +35,29 @@ compound classes, the solvent, and the fictional scalars. It writes nothing else
 
 ### Contribution weighting
 
-Each ingredient's sensory contribution is scaled by `presence_weight * aesthetic_weight`.
-Presence answers "is it physically there", so an insoluble ingredient still colours and
-scents the mix. Aesthetic answers "how much does it dominate the character".
+Two weightings are used, and which one applies is not arbitrary:
 
-For the averaging sub-algorithms (colour, taste) these weights are normalized to sum to 1,
-so a four-ingredient blend and a two-ingredient blend are not systematically different in
-saturation. Ingredient count must not leak into the output as an artifact.
+**You see what is present, you taste what dissolved.**
 
-**Combination pH is the exception.** It is not weighted this way. See below.
+- **Presence weighting** (`presence_weight * aesthetic_weight`) governs colour, luminosity,
+  aroma, temperature, texture, motion, and sound. These are properties of the preparation as you
+  encounter it, so an insoluble ingredient still colours the mix and still sits in the vessel.
+- **Extraction weighting** (`chemical_extraction_weight * aesthetic_weight`) governs taste,
+  and extraction weight alone governs pH. These are properties of the solution.
+
+In both cases `aesthetic_weight` answers "how much does it dominate the character".
+
+The distinction earns its keep. Amethyst, Bloodstone, and Tiger's Eye are insoluble quartzes
+with an all-zero taste profile, the same three that carry `null` pH. Under presence weighting
+a stone dropped into a tincture would dilute its taste by a third, which is wrong: the stone
+contributes nothing but also displaces nothing. Extraction weighting zeroes them out with no
+special case.
+
+For the averaging sub-algorithms (colour, taste) weights are normalized to sum to 1, so a
+four-ingredient blend and a two-ingredient blend are not systematically different in
+intensity. Ingredient count must not leak into the output as an artifact.
+
+**Combination pH is the exception to normalization.** It sums. See below.
 
 ### Determinism
 
@@ -399,19 +413,351 @@ paths are reachable but none is common.
 
 ---
 
+## Taste
+
+**Status: settled.**
+
+A weighted average per dimension across all eight taste keys, using extraction weighting,
+with the solvent participating at the same inverse-load weight it takes in the colour blend.
+Results are clamped to 0.0 to 1.0.
+
+Averaged rather than summed, unlike pH. pH is a bulk chemical property that genuinely
+accumulates, whereas a taste profile describes what fraction of the character each
+participant carries. Summing would make every four-ingredient preparation more intense than
+every two-ingredient one, which is the ingredient-count artifact the weighting rule exists to
+prevent.
+
+### Solvents carry taste
+
+Solvents originally had no taste data at all: the `Solvent` record held `aesthetic_base` with
+colour, viscosity, and luminosity, and nothing else sensory. A Honey preparation would not
+have tasted sweet and a Vinegar one would not have tasted sour. Unlike the
+`light-swallowing` gap, no overlay would have backfilled it.
+
+`taste_profile` is now authored per solvent, as a single `jsonb` column mirroring how
+ingredients already store it. Sums are calibrated against the authored ingredient range,
+which runs 0 to 2.60 with a mean of 1.43.
+
+| Solvent | sweet | bitter | sour | salty | umami | astring. | metallic | bright |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Water | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Spirits | 0.1 | 0.4 | 0.1 | 0 | 0 | 0.5 | 0 | 0.7 |
+| Oil | 0.1 | 0.1 | 0 | 0 | 0.3 | 0 | 0 | 0 |
+| Vinegar | 0 | 0.1 | 0.9 | 0.1 | 0.1 | 0.3 | 0.1 | 0.6 |
+| Honey | 0.9 | 0 | 0.2 | 0 | 0.1 | 0 | 0 | 0.3 |
+| Ichor | 0.5 | 0 | 0 | 0.4 | 0.6 | 0 | 0.8 | 0.6 |
+| Prism | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 | 0.3 |
+| Lacuna | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+**Water is the neutral ground**, all zeros, the baseline every other solvent deviates from.
+
+**Spirits** is ethanol: bitter, drying, sharp. Astringent 0.5 is the burn.
+
+**Oil** coats rather than flavours, so it stays low, with a little umami because fats carry
+savour.
+
+**Ichor reads as blood**: metallic and faintly sweet over salt and umami, lifted by bright for
+the divinity. It is the only profile that exceeds the ingredient ceiling, at 2.9, which suits
+a solvent whose signature is additive elevation.
+
+**Prism is flat 0.3 across all eight.** A preparation that tastes of everything at once,
+equally, is the taste equivalent of "you become other". No dimension dominates because every
+dimension is present.
+
+**Lacuna is all zeros, absent rather than neutral.** Mechanically identical to Water, but the
+reasoning matches the distinction already drawn on pH, where Lacuna is 7.0 because everything
+that would push it either way has been taken out. Its erasure overlay mutes taste further at
+step 6.
+
+### Deferred to v2
+
+Antagonistic masking, where high bitter suppresses perceived sweet, is not modelled. It
+belongs to a FlavorBalanceRule and is listed in the v2 roadmap.
+
+---
+
+## Aroma
+
+**Status: settled.**
+
+Each position merges independently. For `top`, `heart`, and `base` in turn, every note any
+participant assigns to that position is collected and weighted by presence, summed per note,
+sorted heaviest first with ties broken on slug, and capped at four.
+
+### A note may occupy several positions at once
+
+22 of the 38 notes in use sit at **different positions on different ingredients**. `mineral`
+appears as top, heart, and base depending on which ingredient carries it; `bitter-scent`
+likewise.
+
+This is deliberately not treated as a conflict to arbitrate. A note that one ingredient places
+at top and another places at heart appears at **both** positions in the result. Combine several
+ingredients carrying `earth` at different levels and the preparation reads earthy the whole way
+down, which is what a real composition does: persistence across all three positions is the
+signature of a blend, not a collision.
+
+The alternative, a weighted vote assigning each note to one winning position, was rejected. It
+would discard exactly the information that makes a profile feel layered, and it would mean the
+same note behaving differently depending on which ingredients happened to outweigh which.
+
+### Solvents carry aroma, muted
+
+Solvents originally had no aroma data, the same gap taste had. Notes are now authored per
+solvent in a `solvent_aroma_notes` join table, mirroring `ingredient_aroma_notes` rather than
+using a jsonb column, so the same field is stored the same way for both and the foreign key to
+the vocabulary still applies.
+
+Solvent notes enter at the usual inverse-load solvent weight, halved again. They colour a
+profile without ever leading it: an ingredient carrying its own note always outranks the
+solvent's.
+
+| Solvent | top | heart | base |
+|---|---|---|---|
+| Water | none | none | none |
+| Spirits | `acrid` | `bread` | none |
+| Oil | none | `nutty` | `wax` |
+| Vinegar | `sour` | `acrid` | none |
+| Honey | `honied` | `floral` | `sweet` |
+| Ichor | `caramelized` | `amber` | `metallic` |
+| Prism | `ozone` | none | none |
+| Lacuna | none | none | `void` |
+
+**Water carries nothing**, consistent with its zero taste profile.
+
+**Ichor is ambrosia over blood**: burnt sugar, then amber resin, then metal underneath. It
+matches the sweet 0.5 over metallic 0.8 in its taste profile. `caramelized` rather than
+`honied` keeps it distinct from Honey's top note while staying in the same `floral-sweet`
+family.
+
+**Prism gets a single note on purpose.** It is the solvent that expands aroma, so a sparse
+profile leaves room for the expansion rather than competing with it.
+
+**Lacuna carries `void` at base**, a note authored in the vocabulary and used by nothing else.
+Smelling of absence rather than smelling of nothing, which is a slightly different claim from
+its all-zero taste.
+
+`honied`, `caramelized`, and `void` were all authored in the vocabulary and unused by any
+ingredient before this.
+
+### Prism expansion
+
+Prism adds one note per point of `synergy_scope_multiplier`, capped at six so a high-scope
+combination cannot bury the original profile. Each added note is a **sibling from the same
+family** as a note already present, drawn with the seeded PRNG from the `family` column on the
+aroma vocabulary.
+
+A prism splits one thing into adjacent versions of itself, so the aroma turning into its own
+relatives is the mechanism rather than a decoration. It also puts the vocabulary to work: 17 of
+its 55 notes are authored and used by no ingredient, and those are exactly the ones expansion
+reaches for.
+
+This is why SignatureTransformRule is now a factory. It needs `aroma_families` from
+PipelineData, so it takes the same shape as the other data-dependent rules. The expansion draws
+from the `signature-transform` stream and must stay after the existing consumption sites, for
+the same reason the colour overlay does.
+
+### Lacuna erasure
+
+Step 3 clears `top`; step 6 clears `heart` as well, leaving only `base`. Top notes are the
+volatile ones that lift off a preparation, so losing them first is physically right and reads
+as the thing going quiet.
+
+---
+
+## Temperature
+
+**Status: settled.**
+
+Weighted dominance on `temperature_feel` using presence weighting, then a tag adjustment that
+can shift the result one step along the ordered scale:
+
+```
+cold  <->  neutral  <->  warming  <->  burning
+```
+
+Net tag load is the presence-weighted `warming` load minus the `cooling` load, normalized
+against total weight. When it clears a threshold in either direction the result moves one
+step, and only one.
+
+### Why the tags cannot simply be summed
+
+The `warming` and `cooling` tags contradict `temperature_feel` on three ingredients. Wormwood
+is tagged `warming` but reads cold; Red Coral the same; Chamomile is tagged `cooling` but
+reads warming.
+
+That is not bad data. The tag is what the ingredient does pharmacologically, the field is how
+it feels in the mouth, and those genuinely differ: wormwood tastes cold and bitter while
+warming you. So the field stays primary, because this is a sensory output, and the tag load
+modulates it rather than overriding it. Wormwood resolves as cold that warms slightly, not as
+a contradiction.
+
+The alternative, letting tags drive the result, was rejected: it would invert hand-authored
+sensory data, turning Chamomile cold on the strength of a pharmacological tag.
+
+Reading reactive tags here is on-principle. Design principle 5 is that sensory reads from
+reactive, one-directionally.
+
+### `heat_default` is not an input
+
+Every solvent carries `heat_default: warm`, so the field has zero discriminating power. It is
+a v2 heat-mechanic hook, not a temperature signal.
+
+---
+
+## Sound
+
+**Status: settled.**
+
+Dominance, not merging. Among the ingredients carrying a non-null `sound`, the one with the
+greatest presence weight wins; ties resolve by ingredient id so the result is stable
+regardless of input order. Below a contribution floor the result is `null`.
+
+Only 12 of 57 ingredients carry a sound, and the values are authored prose rather than
+scalars: "a held breath that never quite reaches speech", "faint metallic ring when tapped
+against glass". Averaging or concatenating them is meaningless, and every one of them is
+already written as faint, so a trace ingredient should not be audible at all. Hence the floor
+rather than an unconditional pick.
+
+Solvents carry no `sound` field and do not participate.
+
+---
+
+## Motion
+
+**Status: settled.**
+
+Motion is **derived**, with authored tendency as a floor rather than the driver. Ingredient
+`motion_tendency` only ever takes 4 of its 10 values in the seed data (`still` 27,
+`settling` 22, `seeking` 6, `rising` 2), so weighted dominance would leave `swirling`,
+`pulsing`, `churning`, `effervescent`, `layered`, and `restless` structurally unreachable.
+That is why motion was held out of the first two slices.
+
+Each mechanism scores its own motion, the highest total wins, and ties resolve by enum order.
+
+| Motion | Driver |
+|---|---|
+| `still` | `quiescent` trait, or nothing else firing |
+| `settling` | `mineral-salt` load, or crystalline, powdery, and gritty textures |
+| `rising` | `essence-vapor` and `noxious-vapor` load |
+| `swirling` | `warming` or `burning` temperature, convection |
+| `pulsing` | `echoic` trait |
+| `churning` | `stability_state` unstable or critically unstable |
+| `effervescent` | alkaline load dissolving in acid |
+| `seeking` | aberrant and pneuma content |
+| `layered` | `blend_state` separated |
+| `restless` | `volatile` trait load |
+
+Two of these were already waiting from earlier work. `layered` comes from `blend_state`, which
+the colour model built. `effervescent` comes from carbonate meeting acid, which the pH model
+predicted before anything consumed it.
+
+`volatile` and the vapour classes are kept as separate mechanisms on purpose. Volatile is
+passive instability, so it drives `restless`; the vapour classes are literal ascent, so they
+drive `rising`.
+
+### Effervescence reuses the pH machinery
+
+```
+acidity       = clamp((7 - solvent.base_ph) / 7, 0, 1)
+effervescence = sum of (positive ph_contribution * chemical_extraction_weight) * acidity
+```
+
+Zero when pH is null, and zero in water because acidity is zero there. The rule never needs to
+know which ingredients are carbonates: alkaline material that dissolved in an acidic medium is
+the whole condition. Wood Ash in Vinegar fizzes; the same Wood Ash in Water does not.
+
+### Scoring: max, not sum, and ties go to whatever fired
+
+Two rules govern how scores combine, and both replace weight tuning with structure.
+
+**A motion scores the greater of its floor and its derived contribution, never their sum.**
+The two sources are correlated rather than independent: dense powder gets authored as
+`settling` AND matches the powdery texture predicate, so adding them counts one fact twice.
+Corroboration should not inflate. Before this, Wood Ash in Vinegar reported as `settling`
+while it was visibly fizzing, because settling collected 0.444 from the floor plus 0.9 from a
+predicate matching 29 of 57 ingredients on texture alone, and 1.344 beat effervescence's 1.215.
+
+**On a tie, the source that actually fired wins.** Ties previously resolved by position in
+`MOTION_TENDENCIES`, which meant `still` won on declaration order rather than on anything
+meaningful. Since motion is derived with tendency as a floor, a floor that outranks a live
+mechanism is not behaving like a floor. Remaining ties fall back to enum order, which then only
+ever decides between two sources of the same kind.
+
+Together these mean the weights do not need to be tuned past 1.0 to be reachable. A mechanism
+weighted at exactly 1.0 still beats unanimous ingredient agreement, because it wins the tie.
+Three weights that had been hand-raised to clear the old constraint were reverted once these
+rules were in place.
+
+### Distribution is lopsided, deferred to v2
+
+All ten values are reachable, but they are far from evenly reached. Across all 9262
+resolvable two-ingredient combinations:
+
+| Motion | Share |
+|---|---:|
+| `churning` | 37.4% |
+| `settling` | 17.8% |
+| `layered` | 14.2% |
+| `still` | 10.6% |
+| `restless` | 8.5% |
+| `rising` | 4.2% |
+| `swirling` | 3.3% |
+| `pulsing` | 2.2% |
+| `effervescent` | 1.6% |
+| `seeking` | 0.1% |
+
+`churning` takes over a third of all outcomes because a large share of combinations resolve
+to `unstable` or `critically_unstable`, and churning then outranks nearly everything else.
+`seeking` appears 10 times in 9262 despite having seven ingredients that should drive it,
+because churning crowds it out.
+
+This is a balancing question rather than a correctness one, and it is deliberately not being
+solved by re-tuning weights: the scoring rules above exist precisely because tuning constants
+to reach a desired outcome hid two real bugs. Any fix should come from the same place, either
+a structural rule about how instability competes with more specific mechanisms, or a change to
+how often stability resolves to unstable in the first place. Tracked as a v2 item.
+
+### Reading stability
+
+This is the first place the sensory layer reads a computed pipeline value rather than
+ingredient data. SensoryRule runs after StabilityRule, so `stability_state` is final, and since
+no ingredient carries the `explosive` trait it is the only available route to `churning`.
+
+### Verified reachable
+
+A sweep of every two-ingredient combination across every solvent produces all ten values.
+Representative cases: `effervescent` from Wood Ash in Vinegar, `rising` from Aphrodite's
+Seafoam, `seeking` from Feywind, `pulsing` from Mandrake, `churning` under Ichor, whose
+stability modifier is 0.4.
+
+### Unused traits
+
+`mercurial` and `explosive` are authored in the trait enum and carried by no ingredient, so
+neither can drive anything today. Same situation as `oily` in the texture vocabulary.
+
+### Lacuna erasure
+
+Step 5 sets motion to `still`. Whatever the preparation was doing, it stops.
+
+---
+
 ## Deferred
 
-**Motion.** Ingredient `motion_tendency` only ever takes 4 of its 10 enum values in the seed
-data: `still` (27), `settling` (22), `seeking` (6), `rising` (2). Nothing is `swirling`,
-`pulsing`, `churning`, `effervescent`, `layered`, or `restless`. Selecting a dominant
-ingredient tendency would therefore make six of ten values structurally unreachable. Motion
-needs to be primarily derived, with ingredient tendency as a floor rather than the driver,
-and that deserves its own design pass. SensoryRule will carry a weighted-dominant
-placeholder until then.
+**Texture, to v2 apart from separation.** `blend_state` already carries whether a preparation
+separates or blends, which is the part that matters, so `sensory_output.texture` stays null and
+texture clash does not become a second driver of `blend_state`. Two findings are logged for
+whenever it is taken up:
 
-Two mechanisms already surfaced that the motion session should inherit: `blend_state`
-`separated` is the natural source of `layered`, and carbonate plus acid producing carbon
-dioxide is the natural source of `effervescent`.
+- 41 of 57 ingredients are dry solids (crystalline 15, fibrous 12, powdery 11, gritty 3) against
+  only 12 liquid-ish. Weighted-dominant ingredient texture would make a tincture of powdered
+  root report as `powdery`, the same dead end that made motion unworkable. Texture is also the
+  only sub-algorithm for which `outcome` matters, since a potion is liquid and a sachet is the
+  dry ingredients themselves.
+- `oily` is unreachable: no ingredient carries it and Oil's solvent viscosity is authored as
+  `viscous`. A one-word change would fix it. Relatedly `aesthetic_base.viscosity` is typed as a
+  bare `string` while its values come from the `TextureType` vocabulary.
+
+Lacuna's erasure step 4 stays deferred alongside it.
 
 ---
 
@@ -424,12 +770,8 @@ dioxide is the natural source of `effervescent`.
   class would carry the same ripple costs that ruled out splitting `oxide`.
 - **Nonpolar ingredients and pH.** Held at 0 rather than `null`. Revisit if the 0.3
   partial-extraction reasoning proves unconvincing in play.
-- **Sound.** Only 12 of 57 ingredients carry one, and they are authored prose rather than
-  values. No averaging or merging is meaningful. It needs a dominance rule with a
-  contribution floor, or null. Not yet designed.
-- **Luminosity `light-swallowing`.** No ingredient carries it; only Lacuna's
-  `aesthetic_base` does. Either luminosity selection reads the solvent, or the value is
-  reachable only through the Lacuna overlay.
+- **Antagonistic taste masking.** High bitter suppressing perceived sweet is not modelled.
+  Deferred to a FlavorBalanceRule in v2.
 
 ---
 

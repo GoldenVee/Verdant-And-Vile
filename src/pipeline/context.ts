@@ -31,6 +31,7 @@ export function emptyPipelineData(): PipelineData {
     synergyPairs: [],
     effectDefinitions: new Map(),
     effectSubtractiveEquivalents: new Map(),
+    aromaFamilies: new Map(),
   };
 }
 

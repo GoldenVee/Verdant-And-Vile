@@ -4,12 +4,12 @@
 import { asc } from 'drizzle-orm';
 
 import { db } from '../db/client.js';
-import { solvents } from '../db/schema.js';
-import type { Solvent } from '../domain/types.js';
+import { solventAromaNotes, solvents } from '../db/schema.js';
+import type { AromaNoteRef, Solvent } from '../domain/types.js';
 
 type SolventRow = typeof solvents.$inferSelect;
 
-function toDomain(row: SolventRow): Solvent {
+function toDomain(row: SolventRow, aromaNotes: AromaNoteRef[]): Solvent {
   return {
     id: row.id,
     slug: row.slug,
@@ -21,6 +21,8 @@ function toDomain(row: SolventRow): Solvent {
     stabilityModifier: row.stabilityModifier,
     heatDefault: row.heatDefault,
     aestheticBase: row.aestheticBase,
+    tasteProfile: row.tasteProfile,
+    aromaNotes,
     categoryAffinity: row.categoryAffinity,
     categoryResistance: row.categoryResistance,
     signatureTransformation: row.signatureTransformation ?? null,
@@ -29,8 +31,19 @@ function toDomain(row: SolventRow): Solvent {
 }
 
 export async function listSolvents(): Promise<Solvent[]> {
-  const rows = await db.select().from(solvents).orderBy(asc(solvents.name));
-  return rows.map(toDomain);
+  const [rows, aroma] = await Promise.all([
+    db.select().from(solvents).orderBy(asc(solvents.name)),
+    db.select().from(solventAromaNotes),
+  ]);
+
+  const aromaBy = new Map<string, AromaNoteRef[]>();
+  for (const a of aroma) {
+    const list = aromaBy.get(a.solventId) ?? [];
+    list.push({ note: a.note, position: a.position });
+    aromaBy.set(a.solventId, list);
+  }
+
+  return rows.map((row) => toDomain(row, aromaBy.get(row.id) ?? []));
 }
 
 export async function getSolventBySlug(slug: string): Promise<Solvent | null> {

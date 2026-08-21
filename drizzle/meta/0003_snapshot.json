@@ -1,0 +1,1118 @@
+{
+  "id": "2b55f3b4-b29c-42d9-9d6f-f8d8a42bf8fe",
+  "prevId": "6977e949-1536-4156-ade0-ea8beeea87db",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.aroma_notes": {
+      "name": "aroma_notes",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "family": {
+          "name": "family",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.compound_classes": {
+      "name": "compound_classes",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "compound_kind",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.effect_definitions": {
+      "name": "effect_definitions",
+      "schema": "",
+      "columns": {
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "domain": {
+          "name": "domain",
+          "type": "effect_domain",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "default_descriptor": {
+          "name": "default_descriptor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.effect_subtractive_equivalents": {
+      "name": "effect_subtractive_equivalents",
+      "schema": "",
+      "columns": {
+        "standard_effect": {
+          "name": "standard_effect",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "subtractive_equivalent": {
+          "name": "subtractive_equivalent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ingredient_aroma_notes": {
+      "name": "ingredient_aroma_notes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "aroma_position",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ingredient_aroma_notes_ingredient_id_ingredients_id_fk": {
+          "name": "ingredient_aroma_notes_ingredient_id_ingredients_id_fk",
+          "tableFrom": "ingredient_aroma_notes",
+          "tableTo": "ingredients",
+          "columnsFrom": [
+            "ingredient_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "ingredient_aroma_notes_note_aroma_notes_slug_fk": {
+          "name": "ingredient_aroma_notes_note_aroma_notes_slug_fk",
+          "tableFrom": "ingredient_aroma_notes",
+          "tableTo": "aroma_notes",
+          "columnsFrom": [
+            "note"
+          ],
+          "columnsTo": [
+            "slug"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "ingredient_aroma_notes_ingredient_id_note_position_unique": {
+          "name": "ingredient_aroma_notes_ingredient_id_note_position_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ingredient_id",
+            "note",
+            "position"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ingredient_compounds": {
+      "name": "ingredient_compounds",
+      "schema": "",
+      "columns": {
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "compound_class": {
+          "name": "compound_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "concentration": {
+          "name": "concentration",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ingredient_compounds_ingredient_id_ingredients_id_fk": {
+          "name": "ingredient_compounds_ingredient_id_ingredients_id_fk",
+          "tableFrom": "ingredient_compounds",
+          "tableTo": "ingredients",
+          "columnsFrom": [
+            "ingredient_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "ingredient_compounds_compound_class_compound_classes_slug_fk": {
+          "name": "ingredient_compounds_compound_class_compound_classes_slug_fk",
+          "tableFrom": "ingredient_compounds",
+          "tableTo": "compound_classes",
+          "columnsFrom": [
+            "compound_class"
+          ],
+          "columnsTo": [
+            "slug"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ingredient_compounds_ingredient_id_compound_class_pk": {
+          "name": "ingredient_compounds_ingredient_id_compound_class_pk",
+          "columns": [
+            "ingredient_id",
+            "compound_class"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ingredient_tags": {
+      "name": "ingredient_tags",
+      "schema": "",
+      "columns": {
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag": {
+          "name": "tag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "tag_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ingredient_tags_ingredient_id_ingredients_id_fk": {
+          "name": "ingredient_tags_ingredient_id_ingredients_id_fk",
+          "tableFrom": "ingredient_tags",
+          "tableTo": "ingredients",
+          "columnsFrom": [
+            "ingredient_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "ingredient_tags_tag_tag_definitions_slug_fk": {
+          "name": "ingredient_tags_tag_tag_definitions_slug_fk",
+          "tableFrom": "ingredient_tags",
+          "tableTo": "tag_definitions",
+          "columnsFrom": [
+            "tag"
+          ],
+          "columnsTo": [
+            "slug"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ingredient_tags_ingredient_id_tag_role_pk": {
+          "name": "ingredient_tags_ingredient_id_tag_role_pk",
+          "columns": [
+            "ingredient_id",
+            "tag",
+            "role"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ingredients": {
+      "name": "ingredients",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore": {
+          "name": "lore",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "origin": {
+          "name": "origin",
+          "type": "origin",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scientific_name": {
+          "name": "scientific_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appearance_text": {
+          "name": "appearance_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appearance_img": {
+          "name": "appearance_img",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "category",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "related_family": {
+          "name": "related_family",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "traits": {
+          "name": "traits",
+          "type": "trait[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "solubility": {
+          "name": "solubility",
+          "type": "solubility",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ph_contribution": {
+          "name": "ph_contribution",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "toxicity_base": {
+          "name": "toxicity_base",
+          "type": "toxicity_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stability_base": {
+          "name": "stability_base",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "extraction_yield": {
+          "name": "extraction_yield",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "potency_base": {
+          "name": "potency_base",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dose_response": {
+          "name": "dose_response",
+          "type": "dose_response",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hormetic_threshold": {
+          "name": "hormetic_threshold",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activation_threshold": {
+          "name": "activation_threshold",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ceiling_value": {
+          "name": "ceiling_value",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "heat_response": {
+          "name": "heat_response",
+          "type": "heat_response",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "color_base": {
+          "name": "color_base",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "color_secondary": {
+          "name": "color_secondary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "taste_profile": {
+          "name": "taste_profile",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "texture": {
+          "name": "texture",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sound": {
+          "name": "sound",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "temperature_feel": {
+          "name": "temperature_feel",
+          "type": "temperature_feel",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "luminosity": {
+          "name": "luminosity",
+          "type": "luminosity",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "motion_tendency": {
+          "name": "motion_tendency",
+          "type": "motion_tendency",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aesthetic_weight": {
+          "name": "aesthetic_weight",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "ingredients_slug_unique": {
+          "name": "ingredients_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.solvent_aroma_notes": {
+      "name": "solvent_aroma_notes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "solvent_id": {
+          "name": "solvent_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "aroma_position",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "solvent_aroma_notes_solvent_id_solvents_id_fk": {
+          "name": "solvent_aroma_notes_solvent_id_solvents_id_fk",
+          "tableFrom": "solvent_aroma_notes",
+          "tableTo": "solvents",
+          "columnsFrom": [
+            "solvent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "solvent_aroma_notes_note_aroma_notes_slug_fk": {
+          "name": "solvent_aroma_notes_note_aroma_notes_slug_fk",
+          "tableFrom": "solvent_aroma_notes",
+          "tableTo": "aroma_notes",
+          "columnsFrom": [
+            "note"
+          ],
+          "columnsTo": [
+            "slug"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "solvent_aroma_notes_solvent_id_note_position_unique": {
+          "name": "solvent_aroma_notes_solvent_id_note_position_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "solvent_id",
+            "note",
+            "position"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.solvents": {
+      "name": "solvents",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lore": {
+          "name": "lore",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "polarity": {
+          "name": "polarity",
+          "type": "polarity",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "base_ph": {
+          "name": "base_ph",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "compatible_outcomes": {
+          "name": "compatible_outcomes",
+          "type": "outcome[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stability_modifier": {
+          "name": "stability_modifier",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "heat_default": {
+          "name": "heat_default",
+          "type": "heat_default",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aesthetic_base": {
+          "name": "aesthetic_base",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "taste_profile": {
+          "name": "taste_profile",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_affinity": {
+          "name": "category_affinity",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category_resistance": {
+          "name": "category_resistance",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "signature_transformation": {
+          "name": "signature_transformation",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "physical_form": {
+          "name": "physical_form",
+          "type": "physical_form",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "solvents_slug_unique": {
+          "name": "solvents_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.synergy_pairs": {
+      "name": "synergy_pairs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "tag_a": {
+          "name": "tag_a",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tag_b": {
+          "name": "tag_b",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "synergy_pair_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "boost": {
+          "name": "boost",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "severity": {
+          "name": "severity",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "complementary_ceiling": {
+          "name": "complementary_ceiling",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "balanced_ceiling": {
+          "name": "balanced_ceiling",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "straining_ceiling": {
+          "name": "straining_ceiling",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unlocks_effect": {
+          "name": "unlocks_effect",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "warning_template": {
+          "name": "warning_template",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tag_definitions": {
+      "name": "tag_definitions",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "targets": {
+          "name": "targets",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "targets_any_compound": {
+          "name": "targets_any_compound",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "effect_targets": {
+          "name": "effect_targets",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "produces_effect": {
+          "name": "produces_effect",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "boost": {
+          "name": "boost",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "severity": {
+          "name": "severity",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opposite_tag": {
+          "name": "opposite_tag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.aroma_position": {
+      "name": "aroma_position",
+      "schema": "public",
+      "values": [
+        "top",
+        "heart",
+        "base"
+      ]
+    },
+    "public.category": {
+      "name": "category",
+      "schema": "public",
+      "values": [
+        "botanical",
+        "mineral",
+        "fungal",
+        "fauna-derived",
+        "alchemical",
+        "pneuma",
+        "effluvia",
+        "aberrant",
+        "cosmic"
+      ]
+    },
+    "public.compound_kind": {
+      "name": "compound_kind",
+      "schema": "public",
+      "values": [
+        "real",
+        "fictional"
+      ]
+    },
+    "public.dose_response": {
+      "name": "dose_response",
+      "schema": "public",
+      "values": [
+        "linear",
+        "hormetic",
+        "threshold",
+        "ceiling"
+      ]
+    },
+    "public.effect_domain": {
+      "name": "effect_domain",
+      "schema": "public",
+      "values": [
+        "memory",
+        "emotion",
+        "identity",
+        "sight",
+        "sound",
+        "perception",
+        "sensation",
+        "time",
+        "other"
+      ]
+    },
+    "public.heat_default": {
+      "name": "heat_default",
+      "schema": "public",
+      "values": [
+        "cold",
+        "warm",
+        "hot"
+      ]
+    },
+    "public.heat_response": {
+      "name": "heat_response",
+      "schema": "public",
+      "values": [
+        "requires-heat",
+        "destroyed-by-heat",
+        "enhanced-by-heat",
+        "neutral"
+      ]
+    },
+    "public.luminosity": {
+      "name": "luminosity",
+      "schema": "public",
+      "values": [
+        "dull",
+        "glossy",
+        "phosphorescent",
+        "light-swallowing"
+      ]
+    },
+    "public.motion_tendency": {
+      "name": "motion_tendency",
+      "schema": "public",
+      "values": [
+        "still",
+        "settling",
+        "rising",
+        "swirling",
+        "pulsing",
+        "churning",
+        "effervescent",
+        "seeking",
+        "layered",
+        "restless"
+      ]
+    },
+    "public.origin": {
+      "name": "origin",
+      "schema": "public",
+      "values": [
+        "real",
+        "fictional"
+      ]
+    },
+    "public.outcome": {
+      "name": "outcome",
+      "schema": "public",
+      "values": [
+        "potion",
+        "concentrate",
+        "reduction",
+        "liniment",
+        "balm",
+        "aromatic",
+        "sachet",
+        "vapors",
+        "pellet",
+        "paste",
+        "powder-balls",
+        "veil",
+        "eye-drops"
+      ]
+    },
+    "public.physical_form": {
+      "name": "physical_form",
+      "schema": "public",
+      "values": [
+        "liquid",
+        "solid"
+      ]
+    },
+    "public.polarity": {
+      "name": "polarity",
+      "schema": "public",
+      "values": [
+        "polar",
+        "nonpolar",
+        "acid-soluble",
+        "universal",
+        "anti-solvent"
+      ]
+    },
+    "public.solubility": {
+      "name": "solubility",
+      "schema": "public",
+      "values": [
+        "polar",
+        "nonpolar",
+        "acid-soluble",
+        "universal",
+        "insoluble"
+      ]
+    },
+    "public.synergy_pair_type": {
+      "name": "synergy_pair_type",
+      "schema": "public",
+      "values": [
+        "always_antagonistic",
+        "always_complementary",
+        "scaled"
+      ]
+    },
+    "public.tag_role": {
+      "name": "tag_role",
+      "schema": "public",
+      "values": [
+        "synergy",
+        "antagonist"
+      ]
+    },
+    "public.temperature_feel": {
+      "name": "temperature_feel",
+      "schema": "public",
+      "values": [
+        "cold",
+        "neutral",
+        "warming",
+        "burning"
+      ]
+    },
+    "public.toxicity_level": {
+      "name": "toxicity_level",
+      "schema": "public",
+      "values": [
+        "none",
+        "low",
+        "medium",
+        "high",
+        "lethal"
+      ]
+    },
+    "public.trait": {
+      "name": "trait",
+      "schema": "public",
+      "values": [
+        "echoic",
+        "volatile",
+        "catalyst",
+        "indestructible",
+        "mercurial",
+        "shy",
+        "carrier",
+        "quiescent",
+        "decaying",
+        "explosive"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

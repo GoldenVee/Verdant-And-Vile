@@ -26,6 +26,17 @@
         "viscosity": "thin",
         "luminosity": "glossy"
       },
+      "taste_profile": {
+        "sweet": 0,
+        "bitter": 0,
+        "sour": 0,
+        "salty": 0,
+        "umami": 0,
+        "astringent": 0,
+        "metallic": 0,
+        "bright": 0
+      },
+      "aroma_notes": [],
       "category_affinity": {
         "strong": ["botanical", "fungal"],
         "weak": ["mineral", "pneuma"]
@@ -61,6 +72,26 @@
         "viscosity": "thin",
         "luminosity": "glossy"
       },
+      "taste_profile": {
+        "sweet": 0.1,
+        "bitter": 0.4,
+        "sour": 0.1,
+        "salty": 0,
+        "umami": 0,
+        "astringent": 0.5,
+        "metallic": 0,
+        "bright": 0.7
+      },
+      "aroma_notes": [
+        {
+          "note": "acrid",
+          "position": "top"
+        },
+        {
+          "note": "bread",
+          "position": "heart"
+        }
+      ],
       "category_affinity": {
         "strong": ["botanical", "fungal", "fauna-derived"],
         "weak": ["alchemical"]
@@ -96,6 +127,26 @@
         "viscosity": "viscous",
         "luminosity": "glossy"
       },
+      "taste_profile": {
+        "sweet": 0.1,
+        "bitter": 0.1,
+        "sour": 0,
+        "salty": 0,
+        "umami": 0.3,
+        "astringent": 0,
+        "metallic": 0,
+        "bright": 0
+      },
+      "aroma_notes": [
+        {
+          "note": "nutty",
+          "position": "heart"
+        },
+        {
+          "note": "wax",
+          "position": "base"
+        }
+      ],
       "category_affinity": {
         "strong": ["botanical", "fauna-derived"],
         "weak": ["fungal"]
@@ -132,6 +183,26 @@
         "viscosity": "thin",
         "luminosity": "glossy"
       },
+      "taste_profile": {
+        "sweet": 0,
+        "bitter": 0.1,
+        "sour": 0.9,
+        "salty": 0.1,
+        "umami": 0.1,
+        "astringent": 0.3,
+        "metallic": 0.1,
+        "bright": 0.6
+      },
+      "aroma_notes": [
+        {
+          "note": "sour",
+          "position": "top"
+        },
+        {
+          "note": "acrid",
+          "position": "heart"
+        }
+      ],
       "category_affinity": {
         "strong": ["mineral", "fauna-derived", "alchemical"],
         "weak": ["botanical"]
@@ -166,6 +237,30 @@
         "viscosity": "viscous",
         "luminosity": "glossy"
       },
+      "taste_profile": {
+        "sweet": 0.9,
+        "bitter": 0,
+        "sour": 0.2,
+        "salty": 0,
+        "umami": 0.1,
+        "astringent": 0,
+        "metallic": 0,
+        "bright": 0.3
+      },
+      "aroma_notes": [
+        {
+          "note": "honied",
+          "position": "top"
+        },
+        {
+          "note": "floral",
+          "position": "heart"
+        },
+        {
+          "note": "sweet",
+          "position": "base"
+        }
+      ],
       "category_affinity": {
         "strong": ["botanical", "pneuma"],
         "weak": ["fungal", "fauna-derived"]
@@ -206,6 +301,30 @@
         "viscosity": "viscous",
         "luminosity": "phosphorescent"
       },
+      "taste_profile": {
+        "sweet": 0.5,
+        "bitter": 0,
+        "sour": 0,
+        "salty": 0.4,
+        "umami": 0.6,
+        "astringent": 0,
+        "metallic": 0.8,
+        "bright": 0.6
+      },
+      "aroma_notes": [
+        {
+          "note": "caramelized",
+          "position": "top"
+        },
+        {
+          "note": "amber",
+          "position": "heart"
+        },
+        {
+          "note": "metallic",
+          "position": "base"
+        }
+      ],
       "category_affinity": {
         "strong": ["fauna-derived", "aberrant"],
         "weak": ["pneuma", "cosmic"]
@@ -249,6 +368,22 @@
         "viscosity": "thin",
         "luminosity": "phosphorescent"
       },
+      "taste_profile": {
+        "sweet": 0.3,
+        "bitter": 0.3,
+        "sour": 0.3,
+        "salty": 0.3,
+        "umami": 0.3,
+        "astringent": 0.3,
+        "metallic": 0.3,
+        "bright": 0.3
+      },
+      "aroma_notes": [
+        {
+          "note": "ozone",
+          "position": "top"
+        }
+      ],
       "category_affinity": {
         "strong": ["aberrant", "cosmic"],
         "weak": ["pneuma", "mineral"]
@@ -292,6 +427,22 @@
         "viscosity": "thin",
         "luminosity": "light-swallowing"
       },
+      "taste_profile": {
+        "sweet": 0,
+        "bitter": 0,
+        "sour": 0,
+        "salty": 0,
+        "umami": 0,
+        "astringent": 0,
+        "metallic": 0,
+        "bright": 0
+      },
+      "aroma_notes": [
+        {
+          "note": "void",
+          "position": "base"
+        }
+      ],
       "category_affinity": {
         "strong": ["aberrant", "cosmic"],
         "weak": ["effluvia", "pneuma"]

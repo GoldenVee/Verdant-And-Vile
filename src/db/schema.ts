@@ -169,6 +169,7 @@ export const solvents = pgTable('solvents', {
   stabilityModifier: real('stability_modifier').notNull(),
   heatDefault: heatDefaultEnum('heat_default').notNull(),
   aestheticBase: jsonb('aesthetic_base').$type<AestheticBase>().notNull(),
+  tasteProfile: jsonb('taste_profile').$type<TasteProfile>().notNull(),
   categoryAffinity: jsonb('category_affinity').$type<CategoryTiers>().notNull(),
   categoryResistance: jsonb('category_resistance').$type<CategoryTiers>().notNull(),
   signatureTransformation: jsonb('signature_transformation').$type<SignatureTransformation>(),
@@ -204,6 +205,21 @@ export const ingredientAromaNotes = pgTable(
     position: aromaPositionEnum('position').notNull(),
   },
   (t) => [unique().on(t.ingredientId, t.note, t.position)],
+);
+
+export const solventAromaNotes = pgTable(
+  'solvent_aroma_notes',
+  {
+    id: serial('id').primaryKey(),
+    solventId: text('solvent_id')
+      .notNull()
+      .references(() => solvents.id, { onDelete: 'cascade' }),
+    note: text('note')
+      .notNull()
+      .references(() => aromaNotesVocab.slug),
+    position: aromaPositionEnum('position').notNull(),
+  },
+  (t) => [unique().on(t.solventId, t.note, t.position)],
 );
 
 export const ingredientTags = pgTable(

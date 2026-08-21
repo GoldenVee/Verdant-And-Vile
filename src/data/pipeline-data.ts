@@ -4,6 +4,7 @@
 
 import { db } from '../db/client.js';
 import {
+  aromaNotesVocab,
   effectDefinitions,
   effectSubtractiveEquivalents,
   synergyPairs,
@@ -17,11 +18,12 @@ import type {
 } from '../domain/types.js';
 
 export async function loadPipelineData(): Promise<PipelineData> {
-  const [tags, pairs, effects, equivalents] = await Promise.all([
+  const [tags, pairs, effects, equivalents, aroma] = await Promise.all([
     db.select().from(tagDefinitions),
     db.select().from(synergyPairs),
     db.select().from(effectDefinitions),
     db.select().from(effectSubtractiveEquivalents),
+    db.select().from(aromaNotesVocab),
   ]);
 
   const tagMap = new Map<string, TagDefinition>();
@@ -64,10 +66,16 @@ export async function loadPipelineData(): Promise<PipelineData> {
   const equivalentMap = new Map<string, string>();
   for (const eq of equivalents) equivalentMap.set(eq.standardEffect, eq.subtractiveEquivalent);
 
+  const aromaFamilies = new Map<string, string>();
+  for (const a of aroma) {
+    if (a.family !== null) aromaFamilies.set(a.slug, a.family);
+  }
+
   return {
     tagDefinitions: tagMap,
     synergyPairs: synergyPairRows,
     effectDefinitions: effectMap,
     effectSubtractiveEquivalents: equivalentMap,
+    aromaFamilies,
   };
 }

@@ -6,10 +6,10 @@
 // overlays are implemented. The aroma, texture, motion, and taste overlays are still deferred,
 // since those sub-algorithms are not yet designed. Those sites are marked below.
 
-import type { Luminosity } from '../../domain/enums.js';
+import { AROMA_POSITIONS, type AromaPosition, type Luminosity } from '../../domain/enums.js';
 import type { Prng } from '../../domain/prng.js';
 import { ok } from '../../domain/result.js';
-import type { Effect } from '../../domain/types.js';
+import type { AromaProfile, Effect, PipelineData } from '../../domain/types.js';
 import {
   blend,
   darken,
@@ -57,6 +57,17 @@ const ICHOR_FLOOD = 0.75;
 const PRISM_SATURATION_FLOOR = 0.65;
 const PRISM_SECONDARY_TURN = 1 / 3;
 
+// Notes Prism adds per point of synergy scope, capped so a high-scope combination does not
+// bury the original profile.
+const PRISM_NOTES_PER_SCOPE = 1;
+const PRISM_MAX_ADDED_NOTES = 6;
+
+// Erasure step at which aroma flattens. Top notes are the volatile ones that lift off a
+// preparation, so they go first; at the far end only the base remains.
+const LACUNA_AROMA_STEP = 3;
+const LACUNA_MOTION_STEP = 5;
+const LACUNA_HEART_STEP = 6;
+
 // Lacuna dulls toward 'dull'. LUMINOSITIES is not a brightness ordering, so stepping down the
 // enum would be wrong: light-swallowing is already maximal absence and stays put.
 const DULLED: Record<Luminosity, Luminosity> = {
@@ -95,6 +106,53 @@ function applyPrismSensory(context: BrewingContext, prng: Prng): void {
   sensory.luminosity = 'phosphorescent';
 }
 
+// A prism splits one thing into adjacent versions of itself, so the expansion pulls sibling
+// notes from the same family as notes already present rather than inventing strings. The
+// vocabulary supplies them: 17 of its 55 notes are authored but unused by any ingredient.
+// Draws from the same stream as the rest of applyPrism, so it must stay after the existing
+// consumption sites.
+function expandAroma(
+  profile: AromaProfile,
+  families: Map<string, string>,
+  scope: number,
+  prng: Prng,
+): void {
+  const budget = Math.min(Math.floor(scope * PRISM_NOTES_PER_SCOPE), PRISM_MAX_ADDED_NOTES);
+  if (budget <= 0) return;
+
+  // Siblings by family, so a note present at any position can suggest relatives.
+  const byFamily = new Map<string, string[]>();
+  for (const [note, family] of families) {
+    const list = byFamily.get(family) ?? [];
+    list.push(note);
+    byFamily.set(family, list);
+  }
+  for (const list of byFamily.values()) list.sort();
+
+  const present = new Set(AROMA_POSITIONS.flatMap((pos) => profile[pos]));
+
+  for (let added = 0; added < budget; added++) {
+    // Candidates are unused siblings of whatever is currently in the profile.
+    const candidates: Array<{ note: string; position: AromaPosition }> = [];
+    for (const position of AROMA_POSITIONS) {
+      for (const note of profile[position]) {
+        const family = families.get(note);
+        if (family === undefined) continue;
+        for (const sibling of byFamily.get(family) ?? []) {
+          if (!present.has(sibling)) candidates.push({ note: sibling, position });
+        }
+      }
+    }
+    if (candidates.length === 0) return;
+
+    candidates.sort((a, b) => a.note.localeCompare(b.note) || a.position.localeCompare(b.position));
+    const pick = candidates[Math.floor(prng.next() * candidates.length)];
+    if (pick === undefined) return;
+    profile[pick.position].push(pick.note);
+    present.add(pick.note);
+  }
+}
+
 // Progressive erasure. Step 1 dulls luminosity, step 2 onward strips the yellow channel over
 // a darkening, desaturating ground. Y = 1 - B in subtractive space, so removing yellow is
 // what leaves cyan and magenta behind: the mechanic and the look are the same operation.
@@ -122,8 +180,18 @@ function applyLacunaSensory(context: BrewingContext): void {
         : '#00FFFF'
       : erase(sensory.colorSecondary);
 
-  // Remaining erasure steps (3 aroma, 4 texture, 5 motion, 6+ taste) act on sub-algorithms
-  // that are not yet designed.
+  // Aroma flattens by losing its volatiles first: top notes lift off a preparation, so they
+  // are the first thing to go missing. At the far end only the base remains.
+  if (sensory.aromaProfile !== null) {
+    if (count >= LACUNA_AROMA_STEP) sensory.aromaProfile.top = [];
+    if (count >= LACUNA_HEART_STEP) sensory.aromaProfile.heart = [];
+  }
+
+  // Whatever the preparation was doing, it stops.
+  if (count >= LACUNA_MOTION_STEP) sensory.motionTendency = 'still';
+
+  // Texture is deferred to v2 apart from the separation blend_state already carries, so
+  // erasure step 4 has nothing to act on yet.
 }
 
 function applyIchor(context: BrewingContext): void {
@@ -157,7 +225,7 @@ function applyIchor(context: BrewingContext): void {
   context.narrativeWrap = ICHOR_NARRATIVE;
 }
 
-function applyPrism(context: BrewingContext): void {
+function applyPrism(context: BrewingContext, data: PipelineData): void {
   const prng = context.prngFor('signature-transform');
 
   // Effect duplication: each effect has a 40% chance of a refracted copy.
@@ -176,7 +244,14 @@ function applyPrism(context: BrewingContext): void {
 
   // Drawn after the duplication loop on purpose: see applyPrismSensory.
   applyPrismSensory(context, prng);
-  // Aroma expansion by synergy scope is still deferred; aroma is not yet designed.
+  if (context.sensoryOutput?.aromaProfile != null) {
+    expandAroma(
+      context.sensoryOutput.aromaProfile,
+      data.aromaFamilies,
+      context.synergyScopeMultiplier,
+      prng,
+    );
+  }
 
   const count = context.ingredients.length;
   const intensity = context.synergyScopeMultiplier * 1.2 + count * 0.4;
@@ -247,24 +322,28 @@ function applyLacuna(context: BrewingContext): void {
   context.narrativeWrap = LACUNA_NARRATIVE;
 }
 
-export const signatureTransformRule: Rule = {
-  name: 'signature-transform',
+// A factory now, because Prism's aroma expansion reads the aroma vocabulary. Same shape as
+// the other data-dependent rules.
+export function makeSignatureTransformRule(data: PipelineData): Rule {
+  return {
+    name: 'signature-transform',
 
-  apply(context: BrewingContext) {
-    if (context.solvent.signatureTransformation === null) return ok(context);
+    apply(context: BrewingContext) {
+      if (context.solvent.signatureTransformation === null) return ok(context);
 
-    switch (context.solvent.slug) {
-      case 'ichor':
-        applyIchor(context);
-        break;
-      case 'prism':
-        applyPrism(context);
-        break;
-      case 'lacuna':
-        applyLacuna(context);
-        break;
-    }
+      switch (context.solvent.slug) {
+        case 'ichor':
+          applyIchor(context);
+          break;
+        case 'prism':
+          applyPrism(context, data);
+          break;
+        case 'lacuna':
+          applyLacuna(context);
+          break;
+      }
 
-    return ok(context);
-  },
-};
+      return ok(context);
+    },
+  };
+}

@@ -1,11 +1,28 @@
 // The sensory algorithm. Computes the preparation's perceived qualities from final weights
 // and ingredient data. See docs/sensory.md.
 //
-// Colour and luminosity are implemented. Aroma, taste, texture, motion, temperature, and
-// sound are not yet designed and are returned as null.
+// Every channel except texture is implemented. Texture is deferred to v2 apart from the
+// separation that blend_state already carries.
 
-import { LUMINOSITIES, type BlendState, type Luminosity } from '../domain/enums.js';
-import type { CombinationIngredient, SensoryOutput, Solvent } from '../domain/types.js';
+import {
+  AROMA_POSITIONS,
+  LUMINOSITIES,
+  MOTION_TENDENCIES,
+  TASTE_KEYS,
+  TEMPERATURE_FEELS,
+  type BlendState,
+  type Luminosity,
+  type MotionTendency,
+  type StabilityState,
+  type TemperatureFeel,
+} from '../domain/enums.js';
+import type {
+  AromaProfile,
+  CombinationIngredient,
+  SensoryOutput,
+  Solvent,
+  TasteProfile,
+} from '../domain/types.js';
 import { blend, luminance, shiftToward } from './color.js';
 
 // Reactive shift targets. Amber is fixed rather than derived because tannin browning
@@ -26,6 +43,43 @@ const SEPARATED_SPREAD = 0.7;
 const GRADIENT_SPREAD = 0.4;
 const SUSPENSION_MEAN = 0.5;
 
+// Net warming or cooling tag load, as a fraction of total weight, needed to move the
+// perceived temperature one step.
+const TEMPERATURE_TAG_THRESHOLD = 0.3;
+
+// A sound-bearing ingredient below this share of total weight is not audible. Every authored
+// sound is already written as faint, so a trace ingredient should not be heard at all.
+const SOUND_FLOOR = 0.15;
+
+// Most notes a single position carries. Four ingredients at three notes each, plus the
+// solvent, can offer more than a profile can usefully say.
+const AROMA_NOTES_PER_POSITION = 4;
+
+// Solvent notes enter muted, on top of the usual inverse-load solvent weight, so they
+// colour a profile without ever leading it.
+const AROMA_SOLVENT_MUTE = 0.5;
+
+// Motion scoring weights. Ingredient tendency supplies a floor of at most 1.0, reached when
+// every ingredient agrees on one value, so these sit around that mark. They do not need to be
+// tuned past it: resolveMotion breaks ties in favour of whichever source actually fired, so a
+// mechanism weighted at exactly 1.0 still beats unanimous agreement.
+//
+// layeredGradient sits low on purpose, since a gradient is a weaker claim than full separation.
+const MOTION_WEIGHTS = {
+  layeredSeparated: 1.5,
+  layeredGradient: 0.7,
+  churningCritical: 1.5,
+  churningUnstable: 1.0,
+  effervescent: 0.9,
+  rising: 1.3,
+  pulsing: 1.3,
+  restless: 1.2,
+  seeking: 1.2,
+  still: 1.2,
+  swirling: 1.0,
+  settling: 0.9,
+} as const;
+
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
@@ -35,6 +89,13 @@ function clamp(value: number, min: number, max: number): number {
 // "how much does it carry the character".
 function contributionWeight(ci: CombinationIngredient): number {
   return ci.weightData.presenceWeight * ci.ingredient.aestheticWeight;
+}
+
+// Taste and pH are properties of the solution, so they follow what dissolved rather than what
+// is present. You see what is present, you taste what dissolved. This also means the three
+// insoluble quartzes, which have all-zero taste profiles, cannot dilute a preparation's taste.
+function extractionContribution(ci: CombinationIngredient): number {
+  return ci.weightData.chemicalExtractionWeight * ci.ingredient.aestheticWeight;
 }
 
 function concentrationOf(ci: CombinationIngredient, compoundClass: string): number {
@@ -198,9 +259,290 @@ export function resolveLuminosity(
   return best;
 }
 
+// Weighted average per dimension, with the solvent participating at the same inverse-load
+// weight it takes in the colour blend. Averaged rather than summed: a taste profile describes
+// what share of the character each participant carries, so summing would make every
+// four-ingredient preparation more intense than every two-ingredient one.
+export function resolveTaste(ingredients: CombinationIngredient[], solvent: Solvent): TasteProfile {
+  const weights = ingredients.map(extractionContribution);
+  const total = weights.reduce((sum, w) => sum + w, 0);
+  const sw = solventWeight(total);
+  const divisor = total + sw;
+
+  const profile = {} as TasteProfile;
+  for (const key of TASTE_KEYS) {
+    let sum = solvent.tasteProfile[key] * sw;
+    for (let i = 0; i < ingredients.length; i++) {
+      const ci = ingredients[i];
+      const w = weights[i];
+      if (ci === undefined || w === undefined) continue;
+      sum += ci.ingredient.tasteProfile[key] * w;
+    }
+    profile[key] = clamp(divisor > 0 ? sum / divisor : 0, 0, 1);
+  }
+  return profile;
+}
+
+// Weighted dominance on the authored field, then a one-step shift from tag load. The field
+// stays primary because this is a sensory output; the tags modulate it. They disagree on
+// three ingredients (Wormwood and Red Coral read cold but are tagged warming, Chamomile reads
+// warming but is tagged cooling), which is not bad data: the tag is what an ingredient does
+// pharmacologically, the field is how it feels. Wormwood should read as cold that warms
+// slightly, not as a contradiction.
+export function resolveTemperature(ingredients: CombinationIngredient[]): TemperatureFeel {
+  const tally = new Map<TemperatureFeel, number>();
+  let total = 0;
+  let net = 0;
+
+  for (const ci of ingredients) {
+    const w = contributionWeight(ci);
+    total += w;
+    const feel = ci.ingredient.temperatureFeel;
+    tally.set(feel, (tally.get(feel) ?? 0) + w);
+
+    const tags = [...ci.ingredient.synergyTags, ...ci.ingredient.antagonistTags];
+    if (tags.includes('warming')) net += w;
+    if (tags.includes('cooling')) net -= w;
+  }
+
+  // Ties resolve by TEMPERATURE_FEELS order so the result is stable regardless of input order.
+  let index = 0;
+  let bestScore = -1;
+  for (let i = 0; i < TEMPERATURE_FEELS.length; i++) {
+    const feel = TEMPERATURE_FEELS[i];
+    if (feel === undefined) continue;
+    const score = tally.get(feel) ?? 0;
+    if (score > bestScore) {
+      index = i;
+      bestScore = score;
+    }
+  }
+
+  const pressure = total > 0 ? net / total : 0;
+  if (pressure >= TEMPERATURE_TAG_THRESHOLD) index += 1;
+  else if (pressure <= -TEMPERATURE_TAG_THRESHOLD) index -= 1;
+
+  return TEMPERATURE_FEELS[clamp(index, 0, TEMPERATURE_FEELS.length - 1)] ?? 'neutral';
+}
+
+// Dominance, not merging. Sounds are authored prose, so averaging them is meaningless, and a
+// trace ingredient's faint sound should not be audible at all. Solvents carry no sound.
+export function resolveSound(ingredients: CombinationIngredient[]): string | null {
+  const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
+  if (total <= 0) return null;
+
+  let best: CombinationIngredient | null = null;
+  let bestWeight = 0;
+  for (const ci of ingredients) {
+    if (ci.ingredient.sound === null) continue;
+    const w = contributionWeight(ci);
+    // Ties break on id so ingredient order cannot change the result.
+    if (
+      w > bestWeight ||
+      (w === bestWeight && best !== null && ci.ingredient.id < best.ingredient.id)
+    ) {
+      best = ci;
+      bestWeight = w;
+    }
+  }
+
+  if (best === null || bestWeight / total < SOUND_FLOOR) return null;
+  return best.ingredient.sound;
+}
+
+// Merges notes by position, each position independently. A note that one ingredient places
+// at top and another places at heart appears at BOTH positions rather than being arbitrated
+// to one. That is not a conflict: 22 of the 38 notes in use sit at different positions on
+// different ingredients, and several ingredients carrying earth at different levels should
+// produce a preparation that reads earthy the whole way down. Persisting across positions is
+// the signature of a composition, not a collision to resolve.
+export function resolveAroma(ingredients: CombinationIngredient[], solvent: Solvent): AromaProfile {
+  const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
+  const solventShare = solventWeight(total) * AROMA_SOLVENT_MUTE;
+
+  const profile: AromaProfile = { top: [], heart: [], base: [] };
+
+  for (const position of AROMA_POSITIONS) {
+    const weights = new Map<string, number>();
+
+    for (const ci of ingredients) {
+      const w = contributionWeight(ci);
+      if (w <= 0) continue;
+      for (const ref of ci.ingredient.aromaNotes) {
+        if (ref.position !== position) continue;
+        weights.set(ref.note, (weights.get(ref.note) ?? 0) + w);
+      }
+    }
+    for (const ref of solvent.aromaNotes) {
+      if (ref.position !== position) continue;
+      weights.set(ref.note, (weights.get(ref.note) ?? 0) + solventShare);
+    }
+
+    // Heaviest first; ties break on slug so ingredient order cannot change the result.
+    profile[position] = [...weights.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, AROMA_NOTES_PER_POSITION)
+      .map(([note]) => note);
+  }
+
+  return profile;
+}
+
+// Weighted share of total presence held by ingredients matching a predicate.
+function presenceShare(
+  ingredients: CombinationIngredient[],
+  predicate: (ci: CombinationIngredient) => boolean,
+): number {
+  let total = 0;
+  let matching = 0;
+  for (const ci of ingredients) {
+    const w = contributionWeight(ci);
+    total += w;
+    if (predicate(ci)) matching += w;
+  }
+  return total > 0 ? matching / total : 0;
+}
+
+function hasCompound(ci: CombinationIngredient, classes: string[]): boolean {
+  return ci.ingredient.compoundClasses.some((c) => classes.includes(c.class));
+}
+
+// Carbonate meeting acid evolves carbon dioxide. Alkaline load is what dissolved, scaled by
+// how acidic the medium is, so this is zero in water and strong in vinegar without needing
+// to know which ingredients are carbonates. Null pH means no aqueous phase and no fizz.
+export function effervescence(ingredients: CombinationIngredient[], solvent: Solvent): number {
+  if (solvent.basePh === null) return 0;
+  const acidity = clamp((NEUTRAL_PH - solvent.basePh) / NEUTRAL_PH, 0, 1);
+  if (acidity <= 0) return 0;
+
+  let alkaline = 0;
+  for (const ci of ingredients) {
+    const ph = ci.ingredient.phContribution ?? 0;
+    if (ph > 0) alkaline += ph * ci.weightData.chemicalExtractionWeight;
+  }
+  return alkaline * acidity;
+}
+
+// Motion is derived, with authored tendency as a floor rather than the driver. Ingredient
+// motion_tendency only ever takes 4 of its 10 values in the seed data, so dominance selection
+// would leave six structurally unreachable. Each mechanism below scores its own motion.
+export function resolveMotion(
+  ingredients: CombinationIngredient[],
+  solvent: Solvent,
+  blendState: BlendState,
+  stabilityState: StabilityState | null,
+): MotionTendency {
+  // Floor and derived scores are tracked apart and never summed. The two are correlated
+  // rather than independent: dense powder gets authored as `settling` AND matches the powdery
+  // texture predicate, so adding them counts one fact twice. Corroboration should not inflate,
+  // so a motion scores the greater of its two sources.
+  const floor = new Map<MotionTendency, number>();
+  const derived = new Map<MotionTendency, number>();
+  const addFloor = (motion: MotionTendency, amount: number) => {
+    if (amount > 0) floor.set(motion, (floor.get(motion) ?? 0) + amount);
+  };
+  const add = (motion: MotionTendency, amount: number) => {
+    if (amount > 0) derived.set(motion, (derived.get(motion) ?? 0) + amount);
+  };
+
+  // Floor: what the ingredients themselves tend toward.
+  const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
+  if (total > 0) {
+    for (const ci of ingredients) {
+      addFloor(ci.ingredient.motionTendency, contributionWeight(ci) / total);
+    }
+  }
+
+  // Structural: the preparation did not homogenize, so it sits in strata.
+  if (blendState === 'separated') add('layered', MOTION_WEIGHTS.layeredSeparated);
+  else if (blendState === 'gradient') add('layered', MOTION_WEIGHTS.layeredGradient);
+
+  // Agitation from instability. No ingredient carries the explosive trait, so this is the
+  // only route to churning.
+  if (stabilityState === 'critically_unstable') add('churning', MOTION_WEIGHTS.churningCritical);
+  else if (stabilityState === 'unstable') add('churning', MOTION_WEIGHTS.churningUnstable);
+
+  add(
+    'effervescent',
+    Math.min(effervescence(ingredients, solvent), 2) * MOTION_WEIGHTS.effervescent,
+  );
+
+  // Vapours ascend. Kept separate from the volatile trait: vapour is literal ascent, volatile
+  // is passive instability.
+  add(
+    'rising',
+    presenceShare(ingredients, (ci) => hasCompound(ci, ['essence-vapor', 'noxious-vapor'])) *
+      MOTION_WEIGHTS.rising,
+  );
+  add(
+    'restless',
+    presenceShare(ingredients, (ci) => ci.ingredient.traits.includes('volatile')) *
+      MOTION_WEIGHTS.restless,
+  );
+  // Echoic ingredients carry a captured quality that repeats, and five of the seven are the
+  // breath-bearing ones. A preparation of those pulses like respiration.
+  add(
+    'pulsing',
+    presenceShare(ingredients, (ci) => ci.ingredient.traits.includes('echoic')) *
+      MOTION_WEIGHTS.pulsing,
+  );
+  add(
+    'still',
+    presenceShare(ingredients, (ci) => ci.ingredient.traits.includes('quiescent')) *
+      MOTION_WEIGHTS.still,
+  );
+  add(
+    'seeking',
+    presenceShare(
+      ingredients,
+      (ci) => ci.ingredient.category === 'aberrant' || ci.ingredient.category === 'pneuma',
+    ) * MOTION_WEIGHTS.seeking,
+  );
+  // Heat drives convection.
+  add(
+    'swirling',
+    presenceShare(
+      ingredients,
+      (ci) =>
+        ci.ingredient.temperatureFeel === 'warming' || ci.ingredient.temperatureFeel === 'burning',
+    ) * MOTION_WEIGHTS.swirling,
+  );
+  // Dense matter falls out of suspension.
+  add(
+    'settling',
+    presenceShare(
+      ingredients,
+      (ci) =>
+        hasCompound(ci, ['mineral-salt']) ||
+        ['crystalline', 'powdery', 'gritty'].includes(ci.ingredient.texture.type),
+    ) * MOTION_WEIGHTS.settling,
+  );
+
+  // Highest score wins. On a tie a mechanism that actually fired beats a mere tendency:
+  // motion is derived with tendency as a floor, so a floor outranking a live mechanism is not
+  // behaving like a floor. Remaining ties resolve by enum order, which only ever decides
+  // between two sources of the same kind.
+  let best: MotionTendency = 'still';
+  let bestScore = -1;
+  let bestIsDerived = false;
+  for (const motion of MOTION_TENDENCIES) {
+    const d = derived.get(motion) ?? 0;
+    const f = floor.get(motion) ?? 0;
+    const score = Math.max(d, f);
+    const isDerived = d > 0 && d >= f;
+    if (score > bestScore || (score === bestScore && isDerived && !bestIsDerived)) {
+      best = motion;
+      bestScore = score;
+      bestIsDerived = isDerived;
+    }
+  }
+  return best;
+}
+
 export function computeSensory(
   ingredients: CombinationIngredient[],
   solvent: Solvent,
+  stabilityState: StabilityState | null,
 ): SensoryOutput {
   const blendState = resolveBlendState(ingredients);
   const ph = combinationPh(ingredients, solvent);
@@ -222,11 +564,11 @@ export function computeSensory(
     colorSecondary,
     blendState,
     luminosity: resolveLuminosity(ingredients, solvent),
-    aromaProfile: null,
-    tasteProfile: null,
+    aromaProfile: resolveAroma(ingredients, solvent),
+    tasteProfile: resolveTaste(ingredients, solvent),
+    temperatureFeel: resolveTemperature(ingredients),
+    sound: resolveSound(ingredients),
+    motionTendency: resolveMotion(ingredients, solvent, blendState, stabilityState),
     texture: null,
-    motionTendency: null,
-    temperatureFeel: null,
-    sound: null,
   };
 }

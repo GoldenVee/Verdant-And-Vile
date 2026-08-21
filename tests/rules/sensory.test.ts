@@ -6,11 +6,16 @@ import { describe, expect, it } from 'vitest';
 import type { Ingredient, Solvent } from '../../src/domain/types.js';
 import { createContext } from '../../src/pipeline/context.js';
 import { sensoryRule } from '../../src/pipeline/rules/sensory.js';
-import { signatureTransformRule } from '../../src/pipeline/rules/signature-transform.js';
+import { makeSignatureTransformRule } from '../../src/pipeline/rules/signature-transform.js';
 import { solventMatchRule } from '../../src/pipeline/rules/solvent-match.js';
 import { combinationPh } from '../../src/sensory/index.js';
 import { blend, luminance } from '../../src/sensory/color.js';
-import { makeFictionalSolvent, makeIngredient, makeOpenSolvent } from '../support/fixtures.js';
+import {
+  makeFictionalSolvent,
+  makeIngredient,
+  makeOpenSolvent,
+  makePipelineData,
+} from '../support/fixtures.js';
 
 // Runs SolventMatchRule so the weights SensoryRule reads are populated, then SensoryRule.
 function run(ingredients: Ingredient[], solvent: Solvent = makeOpenSolvent()) {
@@ -250,7 +255,7 @@ describe('fictional overlays', () => {
     solventMatchRule.apply(context);
     context.sensoryErasureCount = erasure;
     sensoryRule.apply(context);
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
     return context;
   }
 
@@ -297,5 +302,429 @@ describe('fictional overlays', () => {
       1,
     );
     expect(context.sensoryOutput!.luminosity).toBe('glossy');
+  });
+});
+
+describe('taste', () => {
+  const tasty = (id: string, profile: Partial<Record<string, number>>, overrides = {}) =>
+    plain(id, '#CCCCCC', {
+      tasteProfile: {
+        sweet: 0,
+        bitter: 0,
+        sour: 0,
+        salty: 0,
+        umami: 0,
+        astringent: 0,
+        metallic: 0,
+        bright: 0,
+        ...profile,
+      },
+      ...overrides,
+    });
+
+  it('averages each dimension across participants', () => {
+    const context = run([tasty('a', { bitter: 1 }), tasty('b', { sweet: 1 })]);
+    const taste = context.sensoryOutput!.tasteProfile!;
+    // Equal weights, plus a flat solvent, so both land at the same reduced value.
+    expect(taste.bitter).toBeCloseTo(taste.sweet);
+    expect(taste.bitter).toBeGreaterThan(0);
+    expect(taste.bitter).toBeLessThan(1);
+  });
+
+  it('carries the solvent through, so a sweet solvent makes a sweet preparation', () => {
+    const honey = makeOpenSolvent({
+      basePh: 4,
+      tasteProfile: {
+        sweet: 0.9,
+        bitter: 0,
+        sour: 0.2,
+        salty: 0,
+        umami: 0.1,
+        astringent: 0,
+        metallic: 0,
+        bright: 0.3,
+      },
+    });
+    const inWater = run([tasty('a', { bitter: 0.5 })]);
+    const inHoney = run([tasty('a', { bitter: 0.5 })], honey);
+    expect(inHoney.sensoryOutput!.tasteProfile!.sweet).toBeGreaterThan(
+      inWater.sensoryOutput!.tasteProfile!.sweet,
+    );
+  });
+
+  it('is not diluted by an insoluble ingredient that has no taste', () => {
+    // The three quartzes are insoluble with all-zero taste profiles. Under presence
+    // weighting a stone in the jar would weaken the liquor, which is wrong. Extraction
+    // weighting zeroes it out with no special case.
+    const alone = run([tasty('a', { bitter: 0.8 })]);
+    const withStone = run([
+      tasty('a', { bitter: 0.8 }),
+      tasty('stone', {}, { solubility: 'insoluble' }),
+    ]);
+    expect(withStone.sensoryOutput!.tasteProfile!.bitter).toBeCloseTo(
+      alone.sensoryOutput!.tasteProfile!.bitter,
+    );
+  });
+
+  it('reports every dimension within range', () => {
+    const context = run([tasty('a', { bitter: 1, astringent: 1 }), tasty('b', { salty: 1 })]);
+    for (const value of Object.values(context.sensoryOutput!.tasteProfile!)) {
+      expect(value).toBeGreaterThanOrEqual(0);
+      expect(value).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+describe('temperature', () => {
+  it('takes the weighted-dominant authored value', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'warming', aestheticWeight: 0.9 }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'cold', aestheticWeight: 0.3 }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('warming');
+  });
+
+  it('shifts one step up when warming tag load clears the threshold', () => {
+    const untagged = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'neutral' }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'neutral' }),
+    ]);
+    const tagged = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'neutral', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'neutral' }),
+    ]);
+    expect(untagged.sensoryOutput!.temperatureFeel).toBe('neutral');
+    expect(tagged.sensoryOutput!.temperatureFeel).toBe('warming');
+  });
+
+  it('shifts one step down on cooling tag load', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'warming', synergyTags: ['cooling'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'warming', synergyTags: ['cooling'] }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('neutral');
+  });
+
+  it('keeps the field primary when a tag contradicts it', () => {
+    // Wormwood is tagged warming but reads cold. It should come out cold that warms
+    // slightly, one step, not flipped to warming outright.
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'cold', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'cold', synergyTags: ['warming'] }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('neutral');
+  });
+
+  it('does not shift on tag load below the threshold', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'cold', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'cold' }),
+      plain('c', '#CCCCCC', { temperatureFeel: 'cold' }),
+      plain('d', '#CCCCCC', { temperatureFeel: 'cold' }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('cold');
+  });
+
+  it('clamps at the ends of the scale', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { temperatureFeel: 'burning', synergyTags: ['warming'] }),
+      plain('b', '#CCCCCC', { temperatureFeel: 'burning', synergyTags: ['warming'] }),
+    ]);
+    expect(context.sensoryOutput!.temperatureFeel).toBe('burning');
+  });
+});
+
+describe('sound', () => {
+  it('is null when nothing carries one', () => {
+    expect(run([plain('a', '#CCCCCC'), plain('b', '#CCCCCC')]).sensoryOutput!.sound).toBeNull();
+  });
+
+  it('takes the dominant bearer rather than merging', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { sound: 'faint metallic ring', aestheticWeight: 0.9 }),
+      plain('b', '#CCCCCC', { sound: 'distant surf', aestheticWeight: 0.2 }),
+    ]);
+    expect(context.sensoryOutput!.sound).toBe('faint metallic ring');
+  });
+
+  it('stays silent when the only bearer is a trace presence', () => {
+    const context = run([
+      plain('a', '#CCCCCC', { sound: 'faint high tone', aestheticWeight: 0.1 }),
+      plain('b', '#CCCCCC', { aestheticWeight: 1 }),
+      plain('c', '#CCCCCC', { aestheticWeight: 1 }),
+      plain('d', '#CCCCCC', { aestheticWeight: 1 }),
+    ]);
+    expect(context.sensoryOutput!.sound).toBeNull();
+  });
+
+  it('does not depend on ingredient order', () => {
+    const a = plain('a', '#CCCCCC', { sound: 'first', aestheticWeight: 0.6 });
+    const b = plain('b', '#CCCCCC', { sound: 'second', aestheticWeight: 0.6 });
+    expect(run([a, b]).sensoryOutput!.sound).toBe(run([b, a]).sensoryOutput!.sound);
+  });
+});
+
+describe('aroma', () => {
+  const scented = (id: string, notes: Array<[string, 'top' | 'heart' | 'base']>, overrides = {}) =>
+    plain(id, '#CCCCCC', {
+      aromaNotes: notes.map(([note, position]) => ({ note, position })),
+      ...overrides,
+    });
+
+  it('merges notes by position', () => {
+    const context = run([
+      scented('a', [
+        ['citrus', 'top'],
+        ['wood', 'base'],
+      ]),
+      scented('b', [['floral', 'top']]),
+    ]);
+    const aroma = context.sensoryOutput!.aromaProfile!;
+    expect(aroma.top.sort()).toEqual(['citrus', 'floral']);
+    expect(aroma.base).toEqual(['wood']);
+    expect(aroma.heart).toEqual([]);
+  });
+
+  it('keeps a note at every position any ingredient assigns it to', () => {
+    // 22 of the 38 notes in use sit at different positions on different ingredients. A
+    // preparation of several earthy ingredients should read earthy the whole way down
+    // rather than having one position arbitrarily win.
+    const context = run([
+      scented('a', [['earth', 'top']]),
+      scented('b', [['earth', 'heart']]),
+      scented('c', [['earth', 'base']]),
+    ]);
+    const aroma = context.sensoryOutput!.aromaProfile!;
+    expect(aroma.top).toContain('earth');
+    expect(aroma.heart).toContain('earth');
+    expect(aroma.base).toContain('earth');
+  });
+
+  it('does not duplicate a note within one position', () => {
+    const context = run([scented('a', [['earth', 'top']]), scented('b', [['earth', 'top']])]);
+    expect(context.sensoryOutput!.aromaProfile!.top).toEqual(['earth']);
+  });
+
+  it('lets the solvent contribute without leading', () => {
+    const honey = makeOpenSolvent({
+      aromaNotes: [{ note: 'honied', position: 'top' }],
+    });
+    const bare = run([scented('a', [['citrus', 'top']])], honey);
+    expect(bare.sensoryOutput!.aromaProfile!.top).toContain('honied');
+    // Muted: an ingredient carrying its own note outranks the solvent's.
+    expect(bare.sensoryOutput!.aromaProfile!.top[0]).toBe('citrus');
+  });
+
+  it('caps how many notes a position carries', () => {
+    const context = run([
+      scented('a', [
+        ['citrus', 'top'],
+        ['mint', 'top'],
+        ['green', 'top'],
+      ]),
+      scented('b', [
+        ['ozone', 'top'],
+        ['floral', 'top'],
+        ['sweet', 'top'],
+      ]),
+    ]);
+    expect(context.sensoryOutput!.aromaProfile!.top.length).toBeLessThanOrEqual(4);
+  });
+
+  it('does not depend on ingredient order', () => {
+    const a = scented('a', [['citrus', 'top']], { aestheticWeight: 0.5 });
+    const b = scented('b', [['mint', 'top']], { aestheticWeight: 0.5 });
+    expect(run([a, b]).sensoryOutput!.aromaProfile).toEqual(
+      run([b, a]).sensoryOutput!.aromaProfile,
+    );
+  });
+});
+
+describe('fictional aroma overlays', () => {
+  const families = () =>
+    new Map([
+      ['citrus', 'fresh-bright'],
+      ['mint', 'fresh-bright'],
+      ['green', 'fresh-bright'],
+      ['ozone', 'fresh-bright'],
+    ]);
+
+  function overlay(
+    ingredients: Ingredient[],
+    solvent: Solvent,
+    opts: { erasure?: number; scope?: number } = {},
+  ) {
+    const context = createContext({ ingredients, solvent, outcome: 'concentrate' });
+    solventMatchRule.apply(context);
+    context.sensoryErasureCount = opts.erasure ?? 0;
+    context.synergyScopeMultiplier = opts.scope ?? 0;
+    sensoryRule.apply(context);
+    makeSignatureTransformRule(makePipelineData({ aromaFamilies: families() })).apply(context);
+    return context;
+  }
+
+  const prism = () =>
+    makeFictionalSolvent({
+      id: 'prism',
+      slug: 'prism',
+      name: 'Prism',
+      polarity: 'universal',
+      signatureTransformation: { type: 'refractive-alteration', summary: 'you become other' },
+    });
+
+  const withCitrus = () =>
+    plain('a', '#CCCCCC', { aromaNotes: [{ note: 'citrus', position: 'top' }] });
+
+  it('expands Prism aroma with siblings from the same family', () => {
+    const none = overlay([withCitrus()], prism(), { scope: 0 });
+    const wide = overlay([withCitrus()], prism(), { scope: 3 });
+
+    expect(none.sensoryOutput!.aromaProfile!.top).toEqual(['citrus']);
+    expect(wide.sensoryOutput!.aromaProfile!.top.length).toBeGreaterThan(1);
+    // Everything added is a fresh-bright sibling, drawn from the vocabulary rather than invented.
+    for (const note of wide.sensoryOutput!.aromaProfile!.top) {
+      expect(families().get(note)).toBe('fresh-bright');
+    }
+  });
+
+  it('expands deterministically for a given seed', () => {
+    const first = overlay([withCitrus()], prism(), { scope: 3 });
+    const second = overlay([withCitrus()], prism(), { scope: 3 });
+    expect(first.sensoryOutput!.aromaProfile).toEqual(second.sensoryOutput!.aromaProfile);
+  });
+
+  it('flattens Lacuna aroma from the top down', () => {
+    const scented = () =>
+      plain('a', '#CCCCCC', {
+        aromaNotes: [
+          { note: 'citrus', position: 'top' },
+          { note: 'wood', position: 'heart' },
+          { note: 'earth', position: 'base' },
+        ],
+      });
+
+    const intact = overlay([scented()], makeFictionalSolvent(), { erasure: 2 });
+    const flattened = overlay([scented()], makeFictionalSolvent(), { erasure: 3 });
+    const gone = overlay([scented()], makeFictionalSolvent(), { erasure: 6 });
+
+    expect(intact.sensoryOutput!.aromaProfile!.top).toEqual(['citrus']);
+    // Volatiles lift off first.
+    expect(flattened.sensoryOutput!.aromaProfile!.top).toEqual([]);
+    expect(flattened.sensoryOutput!.aromaProfile!.heart).toEqual(['wood']);
+    // At the far end only the base remains.
+    expect(gone.sensoryOutput!.aromaProfile!.heart).toEqual([]);
+    expect(gone.sensoryOutput!.aromaProfile!.base).toEqual(['earth']);
+  });
+});
+
+describe('motion', () => {
+  const moving = (id: string, overrides = {}) => plain(id, '#CCCCCC', overrides);
+
+  it('falls back to weighted ingredient tendency when nothing else fires', () => {
+    const context = run([
+      moving('a', { motionTendency: 'rising', aestheticWeight: 0.9 }),
+      moving('b', { motionTendency: 'still', aestheticWeight: 0.2 }),
+    ]);
+    expect(context.sensoryOutput!.motionTendency).toBe('rising');
+  });
+
+  it('reads layered when the preparation separates', () => {
+    const context = run([
+      moving('a', { solubility: 'polar', motionTendency: 'still' }),
+      moving('b', { solubility: 'insoluble', motionTendency: 'still' }),
+    ]);
+    expect(context.sensoryOutput!.blendState).toBe('separated');
+    expect(context.sensoryOutput!.motionTendency).toBe('layered');
+  });
+
+  it('fizzes when an alkaline ingredient dissolves in acid, and not otherwise', () => {
+    // Carbonate meeting acid evolves carbon dioxide. The same ingredient in water does
+    // nothing, because the acidity factor is zero there.
+    const carbonate = () =>
+      moving('coral', { phContribution: 3, solubility: 'acid-soluble', motionTendency: 'still' });
+    const inAcid = run([carbonate(), moving('b')], makeOpenSolvent({ basePh: 2.5 }));
+    const inWater = run([carbonate(), moving('b')], makeOpenSolvent({ basePh: 7 }));
+
+    expect(inAcid.sensoryOutput!.motionTendency).toBe('effervescent');
+    expect(inWater.sensoryOutput!.motionTendency).not.toBe('effervescent');
+  });
+
+  it('churns when the preparation is unstable', () => {
+    const context = createContext({
+      ingredients: [
+        moving('a', { motionTendency: 'still' }),
+        moving('b', { motionTendency: 'still' }),
+      ],
+      solvent: makeOpenSolvent(),
+      outcome: 'concentrate',
+    });
+    solventMatchRule.apply(context);
+    context.stabilityState = 'critically_unstable';
+    sensoryRule.apply(context);
+    expect(context.sensoryOutput!.motionTendency).toBe('churning');
+  });
+
+  it('rises on vapour content and goes restless on volatile content', () => {
+    const vapour = run([
+      moving('a', {
+        compoundClasses: [{ class: 'essence-vapor', concentration: 0.8 }],
+        motionTendency: 'still',
+      }),
+      moving('b', {
+        compoundClasses: [{ class: 'essence-vapor', concentration: 0.8 }],
+        motionTendency: 'still',
+      }),
+    ]);
+    const volatile = run([
+      moving('a', { traits: ['volatile'], motionTendency: 'still' }),
+      moving('b', { traits: ['volatile'], motionTendency: 'still' }),
+    ]);
+    expect(vapour.sensoryOutput!.motionTendency).toBe('rising');
+    expect(volatile.sensoryOutput!.motionTendency).toBe('restless');
+  });
+
+  it('pulses on echoic content and seeks on aberrant or pneuma content', () => {
+    const echoic = run([
+      moving('a', { traits: ['echoic'], motionTendency: 'still' }),
+      moving('b', { traits: ['echoic'], motionTendency: 'still' }),
+    ]);
+    const fictional = run([
+      moving('a', { category: 'pneuma', motionTendency: 'still' }),
+      moving('b', { category: 'aberrant', motionTendency: 'still' }),
+    ]);
+    expect(echoic.sensoryOutput!.motionTendency).toBe('pulsing');
+    expect(fictional.sensoryOutput!.motionTendency).toBe('seeking');
+  });
+
+  it('swirls on heat, convection being the mechanism', () => {
+    const context = run([
+      moving('a', { temperatureFeel: 'burning', motionTendency: 'still' }),
+      moving('b', { temperatureFeel: 'warming', motionTendency: 'still' }),
+    ]);
+    expect(context.sensoryOutput!.motionTendency).toBe('swirling');
+  });
+
+  it('does not depend on ingredient order', () => {
+    const a = moving('a', { traits: ['volatile'], motionTendency: 'rising' });
+    const b = moving('b', { traits: ['echoic'], motionTendency: 'settling' });
+    expect(run([a, b]).sensoryOutput!.motionTendency).toBe(
+      run([b, a]).sensoryOutput!.motionTendency,
+    );
+  });
+
+  it('stops entirely under deep Lacuna erasure', () => {
+    const context = createContext({
+      ingredients: [
+        plain('a', '#CCCCCC', { traits: ['volatile'], motionTendency: 'rising' }),
+        plain('b', '#CCCCCC', { traits: ['volatile'], motionTendency: 'rising' }),
+      ],
+      solvent: makeFictionalSolvent(),
+      outcome: 'concentrate',
+    });
+    solventMatchRule.apply(context);
+    context.sensoryErasureCount = 5;
+    sensoryRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
+    expect(context.sensoryOutput!.motionTendency).toBe('still');
   });
 });

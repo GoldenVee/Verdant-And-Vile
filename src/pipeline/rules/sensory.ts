@@ -14,7 +14,11 @@ export const sensoryRule: Rule = {
   name: 'sensory',
 
   apply(context: BrewingContext) {
-    context.sensoryOutput = computeSensory(context.ingredients, context.solvent);
+    context.sensoryOutput = computeSensory(
+      context.ingredients,
+      context.solvent,
+      context.stabilityState,
+    );
     return ok(context);
   },
 };
