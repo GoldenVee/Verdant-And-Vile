@@ -68,7 +68,8 @@ is gitignored. Those two are fine.
 
 ### Operational readiness
 
-- **Health check endpoint.** Deploy platforms need one to know the instance is alive.
+- **Health check endpoint.** Already present: `GET /health` in `src/app.ts`. Confirm the deploy
+  platform is pointed at it.
 - **Graceful shutdown.** `index.ts` has no SIGTERM handling, so in-flight requests are dropped
   on redeploy.
 - **Production log level.** Pino is wired through `buildApp(config.logLevel)`; confirm the
