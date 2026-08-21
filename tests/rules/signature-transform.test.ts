@@ -5,12 +5,13 @@ import { describe, expect, it } from 'vitest';
 
 import type { Solvent, Toxicity } from '../../src/domain/types.js';
 import { createContext } from '../../src/pipeline/context.js';
-import { signatureTransformRule } from '../../src/pipeline/rules/signature-transform.js';
+import { makeSignatureTransformRule } from '../../src/pipeline/rules/signature-transform.js';
 import {
   makeEffect,
   makeFictionalSolvent,
   makeIngredient,
   makeOpenSolvent,
+  makePipelineData,
 } from '../support/fixtures.js';
 
 const ichor = () =>
@@ -39,7 +40,7 @@ describe('grounded solvents', () => {
   it('skip the rule: no marks, no narrative, effects untouched', () => {
     const context = contextWith(makeOpenSolvent());
     context.effects.push(makeEffect({ id: 'e0', descriptor: 'vivid recollection' }));
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
     expect(context.marks).toHaveLength(0);
     expect(context.narrativeWrap).toBeNull();
     expect(context.effects[0]!.descriptor).toBe('vivid recollection');
@@ -51,7 +52,7 @@ describe('Ichor', () => {
     const context = contextWith(ichor());
     context.toxicity = safeToxicity;
     context.effects.push(makeEffect({ id: 'e0', descriptor: 'vivid recollection' }));
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
 
     expect(context.effects[0]!.descriptor).toBe('transcendent vivid recollection');
     expect(context.marks).toEqual([{ solvent: 'ichor', markLevel: expect.any(Number) }]);
@@ -61,7 +62,7 @@ describe('Ichor', () => {
   it('warns when somatic toxicity is high', () => {
     const context = contextWith(ichor());
     context.toxicity = { somatic: 6, psychic: 0, sensory: 0 };
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
     expect(context.warnings).toContain('the divine solvent amplifies harm as readily as benefit');
   });
 });
@@ -71,7 +72,7 @@ describe('Prism', () => {
     const build = () => {
       const context = contextWith(prism());
       for (let i = 0; i < 4; i++) context.effects.push(makeEffect({ id: `e${i}` }));
-      signatureTransformRule.apply(context);
+      makeSignatureTransformRule(makePipelineData()).apply(context);
       return context;
     };
     const first = build();
@@ -100,7 +101,7 @@ describe('Lacuna', () => {
       transmutedEffect: 'memory_erasure',
       effectDomain: 'memory',
     });
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
 
     const effect = context.effects[0]!;
     expect(effect.type).toBe('memory_erasure');
@@ -119,7 +120,7 @@ describe('Lacuna', () => {
       transmutedEffect: 'memory_erasure',
       effectDomain: 'memory',
     });
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
 
     const effect = context.effects[0]!;
     expect(effect.duration).toBe('permanent');
@@ -137,7 +138,7 @@ describe('Lacuna', () => {
       transmutedEffect: 'memory_erasure',
       effectDomain: 'memory',
     });
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
 
     expect(context.effects[0]!.duration).toBe('extended');
     expect(context.effects[0]!.reversible).toBe(true);

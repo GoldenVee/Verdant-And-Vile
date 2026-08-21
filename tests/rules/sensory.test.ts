@@ -6,11 +6,16 @@ import { describe, expect, it } from 'vitest';
 import type { Ingredient, Solvent } from '../../src/domain/types.js';
 import { createContext } from '../../src/pipeline/context.js';
 import { sensoryRule } from '../../src/pipeline/rules/sensory.js';
-import { signatureTransformRule } from '../../src/pipeline/rules/signature-transform.js';
+import { makeSignatureTransformRule } from '../../src/pipeline/rules/signature-transform.js';
 import { solventMatchRule } from '../../src/pipeline/rules/solvent-match.js';
 import { combinationPh } from '../../src/sensory/index.js';
 import { blend, luminance } from '../../src/sensory/color.js';
-import { makeFictionalSolvent, makeIngredient, makeOpenSolvent } from '../support/fixtures.js';
+import {
+  makeFictionalSolvent,
+  makeIngredient,
+  makeOpenSolvent,
+  makePipelineData,
+} from '../support/fixtures.js';
 
 // Runs SolventMatchRule so the weights SensoryRule reads are populated, then SensoryRule.
 function run(ingredients: Ingredient[], solvent: Solvent = makeOpenSolvent()) {
@@ -250,7 +255,7 @@ describe('fictional overlays', () => {
     solventMatchRule.apply(context);
     context.sensoryErasureCount = erasure;
     sensoryRule.apply(context);
-    signatureTransformRule.apply(context);
+    makeSignatureTransformRule(makePipelineData()).apply(context);
     return context;
   }
 
@@ -456,5 +461,158 @@ describe('sound', () => {
     const a = plain('a', '#CCCCCC', { sound: 'first', aestheticWeight: 0.6 });
     const b = plain('b', '#CCCCCC', { sound: 'second', aestheticWeight: 0.6 });
     expect(run([a, b]).sensoryOutput!.sound).toBe(run([b, a]).sensoryOutput!.sound);
+  });
+});
+
+describe('aroma', () => {
+  const scented = (id: string, notes: Array<[string, 'top' | 'heart' | 'base']>, overrides = {}) =>
+    plain(id, '#CCCCCC', {
+      aromaNotes: notes.map(([note, position]) => ({ note, position })),
+      ...overrides,
+    });
+
+  it('merges notes by position', () => {
+    const context = run([
+      scented('a', [
+        ['citrus', 'top'],
+        ['wood', 'base'],
+      ]),
+      scented('b', [['floral', 'top']]),
+    ]);
+    const aroma = context.sensoryOutput!.aromaProfile!;
+    expect(aroma.top.sort()).toEqual(['citrus', 'floral']);
+    expect(aroma.base).toEqual(['wood']);
+    expect(aroma.heart).toEqual([]);
+  });
+
+  it('keeps a note at every position any ingredient assigns it to', () => {
+    // 22 of the 38 notes in use sit at different positions on different ingredients. A
+    // preparation of several earthy ingredients should read earthy the whole way down
+    // rather than having one position arbitrarily win.
+    const context = run([
+      scented('a', [['earth', 'top']]),
+      scented('b', [['earth', 'heart']]),
+      scented('c', [['earth', 'base']]),
+    ]);
+    const aroma = context.sensoryOutput!.aromaProfile!;
+    expect(aroma.top).toContain('earth');
+    expect(aroma.heart).toContain('earth');
+    expect(aroma.base).toContain('earth');
+  });
+
+  it('does not duplicate a note within one position', () => {
+    const context = run([scented('a', [['earth', 'top']]), scented('b', [['earth', 'top']])]);
+    expect(context.sensoryOutput!.aromaProfile!.top).toEqual(['earth']);
+  });
+
+  it('lets the solvent contribute without leading', () => {
+    const honey = makeOpenSolvent({
+      aromaNotes: [{ note: 'honied', position: 'top' }],
+    });
+    const bare = run([scented('a', [['citrus', 'top']])], honey);
+    expect(bare.sensoryOutput!.aromaProfile!.top).toContain('honied');
+    // Muted: an ingredient carrying its own note outranks the solvent's.
+    expect(bare.sensoryOutput!.aromaProfile!.top[0]).toBe('citrus');
+  });
+
+  it('caps how many notes a position carries', () => {
+    const context = run([
+      scented('a', [
+        ['citrus', 'top'],
+        ['mint', 'top'],
+        ['green', 'top'],
+      ]),
+      scented('b', [
+        ['ozone', 'top'],
+        ['floral', 'top'],
+        ['sweet', 'top'],
+      ]),
+    ]);
+    expect(context.sensoryOutput!.aromaProfile!.top.length).toBeLessThanOrEqual(4);
+  });
+
+  it('does not depend on ingredient order', () => {
+    const a = scented('a', [['citrus', 'top']], { aestheticWeight: 0.5 });
+    const b = scented('b', [['mint', 'top']], { aestheticWeight: 0.5 });
+    expect(run([a, b]).sensoryOutput!.aromaProfile).toEqual(
+      run([b, a]).sensoryOutput!.aromaProfile,
+    );
+  });
+});
+
+describe('fictional aroma overlays', () => {
+  const families = () =>
+    new Map([
+      ['citrus', 'fresh-bright'],
+      ['mint', 'fresh-bright'],
+      ['green', 'fresh-bright'],
+      ['ozone', 'fresh-bright'],
+    ]);
+
+  function overlay(
+    ingredients: Ingredient[],
+    solvent: Solvent,
+    opts: { erasure?: number; scope?: number } = {},
+  ) {
+    const context = createContext({ ingredients, solvent, outcome: 'concentrate' });
+    solventMatchRule.apply(context);
+    context.sensoryErasureCount = opts.erasure ?? 0;
+    context.synergyScopeMultiplier = opts.scope ?? 0;
+    sensoryRule.apply(context);
+    makeSignatureTransformRule(makePipelineData({ aromaFamilies: families() })).apply(context);
+    return context;
+  }
+
+  const prism = () =>
+    makeFictionalSolvent({
+      id: 'prism',
+      slug: 'prism',
+      name: 'Prism',
+      polarity: 'universal',
+      signatureTransformation: { type: 'refractive-alteration', summary: 'you become other' },
+    });
+
+  const withCitrus = () =>
+    plain('a', '#CCCCCC', { aromaNotes: [{ note: 'citrus', position: 'top' }] });
+
+  it('expands Prism aroma with siblings from the same family', () => {
+    const none = overlay([withCitrus()], prism(), { scope: 0 });
+    const wide = overlay([withCitrus()], prism(), { scope: 3 });
+
+    expect(none.sensoryOutput!.aromaProfile!.top).toEqual(['citrus']);
+    expect(wide.sensoryOutput!.aromaProfile!.top.length).toBeGreaterThan(1);
+    // Everything added is a fresh-bright sibling, drawn from the vocabulary rather than invented.
+    for (const note of wide.sensoryOutput!.aromaProfile!.top) {
+      expect(families().get(note)).toBe('fresh-bright');
+    }
+  });
+
+  it('expands deterministically for a given seed', () => {
+    const first = overlay([withCitrus()], prism(), { scope: 3 });
+    const second = overlay([withCitrus()], prism(), { scope: 3 });
+    expect(first.sensoryOutput!.aromaProfile).toEqual(second.sensoryOutput!.aromaProfile);
+  });
+
+  it('flattens Lacuna aroma from the top down', () => {
+    const scented = () =>
+      plain('a', '#CCCCCC', {
+        aromaNotes: [
+          { note: 'citrus', position: 'top' },
+          { note: 'wood', position: 'heart' },
+          { note: 'earth', position: 'base' },
+        ],
+      });
+
+    const intact = overlay([scented()], makeFictionalSolvent(), { erasure: 2 });
+    const flattened = overlay([scented()], makeFictionalSolvent(), { erasure: 3 });
+    const gone = overlay([scented()], makeFictionalSolvent(), { erasure: 6 });
+
+    expect(intact.sensoryOutput!.aromaProfile!.top).toEqual(['citrus']);
+    // Volatiles lift off first.
+    expect(flattened.sensoryOutput!.aromaProfile!.top).toEqual([]);
+    expect(flattened.sensoryOutput!.aromaProfile!.heart).toEqual(['wood']);
+    // At the far end only the base remains.
+    expect(gone.sensoryOutput!.aromaProfile!.heart).toEqual([]);
+    expect(gone.sensoryOutput!.aromaProfile!.base).toEqual(['earth']);
   });
 });

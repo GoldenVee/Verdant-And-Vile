@@ -4,6 +4,7 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 
 import {
+  AROMA_POSITIONS,
   BLEND_STATES,
   LUMINOSITIES,
   SOLUBILITIES,
@@ -31,6 +32,12 @@ const concentration = () => fc.double({ min: 0, max: 1, noNaN: true });
 const temperature = () => fc.constantFrom<TemperatureFeel>(...TEMPERATURE_FEELS);
 const tags = () => fc.subarray(['warming', 'cooling', 'stabilizer'], { maxLength: 2 });
 const tasteValue = () => fc.double({ min: 0, max: 1, noNaN: true });
+const NOTES = ['citrus', 'mint', 'earth', 'wood', 'mineral', 'musk'];
+const aromaNotes = () =>
+  fc.array(
+    fc.record({ note: fc.constantFrom(...NOTES), position: fc.constantFrom(...AROMA_POSITIONS) }),
+    { maxLength: 3 },
+  );
 
 const ingredient = () =>
   fc
@@ -46,6 +53,7 @@ const ingredient = () =>
       temp: temperature(),
       tagList: tags(),
       sound: fc.option(fc.string({ minLength: 1, maxLength: 20 }), { nil: null }),
+      aroma: aromaNotes(),
       taste: fc.record(Object.fromEntries(TASTE_KEYS.map((k) => [k, tasteValue()]))),
     })
     .map((r) =>
@@ -59,6 +67,7 @@ const ingredient = () =>
         synergyTags: r.tagList,
         sound: r.sound,
         tasteProfile: r.taste as Ingredient['tasteProfile'],
+        aromaNotes: r.aroma,
         compoundClasses: [
           { class: 'tannin', concentration: r.tannin },
           { class: 'oxide', concentration: r.oxide },
@@ -335,5 +344,51 @@ describe('insoluble ingredients cannot weaken a preparation', () => {
 
     expect(with_!.sensoryOutput!.blendState).toBe('separated');
     expect(with_!.sensoryOutput!.colorSecondary).not.toBeNull();
+  });
+});
+
+describe('aroma', () => {
+  it('never repeats a note within a position and respects the cap', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const context = run(ingredients, makeOpenSolvent());
+        if (context === null) return;
+        const aroma = context.sensoryOutput!.aromaProfile!;
+        for (const position of AROMA_POSITIONS) {
+          const notes = aroma[position];
+          expect(new Set(notes).size).toBe(notes.length);
+          expect(notes.length).toBeLessThanOrEqual(4);
+        }
+      }),
+    );
+  });
+
+  it('only ever reports notes some participant carries', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const solvent = makeOpenSolvent();
+        const context = run(ingredients, solvent);
+        if (context === null) return;
+        const offered = new Set([
+          ...ingredients.flatMap((i) => i.aromaNotes.map((a) => a.note)),
+          ...solvent.aromaNotes.map((a) => a.note),
+        ]);
+        const aroma = context.sensoryOutput!.aromaProfile!;
+        for (const position of AROMA_POSITIONS) {
+          for (const note of aroma[position]) expect(offered).toContain(note);
+        }
+      }),
+    );
+  });
+
+  it('does not depend on ingredient order', () => {
+    fc.assert(
+      fc.property(combination(), (ingredients) => {
+        const forward = run(ingredients, makeOpenSolvent());
+        const reversed = run([...ingredients].reverse(), makeOpenSolvent());
+        if (forward === null || reversed === null) return;
+        expect(reversed.sensoryOutput!.aromaProfile).toEqual(forward.sensoryOutput!.aromaProfile);
+      }),
+    );
   });
 });

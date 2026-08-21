@@ -14,7 +14,7 @@ import type { Failure, Rule } from './rule.js';
 import { makeAntagonismRule } from './rules/antagonism.js';
 import { doseCurveRule } from './rules/dose-curve.js';
 import { makeEffectsRule } from './rules/effects.js';
-import { signatureTransformRule } from './rules/signature-transform.js';
+import { makeSignatureTransformRule } from './rules/signature-transform.js';
 import { solventMatchRule } from './rules/solvent-match.js';
 import { stabilityRule } from './rules/stability.js';
 import { sensoryRule } from './rules/sensory.js';
@@ -32,7 +32,7 @@ export function buildRules(data: PipelineData): Rule[] {
     stabilityRule,
     toxicityRule,
     sensoryRule,
-    signatureTransformRule,
+    makeSignatureTransformRule(data),
   ];
 }
 

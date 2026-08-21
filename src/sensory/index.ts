@@ -1,10 +1,12 @@
 // The sensory algorithm. Computes the preparation's perceived qualities from final weights
 // and ingredient data. See docs/sensory.md.
 //
-// Colour, luminosity, taste, temperature, and sound are implemented. Aroma and texture are not
-// yet designed and return null; motion is deferred to its own session.
+// Colour, luminosity, aroma, taste, temperature, and sound are implemented. Texture is deferred
+// to v2 apart from the separation that blend_state already carries; motion is deferred to its
+// own session.
 
 import {
+  AROMA_POSITIONS,
   LUMINOSITIES,
   TASTE_KEYS,
   TEMPERATURE_FEELS,
@@ -13,6 +15,7 @@ import {
   type TemperatureFeel,
 } from '../domain/enums.js';
 import type {
+  AromaProfile,
   CombinationIngredient,
   SensoryOutput,
   Solvent,
@@ -45,6 +48,14 @@ const TEMPERATURE_TAG_THRESHOLD = 0.3;
 // A sound-bearing ingredient below this share of total weight is not audible. Every authored
 // sound is already written as faint, so a trace ingredient should not be heard at all.
 const SOUND_FLOOR = 0.15;
+
+// Most notes a single position carries. Four ingredients at three notes each, plus the
+// solvent, can offer more than a profile can usefully say.
+const AROMA_NOTES_PER_POSITION = 4;
+
+// Solvent notes enter muted, on top of the usual inverse-load solvent weight, so they
+// colour a profile without ever leading it.
+const AROMA_SOLVENT_MUTE = 0.5;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -316,6 +327,44 @@ export function resolveSound(ingredients: CombinationIngredient[]): string | nul
   return best.ingredient.sound;
 }
 
+// Merges notes by position, each position independently. A note that one ingredient places
+// at top and another places at heart appears at BOTH positions rather than being arbitrated
+// to one. That is not a conflict: 22 of the 38 notes in use sit at different positions on
+// different ingredients, and several ingredients carrying earth at different levels should
+// produce a preparation that reads earthy the whole way down. Persisting across positions is
+// the signature of a composition, not a collision to resolve.
+export function resolveAroma(ingredients: CombinationIngredient[], solvent: Solvent): AromaProfile {
+  const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
+  const solventShare = solventWeight(total) * AROMA_SOLVENT_MUTE;
+
+  const profile: AromaProfile = { top: [], heart: [], base: [] };
+
+  for (const position of AROMA_POSITIONS) {
+    const weights = new Map<string, number>();
+
+    for (const ci of ingredients) {
+      const w = contributionWeight(ci);
+      if (w <= 0) continue;
+      for (const ref of ci.ingredient.aromaNotes) {
+        if (ref.position !== position) continue;
+        weights.set(ref.note, (weights.get(ref.note) ?? 0) + w);
+      }
+    }
+    for (const ref of solvent.aromaNotes) {
+      if (ref.position !== position) continue;
+      weights.set(ref.note, (weights.get(ref.note) ?? 0) + solventShare);
+    }
+
+    // Heaviest first; ties break on slug so ingredient order cannot change the result.
+    profile[position] = [...weights.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, AROMA_NOTES_PER_POSITION)
+      .map(([note]) => note);
+  }
+
+  return profile;
+}
+
 export function computeSensory(
   ingredients: CombinationIngredient[],
   solvent: Solvent,
@@ -340,10 +389,10 @@ export function computeSensory(
     colorSecondary,
     blendState,
     luminosity: resolveLuminosity(ingredients, solvent),
+    aromaProfile: resolveAroma(ingredients, solvent),
     tasteProfile: resolveTaste(ingredients, solvent),
     temperatureFeel: resolveTemperature(ingredients),
     sound: resolveSound(ingredients),
-    aromaProfile: null,
     texture: null,
     motionTendency: null,
   };
