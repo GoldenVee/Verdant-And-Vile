@@ -25,6 +25,7 @@ Consult `docs/` before implementing anything mechanically non-trivial.
 - `docs/design-reference.md` — master design reference, canonical. When it conflicts with anything else, it wins.
 - `docs/rules/*.md` — individual rule docs with full mechanical detail. Consult when the master doc's summary isn't specific enough.
 - `docs/errors.md` — error code catalogue.
+- `docs/deployment.md`: deployment readiness checklist. Read before any work touching production, environments, or the Neon setup.
 
 Seed data is the authored source of truth. Don't invent ingredient properties; look them up.
 
