@@ -207,6 +207,21 @@ export const ingredientAromaNotes = pgTable(
   (t) => [unique().on(t.ingredientId, t.note, t.position)],
 );
 
+export const solventAromaNotes = pgTable(
+  'solvent_aroma_notes',
+  {
+    id: serial('id').primaryKey(),
+    solventId: text('solvent_id')
+      .notNull()
+      .references(() => solvents.id, { onDelete: 'cascade' }),
+    note: text('note')
+      .notNull()
+      .references(() => aromaNotesVocab.slug),
+    position: aromaPositionEnum('position').notNull(),
+  },
+  (t) => [unique().on(t.solventId, t.note, t.position)],
+);
+
 export const ingredientTags = pgTable(
   'ingredient_tags',
   {

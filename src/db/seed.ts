@@ -15,6 +15,7 @@ import {
   effectDefinitions,
   effectSubtractiveEquivalents,
   ingredientAromaNotes,
+  solventAromaNotes,
   ingredientCompounds,
   ingredientTags,
   ingredients,
@@ -91,6 +92,7 @@ interface RawSolvent {
   heat_default: string;
   aesthetic_base: { color: string; viscosity: string; luminosity: string };
   taste_profile: Record<string, number>;
+  aroma_notes: { note: string; position: string }[];
   category_affinity: { strong: string[]; weak: string[] };
   category_resistance: { strong: string[]; weak: string[] };
   signature_transformation: { type: string; summary: string } | null;
@@ -227,6 +229,7 @@ async function main(): Promise<void> {
   // Reverse FK order: join tables, then core, then reference vocabulary.
   await db.delete(ingredientTags);
   await db.delete(ingredientAromaNotes);
+  await db.delete(solventAromaNotes);
   await db.delete(ingredientCompounds);
   await db.delete(ingredients);
   await db.delete(solvents);
@@ -291,6 +294,14 @@ async function main(): Promise<void> {
 
   console.log(`Inserting ${solventRows.length} solvents...`);
   await db.insert(solvents).values(solventRows.map(toSolventRow));
+
+  const solventAromaJoin = solventRows.flatMap((s) =>
+    s.aroma_notes.map((a) => ({ solventId: s.id, note: a.note, position: a.position })),
+  );
+  console.log(`Inserting ${solventAromaJoin.length} solvent aroma notes...`);
+  if (solventAromaJoin.length > 0) {
+    await db.insert(solventAromaNotes).values(solventAromaJoin as never);
+  }
 
   console.log(`Inserting ${ingredientRows.length} ingredients...`);
   await db.insert(ingredients).values(ingredientRows.map(toIngredientRow));

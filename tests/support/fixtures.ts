@@ -87,6 +87,7 @@ export function makeSolvent(overrides: Partial<Solvent> = {}): Solvent {
       metallic: 0,
       bright: 0,
     },
+    aromaNotes: [],
     categoryAffinity: { strong: ['botanical', 'fungal'], weak: ['mineral', 'pneuma'] },
     categoryResistance: { strong: ['effluvia'], weak: ['cosmic'] },
     signatureTransformation: null,
@@ -183,6 +184,7 @@ export function makePipelineData(
     pairs?: SynergyPair[];
     effects?: EffectDefinition[];
     subtractiveEquivalents?: Record<string, string>;
+    aromaFamilies?: Map<string, string>;
   } = {},
 ): PipelineData {
   const tagDefinitions = new Map<string, TagDefinition>();
@@ -197,6 +199,7 @@ export function makePipelineData(
     synergyPairs: opts.pairs ?? [],
     effectDefinitions,
     effectSubtractiveEquivalents,
+    aromaFamilies: opts.aromaFamilies ?? new Map(),
   };
 }
 

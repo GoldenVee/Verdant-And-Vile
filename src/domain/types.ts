@@ -223,6 +223,9 @@ export interface PipelineData {
   effectDefinitions: Map<string, EffectDefinition>;
   // Base effect type to its Lacuna subtractive equivalent.
   effectSubtractiveEquivalents: Map<string, string>;
+  // Aroma note to its family. Prism's expansion walks this to find sibling notes, which is
+  // what lets the vocabulary supply the new notes rather than the rule inventing strings.
+  aromaFamilies: Map<string, string>;
 }
 
 // A scaled tag pair AntagonismRule classified as complementary, deferred to SynergyRule.
@@ -301,6 +304,9 @@ export interface Solvent {
   // Authored per solvent. Honey is sweet, Vinegar sour; Water and Lacuna are flat, the
   // first because it is neutral and the second because it is absent.
   tasteProfile: TasteProfile;
+  // Authored per solvent, and deliberately sparse. Solvent notes enter the merge muted so
+  // they colour a profile without ever leading it.
+  aromaNotes: AromaNoteRef[];
   categoryAffinity: CategoryTiers;
   categoryResistance: CategoryTiers;
   signatureTransformation: SignatureTransformation | null;
