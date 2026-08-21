@@ -688,6 +688,35 @@ weighted at exactly 1.0 still beats unanimous ingredient agreement, because it w
 Three weights that had been hand-raised to clear the old constraint were reverted once these
 rules were in place.
 
+### Distribution is lopsided, deferred to v2
+
+All ten values are reachable, but they are far from evenly reached. Across all 9262
+resolvable two-ingredient combinations:
+
+| Motion | Share |
+|---|---:|
+| `churning` | 37.4% |
+| `settling` | 17.8% |
+| `layered` | 14.2% |
+| `still` | 10.6% |
+| `restless` | 8.5% |
+| `rising` | 4.2% |
+| `swirling` | 3.3% |
+| `pulsing` | 2.2% |
+| `effervescent` | 1.6% |
+| `seeking` | 0.1% |
+
+`churning` takes over a third of all outcomes because a large share of combinations resolve
+to `unstable` or `critically_unstable`, and churning then outranks nearly everything else.
+`seeking` appears 10 times in 9262 despite having seven ingredients that should drive it,
+because churning crowds it out.
+
+This is a balancing question rather than a correctness one, and it is deliberately not being
+solved by re-tuning weights: the scoring rules above exist precisely because tuning constants
+to reach a desired outcome hid two real bugs. Any fix should come from the same place, either
+a structural rule about how instability competes with more specific mechanisms, or a change to
+how often stability resolves to unstable in the first place. Tracked as a v2 item.
+
 ### Reading stability
 
 This is the first place the sensory layer reads a computed pipeline value rather than
