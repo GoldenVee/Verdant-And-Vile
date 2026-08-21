@@ -1,5 +1,5 @@
 // Colour mathematics for the sensory algorithm. Pure functions over hex strings, with no
-// pipeline or domain knowledge. See docs/sensory.md (Colour).
+// pipeline or domain knowledge. See docs/rules/sensory.md (Colour).
 //
 // Mixing uses Kubelka-Munk reflectance rather than a channel average. Averaging treats a
 // pale pigment and a dense one as equals, which is not how pigment behaves: a small amount

@@ -1,6 +1,6 @@
 // SignatureTransformRule: the final rule. Applies the fictional solvents' signature
 // transformations to the resolved result. Grounded solvents skip it entirely. See
-// docs/rules/rules.md (SignatureTransformRule).
+// docs/rules/signature-transform.md.
 //
 // The effect transformations, marks, narrative wrap, warnings, and the colour and luminosity
 // overlays are implemented. The aroma, texture, motion, and taste overlays are still deferred,

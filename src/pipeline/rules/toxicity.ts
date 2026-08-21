@@ -1,7 +1,6 @@
 // ToxicityRule: computes three orthogonal toxicity dimensions (somatic, psychic,
 // sensory), gates each against outcome-specific thresholds, and surfaces warnings. Runs
-// after StabilityRule and before SignatureTransformRule. See docs/rules/rules.md
-// (ToxicityRule).
+// after StabilityRule and before SignatureTransformRule. See docs/rules/toxicity.md.
 //
 // A plain rule: the toxicity mappings and outcome gates are fixed vocabulary held as
 // constants. Contributions that depend on Lacuna's SynergyRule-pass-2 outputs

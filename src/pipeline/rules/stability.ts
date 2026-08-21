@@ -1,7 +1,7 @@
 // StabilityRule: computes how many days the preparation stays effective. An eight-stage
 // multiplicative formula over ingredient bases, category composition, outcome, solvent,
 // tags, traits, and fictional signatures, then a minimum-stability floor check. Runs
-// after DoseCurveRule and before ToxicityRule. See docs/rules/rules.md (StabilityRule).
+// after DoseCurveRule and before ToxicityRule. See docs/rules/stability.md.
 //
 // A plain rule: category/outcome/tag modifiers are fixed vocabulary held as constants.
 // Stability is a combination-level property; ingredient weight data is not modified here,

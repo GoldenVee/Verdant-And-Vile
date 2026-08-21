@@ -5,8 +5,8 @@
 // Pass 1 is the five grounded patterns plus the per-solvent cap. Pass 2 is the fictional
 // post-processing: emergent effects (all solvents), Prism scope, and Lacuna sensory-erasure
 // count, permanence scale, and transmute markers. Effect transformation itself happens later
-// (EffectsRule materializes, SignatureTransformRule transforms). See docs/rules/rules.md
-// (SynergyRule) and docs/effects.md.
+// (EffectsRule materializes, SignatureTransformRule transforms). See docs/rules/synergy.md
+// and docs/rules/effects.md.
 
 import { ok } from '../../domain/result.js';
 import type {

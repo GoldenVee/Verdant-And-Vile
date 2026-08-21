@@ -1,5 +1,5 @@
 // The sensory algorithm. Computes the preparation's perceived qualities from final weights
-// and ingredient data. See docs/sensory.md.
+// and ingredient data. See docs/rules/sensory.md.
 //
 // Every channel except texture is implemented. Texture is deferred to v2 apart from the
 // separation that blend_state already carries.
