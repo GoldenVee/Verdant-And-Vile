@@ -1,4 +1,4 @@
-# Verdant & Vile — Design Reference (v2, consolidated)
+# Verdant & Vile: Design Reference (v2, consolidated)
 
 _A fictional apothecary API grounded in real botanical data and chemistry principles._
 
@@ -14,16 +14,16 @@ For full mechanical detail on any rule, the individual rule docs remain authorit
 
 ### Core design values
 
-- **Solvent-agnostic naming** — v1 outcomes use generic terms; specialized named variants emerge in v2 as users discover solvent-specific paths
-- **Scalable architecture over premature complexity** — the schema is forward-compatible; v1 ships lean, v2+ additions are additive
-- **Fictional mechanics grounded in real chemistry** — real chemistry rules drive the algorithm; fictional ingredients bend those rules through their data values, not through special-case logic
-- **Portfolio-worthy and interview-explainable** — every architectural choice has a defensible reason
+- **Solvent-agnostic naming**: v1 outcomes use generic terms; specialized named variants emerge in v2 as users discover solvent-specific paths
+- **Scalable architecture over premature complexity**: the schema is forward-compatible; v1 ships lean, v2+ additions are additive
+- **Fictional mechanics grounded in real chemistry**: real chemistry rules drive the algorithm; fictional ingredients bend those rules through their data values, not through special-case logic
+- **Portfolio-worthy and interview-explainable**: every architectural choice has a defensible reason
 
 ### Approach
 
 - **All ingredient data is hand-authored and locally stored.** An external botanical API (Trefle) was evaluated and rejected on data-quality grounds and because personal domain vetting is more valuable for interview conversation than an external dependency. Real ingredients are grounded in actual chemistry and history; fictional ingredients are wholly authored with internally consistent fictional chemistry.
 - **Normalized relational schema** with tables for ingredients, tags, compound classes, aroma notes, and interaction rules
-- **Pluggable rules pipeline** — chemistry mechanics are individual rule modules registered to a pipeline; adding a new mechanic means writing a new rule, not refactoring
+- **Pluggable rules pipeline**: chemistry mechanics are individual rule modules registered to a pipeline; adding a new mechanic means writing a new rule, not refactoring
 
 ---
 
@@ -38,8 +38,8 @@ Ingredients belong to exactly one category. Categories organize both narrative f
 | `fungal` | Mushrooms, molds, lichens | caps, spores, mycelium |
 | `fauna-derived` | Animal-sourced materials | bones, scales, blood, venom |
 | `alchemical` | Reaction residues and byproducts | ash, rust, charcoal, slag |
-| `pneuma` | Pure intangibles — auras, essences, sealed breaths | captured dawn-air, distilled silence |
-| `effluvia` | Corrupt intangibles — miasmas, gases, viral substances | swamp gas, sealed plague-air |
+| `pneuma` | Pure intangibles: auras, essences, sealed breaths | captured dawn-air, distilled silence |
+| `effluvia` | Corrupt intangibles: miasmas, gases, viral substances | swamp gas, sealed plague-air |
 | `aberrant` | Broken-physics things that defy classification | anomalies, impossible fragments |
 | `cosmic` | From-elsewhere substances with real chemistry | meteorite fragments, tektites, stardust |
 
@@ -47,9 +47,9 @@ Ingredients belong to exactly one category. Categories organize both narrative f
 
 ## Traits (10)
 
-Traits are essential natures — rare, defining qualities that describe _what an ingredient is_. Distinct from interaction tags (which describe _what an ingredient does_).
+Traits are essential natures: rare, defining qualities that describe _what an ingredient is_. Distinct from interaction tags (which describe _what an ingredient does_).
 
-**How traits work:** Every trait has mechanical impact — either on the algorithm directly or on the generated narrative output. If a proposed quality has no mechanical hook (not even affecting generated description), it belongs in `lore`, not in the trait system.
+**How traits work:** Every trait has mechanical impact, either on the algorithm directly or on the generated narrative output. If a proposed quality has no mechanical hook (not even affecting generated description), it belongs in `lore`, not in the trait system.
 
 **Cardinality:** most ingredients carry zero or one trait. Two-trait ingredients are possible but should be intentional; three or more is unusual.
 
@@ -62,7 +62,7 @@ Traits are essential natures — rare, defining qualities that describe _what an
 | `catalyst` | Modifies others' reactions without being consumed | Amplifies paired ingredients' extraction and effective potency (SynergyRule Pattern 5) |
 | `indestructible` | Resists destruction and decay | Sets 30-day floor on final stability (Stage 6, StabilityRule); state marked `indefinite` |
 | `mercurial` | Own properties shift in response to surroundings | Under non-Prism solvents, applies seeded-random stability multiplier 0.7×–1.4× |
-| `shy` | Effects diminish under direct observation or measurement | Potency inversely correlates with combination complexity (mechanic partially deferred — Ectoplasm is only current example) |
+| `shy` | Effects diminish under direct observation or measurement | Potency inversely correlates with combination complexity (mechanic partially deferred: Ectoplasm is only current example) |
 | `carrier` | Exists to transport others | Low own potency; boosts paired active ingredients (SynergyRule Pattern 5, boost 0.6) |
 | `quiescent` | Always inert; contributes mass without reactivity | Contributes stability without triggering reactive interactions (Stage 6, StabilityRule, 1.4× per instance) |
 | `decaying` | Actively degrading in real time | Stability drops (0.4× multiplier) and spreads decay to other ingredients (reduces their `presence_weight` by 10%) |
@@ -70,11 +70,11 @@ Traits are essential natures — rare, defining qualities that describe _what an
 
 ### v2 deferred candidates
 
-- `sympathetic` — resonates with what it was once near
-- `latent` — inert until activated by something specific _(and its activator sub-family: `latent-acid`, `latent-heat`, `latent-catalyst`, etc.)_
-- `sentient` — has some form of awareness; may resist certain uses
-- `unwilling` — sentient-adjacent but simpler (resistance without choice)
-- `sealed` — properties locked away; require breaking-open through specific preparation
+- `sympathetic`: resonates with what it was once near
+- `latent`: inert until activated by something specific _(and its activator sub-family: `latent-acid`, `latent-heat`, `latent-catalyst`, etc.)_
+- `sentient`: has some form of awareness; may resist certain uses
+- `unwilling`: sentient-adjacent but simpler (resistance without choice)
+- `sealed`: properties locked away; require breaking-open through specific preparation
 
 **Rule of thumb:** most ingredients should carry zero or one trait. Traits are salt, not vegetables.
 
@@ -146,9 +146,9 @@ Bypass outcome-compatibility gates. Compatible with **all** outcomes. Each appli
 
 | Solvent | Polarity | pH | Stability × | Signature transformation |
 | --- | --- | --- | --- | --- |
-| `ichor` | polar | variable | 0.4× | `additive-elevation` — you become more (golden mark) |
-| `prism` | universal | N/A | 1.0× | `refractive-alteration` — you become other (iridescent mark) |
-| `lacuna` | anti-solvent | N/A | 5.0× | `subtractive-erasure` — you become less (absence mark) |
+| `ichor` | polar | variable | 0.4× | `additive-elevation`: you become more (golden mark) |
+| `prism` | universal | N/A | 1.0× | `refractive-alteration`: you become other (iridescent mark) |
+| `lacuna` | anti-solvent | N/A | 5.0× | `subtractive-erasure`: you become less (absence mark) |
 
 ### Outcome × solvent matrix (grounded)
 
@@ -180,16 +180,16 @@ Bypass outcome-compatibility gates. Compatible with **all** outcomes. Each appli
 
 ### Taxonomy (what this ingredient is)
 
-- `lore` — narrative flavor text (voice-of-apothecary, no em dashes)
-- `origin` — enum: `real` | `fictional`
-- `scientific_name` — string, nullable (only populated when `origin = real`, e.g., "Digitalis purpurea")
-- `appearance_text` — descriptive prose
-- `appearance_img` — nullable, for v2 art assets
-- `type` — one of 62 (see Ingredient Types section)
-- `category` — one of 9 (see Categories section)
-- `traits` — array of trait values (typically 0–1, extensible)
-- `compound_classes` — many-to-many via `ingredient_compounds` join table with `concentration` weight (0.0–1.0)
-- `related_family` — string, nullable. Manually curated for all categories. Groups ingredients that share related chemistry or origin for the SynergyRule Pattern 1 boost. Examples: `Solanaceae` (Belladonna, Mandrake); `Asteraceae` (Chamomile, Wormwood, Yarrow); `quartz-crystals` (Amethyst, Tiger's Eye); `hoarfrost-captures` (Rime Frost).
+- `lore`: narrative flavor text (voice-of-apothecary, no em dashes)
+- `origin`: enum: `real` | `fictional`
+- `scientific_name`: string, nullable (only populated when `origin = real`, e.g., "Digitalis purpurea")
+- `appearance_text`: descriptive prose
+- `appearance_img`: nullable, for v2 art assets
+- `type`: one of 62 (see Ingredient Types section)
+- `category`: one of 9 (see Categories section)
+- `traits`: array of trait values (typically 0–1, extensible)
+- `compound_classes`: many-to-many via `ingredient_compounds` join table with `concentration` weight (0.0–1.0)
+- `related_family`: string, nullable. Manually curated for all categories. Groups ingredients that share related chemistry or origin for the SynergyRule Pattern 1 boost. Examples: `Solanaceae` (Belladonna, Mandrake); `Asteraceae` (Chamomile, Wormwood, Yarrow); `quartz-crystals` (Amethyst, Tiger's Eye); `hoarfrost-captures` (Rime Frost).
 
 ### Reactive (chemistry)
 
@@ -269,35 +269,35 @@ Compound classes drive solvent extraction profiles and rule logic. They describe
 
 Combined via perfumery-style top/heart/base positions.
 
-**Fresh & bright** — `citrus` | `mint` | `green` | `ozone` | `petrichor` | `storm-air`
+**Fresh & bright**: `citrus` | `mint` | `green` | `ozone` | `petrichor` | `storm-air`
 
-**Floral & sweet** — `floral` | `sweet` | `honied` | `caramelized` | `soap`
+**Floral & sweet**: `floral` | `sweet` | `honied` | `caramelized` | `soap`
 
-**Fruit** — `berry` | `stonefruit` | `apple` | `tropical`
+**Fruit**: `berry` | `stonefruit` | `apple` | `tropical`
 
-**Herbal** — `herbaceous-green` | `herbaceous-soft` | `medicinal`
+**Herbal**: `herbaceous-green` | `herbaceous-soft` | `medicinal`
 
-**Spice** — `warm-spice` | `sharp-spice` | `smoky-spice`
+**Spice**: `warm-spice` | `sharp-spice` | `smoky-spice`
 
-**Warm & animalic** — `musk` | `amber` | `leather` | `wax` | `oud`
+**Warm & animalic**: `musk` | `amber` | `leather` | `wax` | `oud`
 
-**Woody & resinous** — `wood` | `resin` | `coffee`
+**Woody & resinous**: `wood` | `resin` | `coffee`
 
-**Mineral & elemental** — `mineral` | `metallic` | `salt` | `dust`
+**Mineral & elemental**: `mineral` | `metallic` | `salt` | `dust`
 
-**Smoke & fire** — `smoke` | `ash`
+**Smoke & fire**: `smoke` | `ash`
 
-**Earth & decay** — `earth` | `animal-decay` | `plant-decay` | `sulfur`
+**Earth & decay**: `earth` | `animal-decay` | `plant-decay` | `sulfur`
 
-**Sharp & bitter** — `bitter-scent` | `sour` | `acrid`
+**Sharp & bitter**: `bitter-scent` | `sour` | `acrid`
 
-**Aquatic** — `briney` | `seawater` | `wet-sand`
+**Aquatic**: `briney` | `seawater` | `wet-sand`
 
-**Industrial** — `plastic` | `rubber`
+**Industrial**: `plastic` | `rubber`
 
-**Dairy, nut & pantry** — `milky` | `nutty` | `bread`
+**Dairy, nut & pantry**: `milky` | `nutty` | `bread`
 
-**Fictional/surreal** — `void` | `paper` | `forgotten` | `stale` | `sickroom`
+**Fictional/surreal**: `void` | `paper` | `forgotten` | `stale` | `sickroom`
 
 _Decay is always specified as `animal-decay` or `plant-decay`. If a future ingredient truly cannot be classified as either, that's a signal to reconsider whether decay is the right note._
 
@@ -307,35 +307,35 @@ _Decay is always specified as `animal-decay` or `plant-decay`. If a future ingre
 
 Types describe physical form. A single type can appear across multiple categories (e.g., `dust` can be Mineral, Alchemical, or Cosmic).
 
-**Plant parts (13)** — `root` | `leaf` | `flower` | `bark` | `seed` | `fruit` | `stem` | `sap` | `berry` | `pollen` | `wood` | `thorn` | `moss`
+**Plant parts (13)**: `root` | `leaf` | `flower` | `bark` | `seed` | `fruit` | `stem` | `sap` | `berry` | `pollen` | `wood` | `thorn` | `moss`
 
-**Fungal & growth (5)** — `cap` | `spore` | `mycelium` | `lichen` | `bloom`
+**Fungal & growth (5)**: `cap` | `spore` | `mycelium` | `lichen` | `bloom`
 
-**Aquatic (1)** — `algae`
+**Aquatic (1)**: `algae`
 
-**Animal parts (13)** — `bone` | `shell` | `scale` | `feather` | `hair` | `fat` | `blood` | `organ` | `venom` | `chitin` | `horn` | `tooth` | `hide`
+**Animal parts (13)**: `bone` | `shell` | `scale` | `feather` | `hair` | `fat` | `blood` | `organ` | `venom` | `chitin` | `horn` | `tooth` | `hide`
 
-**Mineral/inorganic solids (6)** — `stone` | `crystal` | `salt` | `metal` | `ore` | `mineral`
+**Mineral/inorganic solids (6)**: `stone` | `crystal` | `salt` | `metal` | `ore` | `mineral`
 
-**Particulate (4)** — `dust` | `ash` | `soot` | `powder-raw`
+**Particulate (4)**: `dust` | `ash` | `soot` | `powder-raw`
 
-**Fluid/semi-fluid raw materials (4)** — `oil-raw` | `wax-raw` | `honey-raw` | `resin-raw`
+**Fluid/semi-fluid raw materials (4)**: `oil-raw` | `wax-raw` | `honey-raw` | `resin-raw`
 
-**Process residues (3)** — `rust` | `slag` | `residue`
+**Process residues (3)**: `rust` | `slag` | `residue`
 
-**Gaseous/atmospheric (3)** — `vapor` | `miasma` | `exhalation`
+**Gaseous/atmospheric (3)**: `vapor` | `miasma` | `exhalation`
 
-**Intangible/Pneuma-leaning (5)** — `essence` | `aura` | `breath` | `silence` | `resonance`
+**Intangible/Pneuma-leaning (5)**: `essence` | `aura` | `breath` | `silence` | `resonance`
 
-**Aberrant/Cosmic signature (4)** — `fragment` | `shard` | `filament` | `anomaly`
+**Aberrant/Cosmic signature (4)**: `fragment` | `shard` | `filament` | `anomaly`
 
-**Epistemic (1)** — `unknown`
+**Epistemic (1)**: `unknown`
 
 ---
 
 ## Interaction Tags
 
-Interaction tags describe an ingredient's _behavior_ in combinations. Stored as a `tag_definitions` table for extensibility — new tags = insert new rows, no schema migration needed.
+Interaction tags describe an ingredient's _behavior_ in combinations. Stored as a `tag_definitions` table for extensibility: new tags = insert new rows, no schema migration needed.
 
 ### Extraction & preparation dynamics
 
@@ -359,12 +359,12 @@ These tags act on compound classes rather than opposing a single counterpart tag
 
 ### Effect amplification
 
-- `stimulant-amplifier` ↔ `sedative-amplifier` — **scaled**
+- `stimulant-amplifier` ↔ `sedative-amplifier`: **scaled**
 
 ### Thermal & sensation
 
 - `oxidizer` ↔ `reducer` _(always antagonistic)_
-- `warming` ↔ `cooling` — **scaled**
+- `warming` ↔ `cooling`: **scaled**
 
 ### Physical transformation
 
@@ -382,7 +382,7 @@ These tags act on compound classes rather than opposing a single counterpart tag
 
 - `hallucinogenic-amplifier` ↔ `reality-anchor` _(always antagonistic)_
 - `perception-shifter`
-- `dream-inducer` ↔ `lucidity-guard` — **scaled**
+- `dream-inducer` ↔ `lucidity-guard`: **scaled**
 
 ### Memory & identity
 
@@ -398,7 +398,7 @@ These tags act on compound classes rather than opposing a single counterpart tag
 
 ### Time perception
 
-- `time-dilator` ↔ `moment-anchor` — **scaled**
+- `time-dilator` ↔ `moment-anchor`: **scaled**
 
 ### Attraction / repulsion
 
@@ -406,7 +406,7 @@ These tags act on compound classes rather than opposing a single counterpart tag
 
 ### Compulsion _(constrained: amplifies existing seams only, doesn't create from nothing)_
 
-- `disinhibitor` ↔ `will-fortifier` — **scaled**
+- `disinhibitor` ↔ `will-fortifier`: **scaled**
 
 ### Concentration / dilution
 
@@ -462,7 +462,7 @@ disinhibitor, diffuser, deliquescent, time-dilator,
 volatile-fixer, volatile-releaser, accelerant
 ```
 
-An ingredient qualifies as _subtractive_ if it has any tag in the subtractive set, _building_ if it has any tag in the building set. If it has neither (or both — cancellation), it's _neutral_. Physical-transformation tags (`coagulant`, `crystallizer`, `foaming-agent`) and protective-chemistry tags (`radical-scavenger`) are intentionally in neither list.
+An ingredient qualifies as _subtractive_ if it has any tag in the subtractive set, _building_ if it has any tag in the building set. If it has neither (or both, cancellation), it's _neutral_. Physical-transformation tags (`coagulant`, `crystallizer`, `foaming-agent`) and protective-chemistry tags (`radical-scavenger`) are intentionally in neither list.
 
 ---
 
@@ -472,17 +472,17 @@ An ingredient qualifies as _subtractive_ if it has any tag in the subtractive se
 - `slug`
 - `name`
 - `lore`
-- `polarity` — enum: `polar` | `nonpolar` | `acid-soluble` | `universal` | `anti-solvent`
-- `base_ph` — float 0.0–14.0, nullable
-- `extraction_profile` — array of compound_class ids
-- `compatible_outcomes` — array of outcome enum values (fictional solvents: all)
-- `stability_modifier` — float multiplier
-- `heat_default` — enum (v2 hook): `cold` | `warm` | `hot`
-- `aesthetic_base` — object: `{ color, viscosity, luminosity }`
-- `category_affinity` — object: `{ strong: [category_ids], weak: [category_ids] }`
-- `category_resistance` — object: `{ strong: [category_ids], weak: [category_ids] }`
-- `signature_transformation` — nullable object: `{ type, summary }`
-- `physical_form` — enum (v2 hook): `liquid` | `solid`
+- `polarity`: enum: `polar` | `nonpolar` | `acid-soluble` | `universal` | `anti-solvent`
+- `base_ph`: float 0.0–14.0, nullable
+- `extraction_profile`: array of compound_class ids
+- `compatible_outcomes`: array of outcome enum values (fictional solvents: all)
+- `stability_modifier`: float multiplier
+- `heat_default`: enum (v2 hook): `cold` | `warm` | `hot`
+- `aesthetic_base`: object: `{ color, viscosity, luminosity }`
+- `category_affinity`: object: `{ strong: [category_ids], weak: [category_ids] }`
+- `category_resistance`: object: `{ strong: [category_ids], weak: [category_ids] }`
+- `signature_transformation`: nullable object: `{ type, summary }`
+- `physical_form`: enum (v2 hook): `liquid` | `solid`
 
 **Signature transformation types:** `additive-elevation` (Ichor) | `refractive-alteration` (Prism) | `subtractive-erasure` (Lacuna)
 
@@ -491,16 +491,16 @@ An ingredient qualifies as _subtractive_ if it has any tag in the subtractive se
 ## Combination Schema
 
 - `id`
-- `name` — generated from result
-- `lore` — generated description
-- `type` — outcome enum
-- `solvent` — solvent reference
-- `ingredients` — via `combination_ingredients` join with `quantity` field (default 1, for v2 dosage)
-- `modifiers` — computed potency, pH after rules
-- `effects` — array of computed effects (see Effect Schema below)
-- `warnings` — array of non-fatal issues surfaced by rules
-- `failed` — boolean
-- `failure_reason` — nullable enum, one of:
+- `name`: generated from result
+- `lore`: generated description
+- `type`: outcome enum
+- `solvent`: solvent reference
+- `ingredients`: via `combination_ingredients` join with `quantity` field (default 1, for v2 dosage)
+- `modifiers`: computed potency, pH after rules
+- `effects`: array of computed effects (see Effect Schema below)
+- `warnings`: array of non-fatal issues surfaced by rules
+- `failed`: boolean
+- `failure_reason`: nullable enum, one of:
   - `no_ingredients`
   - `outcome_incompatible`
   - `extraction_impossible`
@@ -510,34 +510,38 @@ An ingredient qualifies as _subtractive_ if it has any tag in the subtractive se
   - `lethal_psychic`
   - `lethal_sensory`
   - `unknown`
-- `sensory_output` — object computed by sensory algorithm: `{ color_base, color_secondary, aroma_profile, taste_profile, texture, motion_tendency, luminosity, temperature_feel, sound }`
-- `stability` — float, final stability in days
-- `stability_state` — enum: `critically_unstable` | `unstable` | `moderately_stable` | `stable` | `highly_stable` | `indefinite`
-- `toxicity` — object: `{ somatic: float 0–10, psychic: float 0–10, sensory: float 0–10 }`
-- `toxicity_state` — object: `{ somatic: enum, psychic: enum, sensory: enum }` where each enum is `safe` | `mild` | `significant` | `dangerous` | `lethal`
-- `marks` — array (fictional solvents only, otherwise empty): `[{ solvent: 'ichor' | 'prism' | 'lacuna', mark_level: int 1–5 }]`
-- `narrative_wrap` — string, nullable (populated by SignatureTransformRule for fictional solvents, null for grounded)
+- `sensory_output`: object computed by sensory algorithm: `{ color_base, color_secondary, aroma_profile, taste_profile, texture, motion_tendency, luminosity, temperature_feel, sound }`
+- `stability`: float, final stability in days
+- `stability_state`: enum: `critically_unstable` | `unstable` | `moderately_stable` | `stable` | `highly_stable` | `indefinite`
+- `toxicity`: object: `{ somatic: float 0–10, psychic: float 0–10, sensory: float 0–10 }`
+- `toxicity_state`: object: `{ somatic: enum, psychic: enum, sensory: enum }` where each enum is `safe` | `mild` | `significant` | `dangerous` | `lethal`
+- `marks`: array (fictional solvents only, otherwise empty): `[{ solvent: 'ichor' | 'prism' | 'lacuna', mark_level: int 1–5 }]`
+- `narrative_wrap`: string, nullable (populated by SignatureTransformRule for fictional solvents, null for grounded)
 
 ---
 
 ## Effect Schema
 
+**Superseded by [`rules/effects.md`](rules/effects.md), which is canonical for the effect
+model.** The fields below are accurate; the mechanics that populate them live in the rule doc.
+
+
 Individual effects produced by the pipeline, attached to `combination.effects`.
 
 - `id`
-- `ingredient_id` — the source ingredient (for marker matching in Lacuna)
-- `type` — the effect kind (e.g., `sedation`, `memory_recall`, `warming_sensation`)
-- `descriptor` — human-readable descriptor (elevated by Ichor, refracted by Prism, transmuted by Lacuna)
-- `subtractive` — boolean, set true by Lacuna transmutation
-- `refracted` — boolean, set true by Prism duplication
-- `duration` — enum: `normal` | `extended` | `permanent` (extended and permanent set by Lacuna based on `permanence_scale`)
-- `reversible` — boolean, set false by Lacuna when permanent
+- `ingredient_id`: the source ingredient (for marker matching in Lacuna)
+- `type`: the effect kind (e.g., `sedation`, `memory_recall`, `warming_sensation`)
+- `descriptor`: human-readable descriptor (elevated by Ichor, refracted by Prism, transmuted by Lacuna)
+- `subtractive`: boolean, set true by Lacuna transmutation
+- `refracted`: boolean, set true by Prism duplication
+- `duration`: enum: `normal` | `extended` | `permanent` (extended and permanent set by Lacuna based on `permanence_scale`)
+- `reversible`: boolean, set false by Lacuna when permanent
 
 ---
 
 ## Rules Pipeline
 
-The combination algorithm is a pipeline of pluggable rule modules. Each takes a `BrewingContext` and returns a modified context. All seven rules below are **v1**.
+The combination algorithm is a pipeline of pluggable rule modules. Each takes a `BrewingContext` and returns a modified context. All nine rules below are **v1**. A tenth, DescriptionRule, is designed but not built.
 
 ```
 rawContext
@@ -545,8 +549,10 @@ rawContext
   → AntagonismRule
   → SynergyRule
   → DoseCurveRule
+  → EffectsRule
   → StabilityRule
   → ToxicityRule
+  → SensoryRule
   → SignatureTransformRule
 ```
 
@@ -558,8 +564,10 @@ rawContext
 | **AntagonismRule** | Detects cancellation across four patterns: opposite-tag pairs (with scaled-pair intensity classification), tag-targets-compound, trait-driven, and resistance amplification. | Reduces `chemical_extraction_weight` via multiplicative compounding. Populates `deferred_complementary_pairs` for SynergyRule. | Yes: `total_antagonism` |
 | **SynergyRule** | Detects amplification across five patterns: related-family, shared compound-class (diminishing), tag-targets-compound, complementary pairs (curated + deferred from AntagonismRule), trait-driven. Applies solvent-signature caps. | Sets `potency_multiplier` per ingredient (capped at 2.5× or 5× per solvent). Sets `synergy_scope_multiplier` (Prism), `sensory_erasure_count` (Lacuna), `permanence_scale` (Lacuna), `lacuna_transmute_markers` (Lacuna). | No |
 | **DoseCurveRule** | Computes cumulative compound-class load, applies dose-response per ingredient (linear/hormetic/threshold/ceiling), handles fictional solvent modifiers (Ichor permissive, Prism seeded refraction of response type, Lacuna bidirectional). | Sets `effective_potency` and `dose_state` per ingredient. Populates `cumulative_loads` map. | Yes: `extraction_impossible` (hormetic cascade) |
+| **EffectsRule** | Materializes the preparation's effects from effect-producing tags, gated by dose state, plus emergent effects carried from SynergyRule. | Sets `effects`. | No |
 | **StabilityRule** | Eight-stage stability formula: base × category modifier × outcome modifier × solvent modifier × tag multipliers × trait modifiers × fictional signatures × minimum check. | Sets `stability` (float days), `stability_state` (enum). | Yes: `insufficient_stability` |
 | **ToxicityRule** | Three parallel passes computing somatic, psychic, sensory toxicity. Each gated against outcome-specific thresholds. | Sets `toxicity` and `toxicity_state` objects. | Yes: `lethal_somatic`, `lethal_psychic`, `lethal_sensory` |
+| **SensoryRule** | Computes the perceived qualities: colour, luminosity, aroma, taste, temperature, sound, motion. Reads final weights, compound loads, and `stability_state`. | Sets `sensory_output`. | No |
 | **SignatureTransformRule** | Fictional solvents only. Applies Ichor/Prism/Lacuna signature transformations to effects, sensory output, marks, and narrative wrap. | Modifies `effects`, `sensory_output`. Sets `marks` and `narrative_wrap`. | No |
 
 ### Determinism
@@ -578,9 +586,9 @@ Same inputs always produce the same outputs. Varied across different combination
 
 ### v2 hook rules (not implemented)
 
-- `HeatRule` — enables `combustive`, `exothermic-reactant`, `endothermic-reactant` tags
-- `pHRule` — models pH-driven color shifts and stability effects (partly folded into sensory algorithm; may formalize as separate rule)
-- `FlavorBalanceRule` — masking effects between antagonistic taste dimensions
+- `HeatRule`: enables `combustive`, `exothermic-reactant`, `endothermic-reactant` tags
+- `pHRule`: models pH-driven color shifts and stability effects (partly folded into sensory algorithm; may formalize as separate rule)
+- `FlavorBalanceRule`: masking effects between antagonistic taste dimensions
 
 ---
 
@@ -611,10 +619,10 @@ Downstream rules access:
 
 **Weight semantics:**
 
-- `chemical_extraction_weight` — how much chemistry actually enters the medium. Read by SynergyRule, AntagonismRule, DoseCurveRule, ToxicityRule.
-- `presence_weight` — how much the ingredient's physical/sensory character is present. Read by StabilityRule, the sensory algorithm, and outcome-specific structural rules. Set independently of extraction — insoluble ingredients have `chemical_extraction_weight = 0` but `presence_weight = 1.0`.
-- `potency_multiplier` — synergy stacking, capped per solvent.
-- `effective_potency` — final potency after dose-curve resolution. Primary input for StabilityRule, ToxicityRule, and downstream description generation.
+- `chemical_extraction_weight`: how much chemistry actually enters the medium. Read by SynergyRule, AntagonismRule, DoseCurveRule, ToxicityRule.
+- `presence_weight`: how much the ingredient's physical/sensory character is present. Read by StabilityRule, the sensory algorithm, and outcome-specific structural rules. Set independently of extraction: insoluble ingredients have `chemical_extraction_weight = 0` but `presence_weight = 1.0`.
+- `potency_multiplier`: synergy stacking, capped per solvent.
+- `effective_potency`: final potency after dose-curve resolution. Primary input for StabilityRule, ToxicityRule, and downstream description generation.
 
 ---
 
@@ -683,20 +691,20 @@ The context object passed between rules. Populated progressively.
 
 Inputs (from request):
 
-- `ingredients` — starts as raw ingredient records, replaced by CombinationIngredient wrappers after SolventMatchRule
-- `solvent` — solvent record
-- `outcome` — outcome enum value
+- `ingredients`: starts as raw ingredient records, replaced by CombinationIngredient wrappers after SolventMatchRule
+- `solvent`: solvent record
+- `outcome`: outcome enum value
 
 Populated by rules:
 
-- `solvent_validated` — bool (SolventMatchRule)
-- `warnings` — string[] (accumulated across rules)
-- `deferred_complementary_pairs` — array of `{A, B, boost}` (AntagonismRule → SynergyRule)
-- `synergy_scope_multiplier` — int (SynergyRule, Prism only)
-- `sensory_erasure_count` — int (SynergyRule, Lacuna only)
-- `permanence_scale` — float (SynergyRule, Lacuna only)
-- `lacuna_transmute_markers` — array of `{ingredient_id, original_effect, transmuted_effect, effect_domain}` (SynergyRule, Lacuna only). `effect_domain` values: `memory` | `emotion` | `identity` | `sight` | `sound` | `perception` | `sensation` | `time` | `other`
-- `cumulative_loads` — Map<compound_class, float> (DoseCurveRule)
+- `solvent_validated`: bool (SolventMatchRule)
+- `warnings`: string[] (accumulated across rules)
+- `deferred_complementary_pairs`: array of `{A, B, boost}` (AntagonismRule → SynergyRule)
+- `synergy_scope_multiplier`: int (SynergyRule, Prism only)
+- `sensory_erasure_count`: int (SynergyRule, Lacuna only)
+- `permanence_scale`: float (SynergyRule, Lacuna only)
+- `lacuna_transmute_markers`: array of `{ingredient_id, original_effect, transmuted_effect, effect_domain}` (SynergyRule, Lacuna only). `effect_domain` values: `memory` | `emotion` | `identity` | `sight` | `sound` | `perception` | `sensation` | `time` | `other`
+- `cumulative_loads`: Map<compound_class, float> (DoseCurveRule)
 - `stability`, `stability_state` (StabilityRule)
 - `toxicity`, `toxicity_state` (ToxicityRule)
 - `effects` (produced across rules; transformed by SignatureTransformRule)
@@ -706,45 +714,22 @@ Populated by rules:
 On failure:
 
 - `failed = true`
-- `failure_reason` — enum (see Combination Schema)
+- `failure_reason`: enum (see Combination Schema)
 
 ---
 
 ## Sensory Algorithm
 
-The sensory algorithm reads from reactive fields (one-directional). Produces the combination's `sensory_output`. Full mechanic to be designed in its own session — this section captures the current shape.
+**Superseded by [`rules/sensory.md`](rules/sensory.md), which is canonical for this model.**
 
-### Color
+The sensory algorithm reads from reactive fields, one-directionally, and produces
+`sensory_output`. Colour, luminosity, aroma, taste, temperature, sound, and motion are all
+implemented. Texture is deferred to v2 apart from the separation `blend_state` carries.
 
-Weighted subtractive blend for liquids, weighted by `aesthetic_weight`. Reactive shifts applied:
-
-- `tannin`-heavy → amber/brown shift
-- `oxide` + `tannin` → black shift _(iron-gall ink logic)_
-- `flavonoid` + low pH → red shift; + high pH → blue-green shift _(anthocyanin behavior)_
-
-### Aroma
-
-Perfumery-style top/heart/base combination. Each ingredient's notes merge by position.
-
-### Taste
-
-Weighted average per dimension. Antagonistic dimensions (high bitter masks sweet) applied at the end (v2 or FlavorBalanceRule).
-
-### Texture
-
-Dominant texture wins by `aesthetic_weight`. Clashing textures produce "separates / doesn't blend" output.
-
-### Motion
-
-Computed from density gradient, reaction activity, base ingredient tendencies, and Aberrant/Pneuma content (which unlocks `seeking`).
-
-### Fictional solvent overlays
-
-Applied after the base sensory computation:
-
-- **Ichor** — color shifts toward gold, secondary defaults to `#FFD700` if empty, luminosity boosts from dull/glossy to phosphorescent
-- **Prism** — iridescent quality applied, secondary generated per seeded PRNG, luminosity forced to phosphorescent, aroma notes expanded per `synergy_scope_multiplier`
-- **Lacuna** — progressive erasure per `sensory_erasure_count`: 1→luminosity dulled, 2→color desaturated, 3→aroma flattened, 4→texture generic, 5→motion still, 6+→taste muted
+The placeholder that used to sit here described colour, aroma, taste, texture, motion, and the
+three fictional overlays in summary. All of it is specified properly in the rule doc now,
+including the parts the summary got wrong: the iron-gall shift cannot key off the whole
+`oxide` compound class, and motion cannot be selected by ingredient dominance.
 
 ---
 
@@ -752,20 +737,20 @@ Applied after the base sensory computation:
 
 Features deliberately deferred from v1:
 
-- **Emergent named variants** — specialized outcome names revealed by specific solvent choices
-- **Cream outcome** — dual-solvent emulsion mechanic with `emulsifier`/`separator` interaction
-- **Heat mechanic** — enables `combustive`, `exothermic-reactant`, `endothermic-reactant` tags
-- **Combustion outcomes** — Incense, Fume, etc.
-- **Reflection mechanic (Mirror-agent)** — requires actor/source modeling
-- **Dosage** — quantity multipliers on `combination_ingredients` join
-- **Solvent variants** — Water: rain/well/dew; Spirits: grain/grape/herbal; Oil: olive/coconut/rendered
-- **Ichor sub-sources** — ichor properties determined by source (dragon, spider, etc.)
-- **Art assets** — SVG/PNG rendering of finished preparations in vessels
-- **Trait expansion** — sympathetic, latent (and sub-family), sentient, unwilling, sealed
+- **Emergent named variants**: specialized outcome names revealed by specific solvent choices
+- **Cream outcome**: dual-solvent emulsion mechanic with `emulsifier`/`separator` interaction
+- **Heat mechanic**: enables `combustive`, `exothermic-reactant`, `endothermic-reactant` tags
+- **Combustion outcomes**: Incense, Fume, etc.
+- **Reflection mechanic (Mirror-agent)**: requires actor/source modeling
+- **Dosage**: quantity multipliers on `combination_ingredients` join
+- **Solvent variants**: Water: rain/well/dew; Spirits: grain/grape/herbal; Oil: olive/coconut/rendered
+- **Ichor sub-sources**: ichor properties determined by source (dragon, spider, etc.)
+- **Art assets**: SVG/PNG rendering of finished preparations in vessels
+- **Trait expansion**: sympathetic, latent (and sub-family), sentient, unwilling, sealed
 - **Mineral acid ingredient**: the pH contribution scale runs -3 to +3, but nothing occupies -3. No oil of vitriol, no aqua fortis. A caustic acid ingredient would fill the acid end the way Wood Ash fills the alkaline end. See `sensory.md`.
 - **Motion distribution balancing**: all ten motion values are reachable, but churning takes 37.4% of outcomes and seeking 0.1% across a full sweep of two-ingredient combinations. Churning crowds out the rarer, more specific mechanisms. Should be fixed structurally rather than by re-tuning weights. See `sensory.md`.
-- **User accounts, saving, journal, glossary** — frontend features
-- **Cumulative recipient marks** — modeling recipients as first-class entities so marks accumulate across preparations
+- **User accounts, saving, journal, glossary**: frontend features
+- **Cumulative recipient marks**: modeling recipients as first-class entities so marks accumulate across preparations
 
 ---
 
@@ -773,18 +758,18 @@ Features deliberately deferred from v1:
 
 For interview and portfolio conversations, the defensible-choice highlights:
 
-1. **Rules as pluggable modules** — extensibility without refactoring; new mechanic = new rule
-2. **Forward-compatible schema** — v2 hook fields present in v1 schema, unread by v1 rules
-3. **Fictional ingredients use same algorithm as real ones** — no special-casing; weirdness lives in data values, not code branches
-4. **Interaction tags as extensible enum** — vocabulary in `tag_definitions` table; new tags = insert row
-5. **Sensory reads from reactive (one-directional)** — emergent aesthetics from real chemistry
-6. **Solvent-agnostic v1 outcomes** — specialized variants as v2 discovery feature
-7. **Fictional solvents bypass compatibility gates + apply signature transformations** — distinct mechanical class, defensible as design pattern
-8. **Compulsion constrained to work only along existing seams** — amplifies what's there rather than manufacturing action from nothing
-9. **Failure states are informative, not silent** — `failure_reason` enum split into three toxicity dimensions, plus stability and extraction failures
-10. **Two-weight ingredient model** — `chemical_extraction_weight` and `presence_weight` separated so rules can reason about "what extracted" vs "what's present" independently
-11. **Deterministic seeded randomness** — reproducible per-combination outputs; testable against known seeds; each combination varied
-12. **Three-dimensional toxicity** — somatic/psychic/sensory rather than single scalar, gating against outcome-specific delivery pathways
-13. **Fictional solvents differ in kind, not just numbers** — Ichor amplifies quantitatively, Prism transforms dimensionally, Lacuna transmutes qualitatively
-14. **Antagonism before synergy in pipeline order** — cancellation happens before amplification in real chemistry; synergy operates only on what survived
-15. **All ingredient data hand-authored and locally stored** — Trefle evaluated and rejected on data-quality grounds; personal domain vetting produces better interview material than an external API
+1. **Rules as pluggable modules**: extensibility without refactoring; new mechanic = new rule
+2. **Forward-compatible schema**: v2 hook fields present in v1 schema, unread by v1 rules
+3. **Fictional ingredients use same algorithm as real ones**: no special-casing; weirdness lives in data values, not code branches
+4. **Interaction tags as extensible enum**: vocabulary in `tag_definitions` table; new tags = insert row
+5. **Sensory reads from reactive (one-directional)**: emergent aesthetics from real chemistry
+6. **Solvent-agnostic v1 outcomes**: specialized variants as v2 discovery feature
+7. **Fictional solvents bypass compatibility gates + apply signature transformations**: distinct mechanical class, defensible as design pattern
+8. **Compulsion constrained to work only along existing seams**: amplifies what's there rather than manufacturing action from nothing
+9. **Failure states are informative, not silent**: `failure_reason` enum split into three toxicity dimensions, plus stability and extraction failures
+10. **Two-weight ingredient model**: `chemical_extraction_weight` and `presence_weight` separated so rules can reason about "what extracted" vs "what's present" independently
+11. **Deterministic seeded randomness**: reproducible per-combination outputs; testable against known seeds; each combination varied
+12. **Three-dimensional toxicity**: somatic/psychic/sensory rather than single scalar, gating against outcome-specific delivery pathways
+13. **Fictional solvents differ in kind, not just numbers**: Ichor amplifies quantitatively, Prism transforms dimensionally, Lacuna transmutes qualitatively
+14. **Antagonism before synergy in pipeline order**: cancellation happens before amplification in real chemistry; synergy operates only on what survived
+15. **All ingredient data hand-authored and locally stored**: Trefle evaluated and rejected on data-quality grounds; personal domain vetting produces better interview material than an external API

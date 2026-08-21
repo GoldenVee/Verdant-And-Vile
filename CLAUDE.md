@@ -4,7 +4,7 @@ Context for Claude Code sessions in this repo. Read this first every session.
 
 ## Project
 
-Verdant & Vile — a fictional apothecary API. Users combine 2-4 ingredients with a solvent and an outcome type; a 7-rule pipeline resolves the combination into a preparation with effects, sensory properties, stability, toxicity, and (for fictional solvents) signature transformations. Real botanicals, minerals, fungi, and fauna are grounded in actual chemistry and history. Fictional ingredients (Pneuma, Effluvia, Aberrant, Cosmic) are wholly authored with internally consistent fictional chemistry.
+Verdant & Vile is a fictional apothecary API. Users combine 2-4 ingredients with a solvent and an outcome type; a 9-rule pipeline resolves the combination into a preparation with effects, sensory properties, stability, toxicity, and (for fictional solvents) signature transformations. Real botanicals, minerals, fungi, and fauna are grounded in actual chemistry and history. Fictional ingredients (Pneuma, Effluvia, Aberrant, Cosmic) are wholly authored with internally consistent fictional chemistry.
 
 This is a portfolio project. Complexity and internal consistency are markers of success. Every architectural choice should have a stateable reason.
 
@@ -22,9 +22,12 @@ This is a portfolio project. Complexity and internal consistency are markers of 
 
 Consult `docs/` before implementing anything mechanically non-trivial.
 
-- `docs/design-reference.md` — master design reference, canonical. When it conflicts with anything else, it wins.
-- `docs/rules/*.md` — individual rule docs with full mechanical detail. Consult when the master doc's summary isn't specific enough.
-- `docs/errors.md` — error code catalogue.
+- `docs/design-reference.md`: master design reference, canonical. When it conflicts with anything else, it wins.
+- `docs/rules/`: one doc per rule, in pipeline order, with full mechanical detail. Start at `docs/rules/README.md`. Consult when the master doc's summary isn't specific enough.
+  - `docs/rules/effects.md` and `docs/rules/sensory.md` supersede the design reference on their models.
+  - `docs/rules/description.md` is Phase 10, designed but not built.
+- `docs/errors.md`: error codes, failure reasons, and why they are not the same thing.
+- `docs/deployment.md`: deployment readiness checklist. Read before any work touching production, environments, or the Neon setup.
 
 Seed data is the authored source of truth. Don't invent ingredient properties; look them up.
 
@@ -37,7 +40,7 @@ Seed data is the authored source of truth. Don't invent ingredient properties; l
 ```
 src/
 ├── index.ts              # Fastify server bootstrap
-├── routes/               # HTTP layer — thin, no business logic
+├── routes/               # HTTP layer, thin, no business logic
 ├── db/                   # Drizzle schema, client, seed script
 ├── domain/               # Types, enums, PRNG utility (pure, no I/O)
 ├── pipeline/             # Rules pipeline
@@ -45,7 +48,7 @@ src/
 │   ├── context.ts        # BrewingContext factory
 │   └── rules/            # One file per rule
 ├── data/                 # Runtime lookup queries into DB tables (tag_definitions, synergy_pairs, etc.)
-└── sensory/              # Sensory algorithm (Phase 9, not yet designed)
+└── sensory/              # Sensory algorithm: colour maths and the channel resolvers
 tests/
 ├── rules/                # Per-rule unit tests
 ├── invariants/           # Property-based tests via fast-check
@@ -60,7 +63,7 @@ Static-feeling vocabulary (tag definitions, synergy pairs, effect transmutations
 
 These are locked-in decisions. Don't propose alternatives without asking first.
 
-### Pipeline composition — Result-based short-circuit
+### Pipeline composition: Result-based short-circuit
 
 Rules return a hand-rolled `Result<Context, Failure>` type:
 
@@ -70,7 +73,7 @@ type Result<T, E> = { ok: true; value: T } | { ok: false; error: E }
 
 The pipeline runs rules in order and short-circuits on the first `Err`. Rules never see a failed context because they're never called with one. This is documented in ADR-004.
 
-### PRNG — sub-PRNG per rule
+### PRNG: sub-PRNG per rule
 
 Rules that need randomness derive a fresh PRNG from the master combination seed plus the rule name:
 
@@ -91,20 +94,20 @@ The pipeline computes and returns results. Nothing is persisted for combinations
 ### Error handling and observability
 
 - Fastify's built-in error handler is overridden with a custom one that returns structured errors matching `{ error: { code, message, details? } }`
-- Request IDs via `@fastify/request-id`, propagated as child logger context in Pino
+- Request IDs propagated as child logger context in Pino (Fastify's built-in request id; no separate package)
 - All error codes documented in `docs/errors.md`
 
 ## Testing strategy
 
 Three layers, in order of preference:
 
-1. **Invariant tests** (via `fast-check`) — property-based, prove general properties over generated inputs. Preferred whenever a rule has invariants that must always hold.
-2. **Known-case tests** — hand-authored combinations with expected outputs. Lock in specific mechanical decisions.
-3. **E2E tests** — a principled set of ~18 tests covering: one happy path per outcome group, one per failure_reason, one per fictional solvent, one Sachet case. Run against a fresh Neon test branch.
+1. **Invariant tests** (via `fast-check`): property-based, prove general properties over generated inputs. Preferred whenever a rule has invariants that must always hold.
+2. **Known-case tests**: hand-authored combinations with expected outputs. Lock in specific mechanical decisions.
+3. **E2E tests**: a principled set of ~18 tests covering: one happy path per outcome group, one per failure_reason, one per fictional solvent, one Sachet case. Run against a fresh Neon test branch.
 
 A dedicated determinism test file verifies that:
 - Same input produces same output across runs (snapshot-based)
-- PRNG state does not leak between combinations (run A, then B, then A again — expect identical A results)
+- PRNG state does not leak between combinations (run A, then B, then A again: expect identical A results)
 
 ## Neon branch management
 
@@ -126,8 +129,9 @@ pnpm test:e2e               # E2E tests (creates and destroys a Neon branch)
 pnpm db:generate            # Generate a Drizzle migration from schema changes
 pnpm db:migrate             # Apply migrations to the DB pointed to by DATABASE_URL
 pnpm db:seed                # Load seed/ (ingredients, solvents, tables) into the DB
-pnpm db:branch:create       # Create a Neon test branch (checks 10-branch limit)
-pnpm db:branch:cleanup      # Delete test branches older than 24 hours
+# Not yet written, though the E2E strategy below assumes them:
+# pnpm db:branch:create     Create a Neon test branch (checks 10-branch limit)
+# pnpm db:branch:cleanup    Delete test branches older than 24 hours
 ```
 
 ## Working style
@@ -141,9 +145,9 @@ pnpm db:branch:cleanup      # Delete test branches older than 24 hours
 
 ## What's still open (not yet designed)
 
-- **Sensory algorithm** — the master doc captures its current shape as a placeholder. Full design happens in its own session before implementation (Phase 9).
-- **Description algorithm** — same pattern (Phase 10).
-- **V2 features** — user accounts, saved combinations, emergent named variants, heat mechanic, dosage, cream outcome, and others. All deferred until v1 is running.
+- **Description algorithm**: Phase 10. Designed in `docs/rules/description.md`, not built. The only unbuilt algorithm in v1.
+- **Texture** (sensory): deferred to v2 apart from the separation `blend_state` already carries. `sensory_output.texture` is always null.
+- **V2 features**: user accounts, saved combinations, emergent named variants, heat mechanic, dosage, cream outcome, and others. All deferred until v1 is running.
 
 If a task touches these areas, stop and flag it before proceeding.
 
@@ -158,6 +162,8 @@ Existing ADRs (drafted or planned):
 - ADR-004: Result-based pipeline composition
 - ADR-005: Sub-PRNG per rule
 - ADR-006: V1 stateless pipeline
+- ADR-007: EffectsRule and the eight-rule pipeline (proposed in `docs/rules/effects.md`)
+- ADR-008: SensoryRule and the nine-rule pipeline (proposed in `docs/rules/sensory.md`)
 
 ## Things not to do
 

@@ -1,7 +1,7 @@
 // AntagonismRule: detects canceling and destructive interactions, reducing ingredients'
 // chemical extraction weight. Runs after SolventMatchRule (weights exist) and before
 // SynergyRule (cancellation precedes amplification). Built as a factory closing over the
-// static lookup tables it needs. See docs/rules/rules.md (AntagonismRule), reconciled
+// static lookup tables it needs. See docs/rules/antagonism.md, reconciled
 // with the SynergyRule cross-rule update for Pattern 1.
 
 import { err, ok } from '../../domain/result.js';

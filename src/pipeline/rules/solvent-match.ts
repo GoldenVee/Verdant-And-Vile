@@ -1,6 +1,6 @@
 // SolventMatchRule: the pipeline's gatekeeper. Validates the combination is
 // attemptable and assigns the per-ingredient weights every downstream rule reads.
-// See docs/rules/rules.md (SolventMatchRule) for the full specification.
+// See docs/rules/solvent-match.md for the full specification.
 
 import type { Polarity, Solubility } from '../../domain/enums.js';
 import { err, ok } from '../../domain/result.js';

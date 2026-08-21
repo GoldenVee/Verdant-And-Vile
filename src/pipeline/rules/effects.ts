@@ -2,7 +2,7 @@
 // each ingredient's effect-producing tags, gated by the dose state so an ingredient that
 // did not manifest produces nothing. Emergent effects come from synergy intents. Runs
 // after DoseCurveRule (so effective potency is final) and before StabilityRule. See
-// docs/effects.md.
+// docs/rules/effects.md.
 //
 // A factory over the static effect vocabulary and tag->effect mapping (in PipelineData).
 // Antagonism and synergy influence arrives through the weights, so this rule reads only

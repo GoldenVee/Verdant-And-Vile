@@ -1,7 +1,7 @@
 // DoseCurveRule: models dose-response chemistry. Computes cumulative compound-class load
 // across the combination, then resolves each ingredient's effective potency against its
 // dose-response curve. Runs after SynergyRule and before StabilityRule. See
-// docs/rules/rules.md (DoseCurveRule).
+// docs/rules/dose-curve.md.
 //
 // A plain rule, not a factory: it needs no lookup tables. The Lacuna subtractive/building
 // tag classification is a fixed vocabulary, held here as constants (the rule doc is its
