@@ -622,6 +622,88 @@ Solvents carry no `sound` field and do not participate.
 
 ---
 
+## Motion
+
+**Status: settled.**
+
+Motion is **derived**, with authored tendency as a floor rather than the driver. Ingredient
+`motion_tendency` only ever takes 4 of its 10 values in the seed data (`still` 27,
+`settling` 22, `seeking` 6, `rising` 2), so weighted dominance would leave `swirling`,
+`pulsing`, `churning`, `effervescent`, `layered`, and `restless` structurally unreachable.
+That is why motion was held out of the first two slices.
+
+Each mechanism scores its own motion, the highest total wins, and ties resolve by enum order.
+
+| Motion | Driver |
+|---|---|
+| `still` | `quiescent` trait, or nothing else firing |
+| `settling` | `mineral-salt` load, or crystalline, powdery, and gritty textures |
+| `rising` | `essence-vapor` and `noxious-vapor` load |
+| `swirling` | `warming` or `burning` temperature, convection |
+| `pulsing` | `echoic` trait |
+| `churning` | `stability_state` unstable or critically unstable |
+| `effervescent` | alkaline load dissolving in acid |
+| `seeking` | aberrant and pneuma content |
+| `layered` | `blend_state` separated |
+| `restless` | `volatile` trait load |
+
+Two of these were already waiting from earlier work. `layered` comes from `blend_state`, which
+the colour model built. `effervescent` comes from carbonate meeting acid, which the pH model
+predicted before anything consumed it.
+
+`volatile` and the vapour classes are kept as separate mechanisms on purpose. Volatile is
+passive instability, so it drives `restless`; the vapour classes are literal ascent, so they
+drive `rising`.
+
+### Effervescence reuses the pH machinery
+
+```
+acidity       = clamp((7 - solvent.base_ph) / 7, 0, 1)
+effervescence = sum of (positive ph_contribution * chemical_extraction_weight) * acidity
+```
+
+Zero when pH is null, and zero in water because acidity is zero there. The rule never needs to
+know which ingredients are carbonates: alkaline material that dissolved in an acidic medium is
+the whole condition. Wood Ash in Vinegar fizzes; the same Wood Ash in Water does not.
+
+### The weights have a floor constraint
+
+Ingredient tendency contributes a normalized share, so it reaches 1.0 exactly when every
+ingredient agrees on one value. **Any mechanism meant to fire against that agreement must weigh
+more than 1.0**, because at exactly 1.0 it ties and loses the enum-order tiebreak. A test
+caught this: `swirling` and unstable-`churning` were both sitting at 1.0 and could never have
+fired against a unanimous floor.
+
+Two weights sit deliberately below 1.0. A gradient is a weaker claim than full separation.
+`settling` is held lowest of all, because it otherwise double-counts: it is the
+second-most-common authored tendency AND its predicate matches 29 of 57 ingredients on texture
+alone. At a higher weight a jar of powder outranked an active reaction, and Wood Ash in Vinegar
+reported as settling while it was visibly fizzing.
+
+### Reading stability
+
+This is the first place the sensory layer reads a computed pipeline value rather than
+ingredient data. SensoryRule runs after StabilityRule, so `stability_state` is final, and since
+no ingredient carries the `explosive` trait it is the only available route to `churning`.
+
+### Verified reachable
+
+A sweep of every two-ingredient combination across every solvent produces all ten values.
+Representative cases: `effervescent` from Wood Ash in Vinegar, `rising` from Aphrodite's
+Seafoam, `seeking` from Feywind, `pulsing` from Mandrake, `churning` under Ichor, whose
+stability modifier is 0.4.
+
+### Unused traits
+
+`mercurial` and `explosive` are authored in the trait enum and carried by no ingredient, so
+neither can drive anything today. Same situation as `oily` in the texture vocabulary.
+
+### Lacuna erasure
+
+Step 5 sets motion to `still`. Whatever the preparation was doing, it stops.
+
+---
+
 ## Deferred
 
 **Texture, to v2 apart from separation.** `blend_state` already carries whether a preparation
@@ -639,18 +721,6 @@ whenever it is taken up:
   bare `string` while its values come from the `TextureType` vocabulary.
 
 Lacuna's erasure step 4 stays deferred alongside it.
-
-**Motion.** Ingredient `motion_tendency` only ever takes 4 of its 10 enum values in the seed
-data: `still` (27), `settling` (22), `seeking` (6), `rising` (2). Nothing is `swirling`,
-`pulsing`, `churning`, `effervescent`, `layered`, or `restless`. Selecting a dominant
-ingredient tendency would therefore make six of ten values structurally unreachable. Motion
-needs to be primarily derived, with ingredient tendency as a floor rather than the driver,
-and that deserves its own design pass. SensoryRule will carry a weighted-dominant
-placeholder until then.
-
-Two mechanisms already surfaced that the motion session should inherit: `blend_state`
-`separated` is the natural source of `layered`, and carbonate plus acid producing carbon
-dioxide is the natural source of `effervescent`.
 
 ---
 
