@@ -86,7 +86,8 @@ is gitignored. Those two are fine.
   It interacts with a stated design goal. CLAUDE.md's thesis is that static vocabulary lives in
   DB tables so new tags can be added by inserting a row rather than deploying code. Caching at
   boot means a row insert requires a restart to take effect. Worth deciding deliberately: cache
-  with a restart requirement, or cache with a TTL, or an explicit invalidation route.
+  with a restart requirement, or cache with a TTL, or an explicit invalidation route. See
+  also the combination cache section below, which shares the invalidation problem.
 
 ### Continuous integration
 
@@ -98,6 +99,99 @@ is gitignored. Those two are fine.
   branches would leave eight, and CLAUDE.md already says to abort test-branch creation at eight
   or more. Separate Neon projects for development and production would give each its own
   budget, at the cost of maintaining migrations in two places.
+
+---
+
+## Caching generated combinations
+
+To be designed as a last step for v1. Notes below are the considerations, not the decision.
+
+The idea is to serve an already-computed combination rather than re-running the pipeline for
+inputs that have been seen before.
+
+### Determinism makes this safe, and gives us the key for free
+
+The pipeline is a pure function of its inputs. Same ingredients, solvent, and outcome produce
+byte-identical output, which the determinism tests already assert. So a cached result can never
+disagree with a fresh one, and no staleness can arise from the computation itself.
+
+`combination_seed` is already a content hash of exactly the inputs that determine the result:
+`hash(sorted(ingredient_ids) + solvent_id + outcome)`. It is a ready-made cache key, and it is
+the same key ADR-006 earmarks as the natural primary key for v2 persistence.
+
+Note it is not currently exposed in the API response. If clients are to reference a combination
+by seed, `serialize()` has to return it.
+
+### Measure before building
+
+This is likely **not** the bottleneck. The pipeline is pure CPU over at most four ingredients
+and nine rules, while the same request issues eleven database round trips. Caching the static
+vocabulary almost certainly captures most of the available win, and a combination cache on top
+of that may buy very little.
+
+Worth timing the pipeline against the query load before committing to this. If the vocabulary
+fix lands first, re-measure rather than assuming the case still holds.
+
+### The correctness trap: the key hashes inputs, not the algorithm
+
+`combination_seed` captures what went in. It does not capture the code that ran or the data it
+read. A cached result is therefore stale whenever either changes:
+
+- **Rule code changes.** Motion scoring weights changed three times in one session, twice to fix
+  real bugs. Every cached combination would have been wrong afterwards, with nothing in the key
+  to signal it.
+- **Seed data changes.** Sixteen ingredient pH values were re-authored, and solvent taste and
+  aroma were added. Same problem.
+
+So a cache needs a version component beyond the seed: a data version, a rules version, or both.
+Alternatively purge wholesale on deploy and on reseed, which is cruder but very hard to get
+wrong. Whichever is chosen, **reseeding must invalidate the cache**, or the API will confidently
+serve results that no longer match its own data.
+
+### The space is too large to precompute
+
+Across 2 to 4 ingredients drawn from 57, there are 425,866 ingredient sets. Times 8 solvents and
+13 outcomes, that is roughly 44 million nominal combinations. Precomputation is out.
+
+Real usage will be heavily skewed toward a small set of popular combinations, which is exactly
+what a cache serves well. That argues for populating on read with a bounded size and
+least-recently-used eviction, rather than anything exhaustive.
+
+### Failures are cacheable too
+
+A failed combination is just as deterministic as a successful one, and failures are likely
+common, since users will try incompatible pairings. Caching `failure_reason` results avoids
+re-running the pipeline for known-bad input. Worth deciding explicitly rather than by omission.
+
+### Where it lives, and the ADR-006 tension
+
+A cache is not persistence. It is a disposable derived copy, and deleting it changes behaviour
+only in speed. That distinction is what keeps this compatible with "v1 is stateless" rather than
+a violation of it.
+
+But the distinction gets thin depending on where it lives:
+
+- **In-memory, per process.** No database writes, so ADR-006 stays intact literally as well as
+  in spirit. Lost on restart, and not shared between instances, so it is worth less as the
+  deployment scales out.
+- **A Postgres table keyed by `combination_seed`.** Survives restarts and is shared across
+  instances. But it makes the write path touch the database, which is precisely what ADR-006
+  says v1 does not do. In practice this is v2's persistence arriving early, and it should be
+  called that rather than described as a cache.
+- **External store.** New infrastructure for a project that currently has none.
+
+### Two different features wearing the same name
+
+Worth separating before designing anything, because they pull in opposite directions:
+
+- **Cache as performance.** Invisible to users, disposable, purge freely, no API surface. The
+  only question is speed.
+- **Cache as discovery.** "This has been brewed before", counts, a gallery of found
+  preparations. That is a product feature, it needs real persistence rather than a cache, and it
+  is already sketched in the v2 roadmap under saved combinations and the journal. It also raises
+  questions a cache never does, like whether the recipe is revealed and who else can see it.
+
+The first is a v1 optimisation. The second is v2 product work that happens to share a key.
 
 ---
 
