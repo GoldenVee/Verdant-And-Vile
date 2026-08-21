@@ -469,7 +469,14 @@ reasoning matches the distinction already drawn on pH, where Lacuna is 7.0 becau
 that would push it either way has been taken out. Its erasure overlay mutes taste further at
 step 6.
 
-### Aroma
+### Deferred to v2
+
+Antagonistic masking, where high bitter suppresses perceived sweet, is not modelled. It
+belongs to a FlavorBalanceRule and is listed in the v2 roadmap.
+
+---
+
+## Aroma
 
 **Status: settled.**
 
@@ -554,13 +561,6 @@ the same reason the colour overlay does.
 Step 3 clears `top`; step 6 clears `heart` as well, leaving only `base`. Top notes are the
 volatile ones that lift off a preparation, so losing them first is physically right and reads
 as the thing going quiet.
-
----
-
-## Deferred to v2
-
-Antagonistic masking, where high bitter suppresses perceived sweet, is not modelled. It
-belongs to a FlavorBalanceRule and is listed in the v2 roadmap.
 
 ---
 
