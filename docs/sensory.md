@@ -666,19 +666,27 @@ Zero when pH is null, and zero in water because acidity is zero there. The rule 
 know which ingredients are carbonates: alkaline material that dissolved in an acidic medium is
 the whole condition. Wood Ash in Vinegar fizzes; the same Wood Ash in Water does not.
 
-### The weights have a floor constraint
+### Scoring: max, not sum, and ties go to whatever fired
 
-Ingredient tendency contributes a normalized share, so it reaches 1.0 exactly when every
-ingredient agrees on one value. **Any mechanism meant to fire against that agreement must weigh
-more than 1.0**, because at exactly 1.0 it ties and loses the enum-order tiebreak. A test
-caught this: `swirling` and unstable-`churning` were both sitting at 1.0 and could never have
-fired against a unanimous floor.
+Two rules govern how scores combine, and both replace weight tuning with structure.
 
-Two weights sit deliberately below 1.0. A gradient is a weaker claim than full separation.
-`settling` is held lowest of all, because it otherwise double-counts: it is the
-second-most-common authored tendency AND its predicate matches 29 of 57 ingredients on texture
-alone. At a higher weight a jar of powder outranked an active reaction, and Wood Ash in Vinegar
-reported as settling while it was visibly fizzing.
+**A motion scores the greater of its floor and its derived contribution, never their sum.**
+The two sources are correlated rather than independent: dense powder gets authored as
+`settling` AND matches the powdery texture predicate, so adding them counts one fact twice.
+Corroboration should not inflate. Before this, Wood Ash in Vinegar reported as `settling`
+while it was visibly fizzing, because settling collected 0.444 from the floor plus 0.9 from a
+predicate matching 29 of 57 ingredients on texture alone, and 1.344 beat effervescence's 1.215.
+
+**On a tie, the source that actually fired wins.** Ties previously resolved by position in
+`MOTION_TENDENCIES`, which meant `still` won on declaration order rather than on anything
+meaningful. Since motion is derived with tendency as a floor, a floor that outranks a live
+mechanism is not behaving like a floor. Remaining ties fall back to enum order, which then only
+ever decides between two sources of the same kind.
+
+Together these mean the weights do not need to be tuned past 1.0 to be reachable. A mechanism
+weighted at exactly 1.0 still beats unanimous ingredient agreement, because it wins the tie.
+Three weights that had been hand-raised to clear the old constraint were reverted once these
+rules were in place.
 
 ### Reading stability
 

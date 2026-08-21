@@ -60,28 +60,24 @@ const AROMA_NOTES_PER_POSITION = 4;
 const AROMA_SOLVENT_MUTE = 0.5;
 
 // Motion scoring weights. Ingredient tendency supplies a floor of at most 1.0, reached when
-// every ingredient agrees on one value. Any mechanism meant to fire against that agreement
-// must therefore weigh MORE than 1.0: at exactly 1.0 it ties and loses the enum-order
-// tiebreak. Without these weights still and settling would win almost everything, since they
-// account for 49 of the 57 authored tendencies.
+// every ingredient agrees on one value, so these sit around that mark. They do not need to be
+// tuned past it: resolveMotion breaks ties in favour of whichever source actually fired, so a
+// mechanism weighted at exactly 1.0 still beats unanimous agreement.
 //
-// The two below 1.0 are deliberate. A gradient is a weaker claim than full separation. Settling
-// is held lowest of all because it double-counts otherwise: it is the second-most-common
-// authored tendency AND its predicate matches 29 of 57 ingredients on texture alone, so a
-// higher weight let a jar of powder outrank an active reaction like effervescence.
+// layeredGradient sits low on purpose, since a gradient is a weaker claim than full separation.
 const MOTION_WEIGHTS = {
   layeredSeparated: 1.5,
   layeredGradient: 0.7,
   churningCritical: 1.5,
-  churningUnstable: 1.15,
+  churningUnstable: 1.0,
   effervescent: 0.9,
   rising: 1.3,
   pulsing: 1.3,
   restless: 1.2,
   seeking: 1.2,
   still: 1.2,
-  swirling: 1.15,
-  settling: 0.5,
+  swirling: 1.0,
+  settling: 0.9,
 } as const;
 
 function clamp(value: number, min: number, max: number): number {
@@ -428,25 +424,32 @@ export function effervescence(ingredients: CombinationIngredient[], solvent: Sol
 }
 
 // Motion is derived, with authored tendency as a floor rather than the driver. Ingredient
-// motion_tendency only ever takes 4 of its 10 values in the seed data, so dominance
-// selection would leave six structurally unreachable. Each mechanism below scores its own
-// motion; the highest total wins, ties resolving by enum order.
+// motion_tendency only ever takes 4 of its 10 values in the seed data, so dominance selection
+// would leave six structurally unreachable. Each mechanism below scores its own motion.
 export function resolveMotion(
   ingredients: CombinationIngredient[],
   solvent: Solvent,
   blendState: BlendState,
   stabilityState: StabilityState | null,
 ): MotionTendency {
-  const scores = new Map<MotionTendency, number>();
+  // Floor and derived scores are tracked apart and never summed. The two are correlated
+  // rather than independent: dense powder gets authored as `settling` AND matches the powdery
+  // texture predicate, so adding them counts one fact twice. Corroboration should not inflate,
+  // so a motion scores the greater of its two sources.
+  const floor = new Map<MotionTendency, number>();
+  const derived = new Map<MotionTendency, number>();
+  const addFloor = (motion: MotionTendency, amount: number) => {
+    if (amount > 0) floor.set(motion, (floor.get(motion) ?? 0) + amount);
+  };
   const add = (motion: MotionTendency, amount: number) => {
-    if (amount > 0) scores.set(motion, (scores.get(motion) ?? 0) + amount);
+    if (amount > 0) derived.set(motion, (derived.get(motion) ?? 0) + amount);
   };
 
   // Floor: what the ingredients themselves tend toward.
   const total = ingredients.reduce((sum, ci) => sum + contributionWeight(ci), 0);
   if (total > 0) {
     for (const ci of ingredients) {
-      add(ci.ingredient.motionTendency, contributionWeight(ci) / total);
+      addFloor(ci.ingredient.motionTendency, contributionWeight(ci) / total);
     }
   }
 
@@ -464,8 +467,8 @@ export function resolveMotion(
     Math.min(effervescence(ingredients, solvent), 2) * MOTION_WEIGHTS.effervescent,
   );
 
-  // Vapours ascend. Kept separate from the volatile trait: vapour is literal ascent,
-  // volatile is passive instability.
+  // Vapours ascend. Kept separate from the volatile trait: vapour is literal ascent, volatile
+  // is passive instability.
   add(
     'rising',
     presenceShare(ingredients, (ci) => hasCompound(ci, ['essence-vapor', 'noxious-vapor'])) *
@@ -515,13 +518,22 @@ export function resolveMotion(
     ) * MOTION_WEIGHTS.settling,
   );
 
+  // Highest score wins. On a tie a mechanism that actually fired beats a mere tendency:
+  // motion is derived with tendency as a floor, so a floor outranking a live mechanism is not
+  // behaving like a floor. Remaining ties resolve by enum order, which only ever decides
+  // between two sources of the same kind.
   let best: MotionTendency = 'still';
   let bestScore = -1;
+  let bestIsDerived = false;
   for (const motion of MOTION_TENDENCIES) {
-    const score = scores.get(motion) ?? 0;
-    if (score > bestScore) {
+    const d = derived.get(motion) ?? 0;
+    const f = floor.get(motion) ?? 0;
+    const score = Math.max(d, f);
+    const isDerived = d > 0 && d >= f;
+    if (score > bestScore || (score === bestScore && isDerived && !bestIsDerived)) {
       best = motion;
       bestScore = score;
+      bestIsDerived = isDerived;
     }
   }
   return best;
